@@ -1,6 +1,7 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -19,4 +20,7 @@ public interface ToDoDAO {
 
     @Insert
     void insert(ToDo toDo);
+
+    @Query("DELETE FROM todos")
+    void deleteAll();
 }
