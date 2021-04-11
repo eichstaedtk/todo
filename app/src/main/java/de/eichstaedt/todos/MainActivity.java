@@ -5,6 +5,11 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.schedulers.Schedulers;
+
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -26,9 +31,15 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         ToDo einkaufen = new ToDo("Einkaufen","Essen einkaufen", new Date());
 
+        Observable<List<ToDo>> toDoDBObservable = ToDoRepository.getInstance(getApplicationContext()).toDoDAO().getAllAsync().toObservable();
+
         saveToDo(einkaufen);
 
-        loadAllToDos(this);
+
+        toDoDBObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onComplete);
 
         Log.i(logger,"Application successful started ...");
     }
@@ -47,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     public void onComplete(List<ToDo> result) {
 
         TextView start = findViewById(R.id.start);
+
+        Log.i(logger,"Subscribing to new ToDo List from Database ...");
 
         start.setText("Anzahl offener ToDos "+result.size());
     }
