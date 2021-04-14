@@ -3,23 +3,21 @@ package de.eichstaedt.todos.domain;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import java.util.Date;
+import de.eichstaedt.todos.infrastructure.persistence.LocalDateTimeConverter;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-import de.eichstaedt.todos.infrastructure.persistence.DateConverter;
-
 @Entity(tableName = "todos")
-@TypeConverters({DateConverter.class})
+@TypeConverters({LocalDateTimeConverter.class})
 public class ToDo {
 
     public ToDo() {
     }
 
-    public ToDo(String name, String beschreibung, Date faellig) {
+    public ToDo(String name, String beschreibung, LocalDateTime faellig) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.beschreibung = beschreibung;
@@ -43,7 +41,7 @@ public class ToDo {
     private boolean wichtig;
 
     @ColumnInfo(name = "FAELLIG_DATUM")
-    private Date faellig;
+    private LocalDateTime faellig;
 
     public String getId() {
         return id;
@@ -85,11 +83,11 @@ public class ToDo {
         this.wichtig = wichtig;
     }
 
-    public Date getFaellig() {
+    public LocalDateTime getFaellig() {
         return faellig;
     }
 
-    public void setFaellig(Date faellig) {
+    public void setFaellig(LocalDateTime faellig) {
         this.faellig = faellig;
     }
 }

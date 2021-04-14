@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase;
 
 import de.eichstaedt.todos.domain.ToDo;
 
-@Database(entities = {ToDo.class}, version = 1, exportSchema = false)
+@Database(entities = {ToDo.class}, version = 2, exportSchema = false)
 public abstract class ToDoDatabase extends RoomDatabase {
 
     public abstract ToDoDAO toDoDAO();

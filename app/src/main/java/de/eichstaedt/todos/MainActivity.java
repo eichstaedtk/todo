@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ToDo einkaufen = new ToDo("Einkaufen","Essen einkaufen", new Date());
+        ToDo einkaufen = new ToDo("Einkaufen","Essen einkaufen", LocalDateTime.now());
 
         Observable<List<ToDo>> toDoDBObservable = ToDoRepository.getInstance(getApplicationContext()).toDoDAO().getAllAsync().toObservable();
 

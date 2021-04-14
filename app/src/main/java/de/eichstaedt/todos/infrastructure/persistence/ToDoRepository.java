@@ -15,7 +15,7 @@ public class ToDoRepository {
 
         if(toDoDatabaseInstance == null) {
             toDoDatabaseInstance = Room.databaseBuilder(context,
-                    ToDoDatabase.class, "todo_db").build();
+                    ToDoDatabase.class, "todo_db").fallbackToDestructiveMigration().build();
         }
 
         return toDoDatabaseInstance;
