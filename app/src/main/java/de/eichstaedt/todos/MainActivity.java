@@ -2,9 +2,11 @@ package de.eichstaedt.todos;
 
 import android.util.Log;
 
+import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import de.eichstaedt.todos.infrastructure.view.ToDoListAdapter;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     ExecutorService executorService = Executors.newFixedThreadPool(4);
 
+    private ListView todoList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
                 .subscribe(this::onComplete);
 
         Log.i(logger,"Application successful started ...");
+
+
     }
 
     private void saveToDo(final ToDo toDo) {
@@ -62,5 +68,13 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         Log.i(logger,"Subscribing to new ToDo List from Database ...");
 
         start.setText("Anzahl offener ToDos "+result.size());
+
+        todoList = findViewById(R.id.todoList);
+
+        ToDoListAdapter adapter = new ToDoListAdapter(this,result);
+
+        todoList.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
     }
 }
