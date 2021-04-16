@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     protected static final String logger = MainActivity.class.getName();
 
-    ExecutorService executorService = Executors.newFixedThreadPool(4);
-
     private ListView todoList;
 
     @Override
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ToDo einkaufen = new ToDo("Einkaufen","Essen einkaufen", LocalDateTime.now());
+        ToDo einkaufen = new ToDo("Einkaufen","Wocheneinkauf Lebensmittel", LocalDateTime.now());
 
         Observable<List<ToDo>> toDoDBObservable = ToDoRepository.getInstance(getApplicationContext()).toDoDAO().getAllAsync().toObservable();
 
@@ -51,12 +49,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     }
 
     private void saveToDo(final ToDo toDo) {
-
-        executorService.execute(() -> ToDoRepository.getInstance(getApplicationContext()).toDoDAO().insert(toDo));
-    }
-
-    private void loadAllToDos(final RepositoryCallback<List<ToDo>> callback) {
-        executorService.execute(() -> callback.onComplete(ToDoRepository.getInstance(getApplicationContext()).toDoDAO().getAll()));
+        ToDoRepository.getInstance(getApplicationContext()).toDoDAO().insertAsync(toDo);
     }
 
 
