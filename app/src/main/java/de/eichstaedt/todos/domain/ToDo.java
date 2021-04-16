@@ -24,6 +24,13 @@ public class ToDo {
         this.faellig = faellig;
     }
 
+    public ToDo(String id,String name, String beschreibung, LocalDateTime faellig) {
+        this.id = id;
+        this.name = name;
+        this.beschreibung = beschreibung;
+        this.faellig = faellig;
+    }
+
     @PrimaryKey
     @NonNull
     private String id;
