@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import de.eichstaedt.todos.infrastructure.view.ToDoListAdapter;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,25 +34,15 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private ListView todoList;
 
+    private ToDoDataService dataService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseFirestore
-            firestore = FirebaseFirestore.getInstance();
-
-        firestore.collection("todos")
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Log.i(logger,"Got Successful Documents from Google Firebase"+task.getResult().size());
-                    MainActivity.this.onComplete(task.getResult().getDocuments().stream().map(d -> new ToDo(d.getId(),d.getString("name"),d.getString("beschreibung"),LocalDateTime.now())).collect(
-                        Collectors.toList()));
-                } else {
-                    Log.e(logger,"Error Loading Data from Google Firebase ",task.getException());
-                }
-            });
+        dataService = new ToDoDataService(ToDoRepository.getInstance(getApplicationContext()));
+        dataService.readData(this);
 
         /*
         ToDo einkaufen = new ToDo("Einkaufen","Wocheneinkauf Lebensmittel", LocalDateTime.now());
@@ -73,19 +64,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     }
 
-    private void saveToDo(final ToDo toDo) {
-        ToDoRepository.getInstance(getApplicationContext()).toDoDAO().insertAsync(toDo);
-    }
-
-
     @Override
-    public void onComplete(List<ToDo> result) {
+    public void onComplete(List<ToDo> result, String message) {
 
         TextView start = findViewById(R.id.start);
 
         Log.i(logger,"Subscribing to new ToDo List from Database ...");
 
-        start.setText("Anzahl offener ToDos "+result.size());
+        start.setText(message);
 
         todoList = findViewById(R.id.todoList);
 
