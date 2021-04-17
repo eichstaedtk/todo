@@ -30,21 +30,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService = new ToDoDataService(ToDoRepository.getInstance(getApplicationContext()));
         dataService.readToDos(this);
 
-        /*
-        ToDo einkaufen = new ToDo("Einkaufen","Wocheneinkauf Lebensmittel", LocalDateTime.now());
-
-        Observable<List<ToDo>> toDoDBObservable = ToDoRepository.getInstance(getApplicationContext()).toDoDAO().getAllAsync().toObservable();
-
-        saveToDo(einkaufen);
-
-
-        toDoDBObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onComplete);
-                */
-
-
         Log.i(logger,"Application successful started ...");
 
 
