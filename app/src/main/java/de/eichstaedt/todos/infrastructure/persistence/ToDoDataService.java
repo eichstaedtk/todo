@@ -10,13 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import de.eichstaedt.todos.domain.ToDo;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -39,8 +35,6 @@ public class ToDoDataService {
       firestore = FirebaseFirestore.getInstance();
 
   private final ToDoDatabase localDatabase;
-
-  private static final String DATE_FORMAT = "dd.mm.yyyy HH:MM:ss";
 
   public void readToDos(RepositoryCallback callback) {
 
