@@ -2,6 +2,7 @@ package de.eichstaedt.todos.infrastructure.persistence;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import io.reactivex.Completable;
@@ -21,6 +22,9 @@ public interface ToDoDAO {
 
     @Insert
     void insertAll(List<ToDo> todos);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllAsync(List<ToDo> todos);
 
     @Insert
     void insert(ToDo toDo);
