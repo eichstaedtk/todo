@@ -1,5 +1,8 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapFirebaseDocumentToToDo;
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapToDoToFirebaseDocument;
+
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,7 +33,7 @@ public class ToDoDataService {
 
   private boolean offline = true;
 
-  protected static final String logger = ToDoDataService.class.getName();
+  protected static final String LOGGER = ToDoDataService.class.getName();
 
   private final FirebaseFirestore
       firestore = FirebaseFirestore.getInstance();
@@ -39,14 +42,14 @@ public class ToDoDataService {
 
   private static final String DATE_FORMAT = "dd.mm.yyyy HH:MM:ss";
 
-  public void readData(RepositoryCallback callback) {
+  public void readToDos(RepositoryCallback callback) {
 
     localDatabase.toDoDAO().getAllAsync().toObservable().subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(localToDos -> firestore.collection(COLLECTION_PATH)
         .get()
         .addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
-            Log.i(logger,"Got Successful Documents from Google Firebase "+task.getResult().size());
+            Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size());
 
             List<DocumentSnapshot> firebaseDocuments = task.getResult().getDocuments();
             List<ToDo> result = new ArrayList<>();
@@ -64,24 +67,27 @@ public class ToDoDataService {
             offline = false;
 
           } else {
-            Log.e(logger,"Error Loading Data from Google Firebase ",task.getException());
+            Log.e(LOGGER,"Error Loading Data from Google Firebase ",task.getException());
             callback.onComplete(localToDos, "Offline: "+task.getException().getMessage()+" Daten lokal geladen");
           }
         }));
 
   }
 
-  private Function<DocumentSnapshot, ToDo> mapDocumentSnapshotToDo() {
-    return (d) -> {
-      Log.i(logger,"MAP Document "+d.toString());
-      return new ToDo(d.getId(),d.getString("name"),d.getString("beschreibung"),
-        LocalDateTime.parse(d.getString("faellig"),DateTimeFormatter.ofPattern(DATE_FORMAT)));};
+  public void saveToDo(ToDo toDo) {
+    localDatabase.toDoDAO().insertAsync(toDo).doOnComplete(() -> {
+      if(!offline) {
+        firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo)).addOnSuccessListener(
+            documentReference -> Log.d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
+            .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
+      }
+    });
   }
 
   private List<ToDo> saveFireBaseDocumentInLocalDatabase(
       List<DocumentSnapshot> documents) {
 
-    List<ToDo> todos = documents.stream().map(mapDocumentSnapshotToDo()).collect(Collectors.toList());
+    List<ToDo> todos = documents.stream().map(d -> mapFirebaseDocumentToToDo(d)).collect(Collectors.toList());
 
     localDatabase.toDoDAO().insertAllAsync(todos);
 
@@ -90,14 +96,11 @@ public class ToDoDataService {
 
   private void saveLocalToDoInFirebase(List<ToDo> localToDos) {
     localToDos.stream().map(todo -> {
-      Map<String,String> value = new HashMap<>();
-      value.put("id",todo.getId());
-      value.put("name",todo.getName());
-      value.put("beschreibung",todo.getBeschreibung());
-      value.put("faellig",todo.getFaellig().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+      Map<String, String> value = mapToDoToFirebaseDocument(todo);
       return  value;
     }).forEach(d -> firestore.collection(COLLECTION_PATH).add(d));
   }
+
 
   private void deleteAllFirebaseToDos(
       List<DocumentSnapshot> firebaseDocuments) {
