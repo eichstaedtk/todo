@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FirebaseDocumentMapper {
 
-  private static final String DATE_FORMAT = "dd.mm.yyyy HH:MM:ss";
+  public static final String DATE_FORMAT = "dd.mm.yyyy HH:MM:ss";
   public static final String TODO_ID = "id";
   public static final String TODO_NAME = "name";
   public static final String TODO_BESCHREIBUNG = "beschreibung";
@@ -25,9 +25,9 @@ public class FirebaseDocumentMapper {
   }
 
   public static ToDo mapFirebaseDocumentToToDo(DocumentSnapshot documentSnapshot) {
-   return  new ToDo(documentSnapshot.getId(), documentSnapshot.getString("name"),
-        documentSnapshot.getString("beschreibung"),
-        LocalDateTime.parse(documentSnapshot.getString("faellig"),
+     return  new ToDo(documentSnapshot.getString(TODO_ID), documentSnapshot.getString(TODO_NAME),
+        documentSnapshot.getString(TODO_BESCHREIBUNG),
+        LocalDateTime.parse(documentSnapshot.getString(TODO_FAELLIG),
             DateTimeFormatter.ofPattern(DATE_FORMAT)));
   }
 
