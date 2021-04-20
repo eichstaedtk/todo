@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ToDoListAdapter extends ArrayAdapter<String> {
@@ -38,8 +41,12 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     TextView name = convertView.findViewById(R.id.todoNameText);
     name.setText(toDoList.get(position).getName());
 
+    TextView beschreibung = convertView.findViewById(R.id.todoBeschreibungText);
+    beschreibung.setText(toDoList.get(position).getBeschreibung());
+
     TextView faellig = convertView.findViewById(R.id.todoFaelligText);
-    faellig.setText(toDoList.get(position).getFaellig().toString());
+    faellig.setText(toDoList.get(position).getFaellig().format(DateTimeFormatter.ofPattern(
+        FirebaseDocumentMapper.DATE_FORMAT)));
 
     return convertView;
   }
