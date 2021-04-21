@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -42,6 +44,16 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_options,menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.lokaleDelete : dataService.deleteAllLokalToDos();
+            case R.id.load: dataService.readToDos(this);
+        }
+
+        return false;
     }
 
     @Override

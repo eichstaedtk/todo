@@ -95,8 +95,11 @@ public class ToDoDataService {
     }).forEach(d -> firestore.collection(COLLECTION_PATH).add(d));
   }
 
+  public void deleteAllLokalToDos() {
+    localDatabase.toDoDAO().deleteAllAsync();
+  }
 
-  private void deleteAllFirebaseToDos(
+  public void deleteAllFirebaseToDos(
       List<DocumentSnapshot> firebaseDocuments) {
     firebaseDocuments.stream().forEach(d ->
         firestore.collection(COLLECTION_PATH).document(d.getId()).delete());

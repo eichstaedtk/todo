@@ -34,4 +34,7 @@ public interface ToDoDAO {
 
     @Query("DELETE FROM todos")
     void deleteAll();
+
+    @Query("DELETE FROM todos")
+    Completable deleteAllAsync();
 }

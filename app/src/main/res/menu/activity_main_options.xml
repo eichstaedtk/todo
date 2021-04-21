@@ -4,9 +4,9 @@
     <item android:title="Daten"
       app:showAsAction="always">
       <menu>
-        <item android:title="Löschen (lokal)"></item>
-        <item android:title="Löschen (web)"></item>
-        <item android:title="Laden"></item>
+        <item android:id="@+id/lokaleDelete" android:title="Löschen (lokal)"></item>
+        <item android:id="@+id/remoteDelete" android:title="Löschen (web)"></item>
+        <item android:id="@+id/load" android:title="Laden"></item>
       </menu>
     </item>
 </menu>
