@@ -2,6 +2,7 @@ package de.eichstaedt.todos;
 
 import android.util.Log;
 
+import android.view.Menu;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         Log.i(logger,"Application successful started ...");
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_options,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
