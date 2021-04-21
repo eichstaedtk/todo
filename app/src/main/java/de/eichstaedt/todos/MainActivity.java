@@ -1,8 +1,10 @@
 package de.eichstaedt.todos;
 
+import android.content.Intent;
 import android.util.Log;
 
 import android.view.Menu;
+import android.view.View;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_options,menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

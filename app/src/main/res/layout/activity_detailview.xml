@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <EditText
+    android:hint="@string/hint_name"
+    android:id="@+id/itemName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"></EditText>
+
+  <EditText
+    android:hint="@string/hint_beschreibung"
+    android:id="@+id/itemBeschreibung"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@+id/itemName"></EditText>
+</androidx.constraintlayout.widget.ConstraintLayout>

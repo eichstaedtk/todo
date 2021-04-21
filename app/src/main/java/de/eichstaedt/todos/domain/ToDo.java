@@ -1,5 +1,6 @@
 package de.eichstaedt.todos.domain;
 
+import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

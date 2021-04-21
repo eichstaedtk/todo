@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ihre Aufgaben</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_beschreibung">Beschreibung</string>
 </resources>
