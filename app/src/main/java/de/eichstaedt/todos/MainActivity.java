@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         start.setText(message);
 
         todoList = findViewById(R.id.todoList);
+        TextView name = new TextView(this);
+        name.setText("Aktuelle Aufgaben");
+        todoList.addHeaderView(name);
 
         adapter = new ToDoListAdapter(this,result);
 
