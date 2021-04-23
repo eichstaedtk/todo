@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService.readToDos(this);
 
         Log.i(logger,"Application successful started ...");
-
-
     }
 
     @Override

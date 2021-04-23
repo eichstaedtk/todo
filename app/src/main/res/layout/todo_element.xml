@@ -11,16 +11,21 @@
     android:layout_marginRight="10dp"
     android:text="Name" />
   <TextView
-    android:id="@+id/todoBeschreibungText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textSize="40px"
-    android:layout_marginRight="10dp"
-    android:text="Beschreibung" />
-  <TextView
     android:id="@+id/todoFaelligText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Fallig"
     android:textSize="40px" />
+
+  <CheckBox
+    android:id="@+id/todoErledigt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+  </CheckBox>
+
+  <CheckBox
+    android:id="@+id/todoWichtig"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+  </CheckBox>
 </LinearLayout>

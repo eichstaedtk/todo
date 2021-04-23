@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,9 +44,11 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     name.setText(toDoList.get(position).getName());
     name.setOnClickListener((v) -> onItemSelected(toDoList.get(position),getContext()));
 
-    TextView beschreibung = convertView.findViewById(R.id.todoBeschreibungText);
-    beschreibung.setText(toDoList.get(position).getBeschreibung());
-    beschreibung.setOnClickListener((v) -> onItemSelected(toDoList.get(position),getContext()));
+    CheckBox erledigt = convertView.findViewById(R.id.todoErledigt);
+    erledigt.setChecked(toDoList.get(position).isErledigt());
+
+    CheckBox wichtig = convertView.findViewById(R.id.todoWichtig);
+    wichtig.setChecked(toDoList.get(position).isWichtig());
 
     TextView faellig = convertView.findViewById(R.id.todoFaelligText);
     faellig.setText(toDoList.get(position).getFaellig().format(DateTimeFormatter.ofPattern(
