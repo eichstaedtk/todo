@@ -2,6 +2,8 @@ package de.eichstaedt.todos.infrastructure.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,12 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import de.eichstaedt.todos.DetailViewActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -42,6 +46,11 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
 
     TextView name = convertView.findViewById(R.id.todoNameText);
     name.setText(toDoList.get(position).getName());
+    if(toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())){
+      name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
+    }else {
+      name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoNotUrgent));
+    }
     name.setOnClickListener((v) -> onItemSelected(toDoList.get(position),getContext()));
 
     CheckBox erledigt = convertView.findViewById(R.id.todoErledigt);

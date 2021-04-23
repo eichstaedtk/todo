@@ -88,7 +88,7 @@ public class ToDoDataService {
 
     if(todos.isEmpty())
     {
-      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now()));
+      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now().plusDays(7),true));
     }
 
     localDatabase.toDoDAO().insertAllAsync(todos);

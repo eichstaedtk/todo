@@ -20,11 +20,12 @@ public class ToDo {
     }
 
     @Ignore
-    public ToDo(String name, String beschreibung, LocalDateTime faellig) {
+    public ToDo(String name, String beschreibung, LocalDateTime faellig, boolean wichtig) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.beschreibung = beschreibung;
         this.faellig = faellig;
+        this.wichtig = wichtig;
     }
 
     @Ignore
