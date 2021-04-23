@@ -1,11 +1,9 @@
 package de.eichstaedt.todos;
 
-import android.content.Intent;
 import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,9 +65,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         start.setText(message);
 
         todoList = findViewById(R.id.todoList);
-        TextView name = new TextView(this);
-        name.setText("Aktuelle Aufgaben");
-        todoList.addHeaderView(name);
+
+        if(todoList.getHeaderViewsCount() == 0) {
+            TextView name = new TextView(this);
+            name.setText("Aktuelle Aufgaben");
+            todoList.addHeaderView(name);
+        }
 
         adapter = new ToDoListAdapter(this,result);
 

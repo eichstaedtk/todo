@@ -1,8 +1,8 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
-import static java.time.LocalDateTime.parse;
 import androidx.room.TypeConverter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeConverter {
 
@@ -11,7 +11,7 @@ public class LocalDateTimeConverter {
     if (dateString == null) {
       return null;
     } else {
-      return parse(dateString);
+      return LocalDateTime.parse(dateString,DateTimeFormatter.ofPattern(FirebaseDocumentMapper.DATE_FORMAT));
     }
   }
 
@@ -20,7 +20,7 @@ public class LocalDateTimeConverter {
     if (date == null) {
       return null;
     } else {
-      return date.toString();
+      return date.format(DateTimeFormatter.ofPattern(FirebaseDocumentMapper.DATE_FORMAT));
     }
   }
 

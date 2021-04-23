@@ -3,10 +3,7 @@ package de.eichstaedt.todos.infrastructure.persistence;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import androidx.room.Transaction;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.List;
@@ -23,19 +20,14 @@ public interface ToDoDAO {
     Single<List<ToDo>> getAllAsync();
 
     @Insert
-    void insertAll(List<ToDo> todos);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertTodos(List<ToDo> todos);
 
     @Insert
     void insert(ToDo toDo);
 
-    @Transaction
     @Insert
     Completable insertAsync(ToDo toDo);
 
-    @Transaction
     @Query("DELETE FROM todos")
     Completable deleteAll();
 
