@@ -57,9 +57,6 @@ public class ToDoDataService {
               saveLocalToDoInFirebase(localToDos);
               result.addAll(localToDos);
             }else {
-
-
-
               result.addAll(saveFireBaseDocumentInLocalDatabase(task.getResult().getDocuments()));
             }
 
@@ -106,9 +103,12 @@ public class ToDoDataService {
     }).forEach(d -> firestore.collection(COLLECTION_PATH).add(d));
   }
 
-  public void deleteAllLokalToDos(List<ToDo> toDos) {
-    Log.i(logger,"Delete all lokal todos ..."+toDos.size());
-    localDatabase.toDoDAO().deleteTodos(toDos);
+  public void deleteAllLokalToDos(RepositoryCallback callback) {
+    Log.i(logger,"Delete all lokal todos ...");
+    localDatabase.toDoDAO().deleteAll().doOnComplete(() ->{
+      Log.i(logger,"Deleted all lokal todos");
+      callback.onComplete(new ArrayList<>(),"Es wurden alle Daten lokal gelöscht.");
+    }).doOnError(e -> Log.e(logger,"Error during delete all lokal todos ...",e));
   }
 
   public void deleteAllFirebaseToDos() {
@@ -120,6 +120,8 @@ public class ToDoDataService {
             task.getResult().getDocuments().stream().forEach(d ->
                 firestore.collection(COLLECTION_PATH).document(d.getId()).delete());
             Log.i(logger,"Deleted all firebase documents");
+          }else {
+            Log.e(logger,"Error during delete all firebase documents!",task.getException());
           }
         });
   }

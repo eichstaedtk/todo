@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.lokaleDelete : dataService.deleteAllLokalToDos(adapter.getToDoList());
-            case R.id.remoteDelete : dataService.deleteAllFirebaseToDos();
-            case R.id.load: dataService.readToDos(this);
+            case R.id.lokaleDelete : dataService.deleteAllLokalToDos(this);break;
+            case R.id.remoteDelete : dataService.deleteAllFirebaseToDos();break;
+            case R.id.load: dataService.readToDos(this);break;
         }
 
         return false;

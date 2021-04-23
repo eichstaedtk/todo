@@ -40,7 +40,7 @@ public interface ToDoDAO {
 
     @Transaction
     @Query("DELETE FROM todos")
-    void deleteAll();
+    Completable deleteAll();
 
     @Delete
     Completable deleteTodos(List<ToDo> todos);
