@@ -60,4 +60,8 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     openDetailView.putExtra(DetailViewActivity.ARG_BESCHREIBUNG,toDo.getBeschreibung());
     context.startActivity(openDetailView);
   }
+
+  public List<ToDo> getToDoList() {
+    return toDoList;
+  }
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FirebaseDocumentMapper {
 
-  public static final String DATE_FORMAT = "dd.mm.yyyy HH:MM:ss";
+  public static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
   public static final String TODO_ID = "id";
   public static final String TODO_NAME = "name";
   public static final String TODO_BESCHREIBUNG = "beschreibung";

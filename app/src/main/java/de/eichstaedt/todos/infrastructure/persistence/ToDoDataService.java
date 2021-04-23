@@ -7,9 +7,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import de.eichstaedt.todos.MainActivity;
 import de.eichstaedt.todos.domain.ToDo;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
  */
 
 public class ToDoDataService {
+
+  protected static final String logger = ToDoDataService.class.getName();
 
   public static final String COLLECTION_PATH = "todos";
 
@@ -45,15 +49,17 @@ public class ToDoDataService {
           if (task.isSuccessful()) {
             Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size());
 
-            List<DocumentSnapshot> firebaseDocuments = task.getResult().getDocuments();
             List<ToDo> result = new ArrayList<>();
 
             if(!localToDos.isEmpty())
             {
-              deleteAllFirebaseToDos(firebaseDocuments);
+              deleteAllFirebaseToDos();
               saveLocalToDoInFirebase(localToDos);
               result.addAll(localToDos);
             }else {
+
+
+
               result.addAll(saveFireBaseDocumentInLocalDatabase(task.getResult().getDocuments()));
             }
 
@@ -83,6 +89,11 @@ public class ToDoDataService {
 
     List<ToDo> todos = documents.stream().map(d -> mapFirebaseDocumentToToDo(d)).collect(Collectors.toList());
 
+    if(todos.isEmpty())
+    {
+      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now()));
+    }
+
     localDatabase.toDoDAO().insertAllAsync(todos);
 
     return todos;
@@ -95,14 +106,22 @@ public class ToDoDataService {
     }).forEach(d -> firestore.collection(COLLECTION_PATH).add(d));
   }
 
-  public void deleteAllLokalToDos() {
-    localDatabase.toDoDAO().deleteAllAsync();
+  public void deleteAllLokalToDos(List<ToDo> toDos) {
+    Log.i(logger,"Delete all lokal todos ..."+toDos.size());
+    localDatabase.toDoDAO().deleteTodos(toDos);
   }
 
-  public void deleteAllFirebaseToDos(
-      List<DocumentSnapshot> firebaseDocuments) {
-    firebaseDocuments.stream().forEach(d ->
-        firestore.collection(COLLECTION_PATH).document(d.getId()).delete());
+  public void deleteAllFirebaseToDos() {
+
+    firestore.collection(COLLECTION_PATH)
+        .get()
+        .addOnCompleteListener(task -> {
+          if (task.isSuccessful()) {
+            task.getResult().getDocuments().stream().forEach(d ->
+                firestore.collection(COLLECTION_PATH).document(d.getId()).delete());
+            Log.i(logger,"Deleted all firebase documents");
+          }
+        });
   }
 
   public boolean isOffline() {

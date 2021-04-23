@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private ToDoDataService dataService;
 
+    private ToDoListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.lokaleDelete : dataService.deleteAllLokalToDos();
+            case R.id.lokaleDelete : dataService.deleteAllLokalToDos(adapter.getToDoList());
+            case R.id.remoteDelete : dataService.deleteAllFirebaseToDos();
             case R.id.load: dataService.readToDos(this);
         }
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         todoList = findViewById(R.id.todoList);
 
-        ToDoListAdapter adapter = new ToDoListAdapter(this,result);
+        adapter = new ToDoListAdapter(this,result);
 
         todoList.setAdapter(adapter);
 
