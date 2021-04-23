@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +47,15 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
 
     TextView name = convertView.findViewById(R.id.todoNameText);
     name.setText(toDoList.get(position).getName());
-    if(toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())){
-      name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
+
+    if(!toDoList.get(position).isErledigt()) {
+      if (toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())) {
+        name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
+      } else {
+        name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoNotUrgent));
+      }
     }else {
-      name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoNotUrgent));
+      name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
     name.setOnClickListener((v) -> onItemSelected(toDoList.get(position),getContext()));
 

@@ -26,6 +26,7 @@ public class ToDo {
         this.beschreibung = beschreibung;
         this.faellig = faellig;
         this.wichtig = wichtig;
+        this.erledigt = false;
     }
 
     @Ignore
@@ -34,6 +35,8 @@ public class ToDo {
         this.name = name;
         this.beschreibung = beschreibung;
         this.faellig = faellig;
+        this.wichtig = false;
+        this.erledigt = false;
     }
 
     @PrimaryKey
