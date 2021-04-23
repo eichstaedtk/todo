@@ -22,15 +22,12 @@ public interface ToDoDAO {
     @Query("SELECT * FROM todos")
     Single<List<ToDo>> getAllAsync();
 
-    @Transaction
     @Insert
     void insertAll(List<ToDo> todos);
 
-    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertAllAsync(List<ToDo> todos);
+    Completable insertTodos(List<ToDo> todos);
 
-    @Transaction
     @Insert
     void insert(ToDo toDo);
 

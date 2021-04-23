@@ -1,5 +1,6 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 

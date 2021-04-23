@@ -47,7 +47,7 @@ public class ToDoDataService {
         .get()
         .addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
-            Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size());
+            Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size() + " and local todos "+localToDos.size());
 
             List<ToDo> result = new ArrayList<>();
 
@@ -89,9 +89,14 @@ public class ToDoDataService {
     if(todos.isEmpty())
     {
       todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now().plusDays(7),true));
+      saveLocalToDoInFirebase(todos);
     }
 
-    localDatabase.toDoDAO().insertAllAsync(todos);
+    Log.i(logger,"Save todos into local db .... "+todos.size());
+
+    localDatabase.toDoDAO().insertTodos(todos).doOnComplete(()-> {
+      Log.i(logger,"Saved all lokal todos");
+    });
 
     return todos;
   }
