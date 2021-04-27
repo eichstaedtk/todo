@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import de.eichstaedt.todos.domain.ToDo;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import java.time.LocalDateTime;
@@ -43,10 +43,9 @@ public class ToDoDataService {
 
   public void readToDos(RepositoryCallback callback) {
 
-    localDatabase.toDoDAO().getAllAsync().toObservable().subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread()).subscribe(localToDos -> firestore.collection(COLLECTION_PATH)
-        .get()
-        .addOnCompleteListener(task -> {
+    Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(localToDos -> firestore.collection(COLLECTION_PATH).get().addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
             Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size() + " and local todos "+localToDos.size());
 
@@ -77,7 +76,8 @@ public class ToDoDataService {
   }
 
   public void saveToDo(ToDo toDo) {
-    localDatabase.toDoDAO().insertAsync(toDo).doOnComplete(() -> {
+    Completable.fromAction(()-> localDatabase.toDoDAO().insertAsync(toDo)).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
       if(!offline) {
         firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo)).addOnSuccessListener(
             documentReference -> Log.d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
@@ -93,14 +93,14 @@ public class ToDoDataService {
 
     if(todos.isEmpty())
     {
-      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now().plusDays(3),true));
+      todos.add(new ToDo("Test Aufgabe","Schnell was erledigen", LocalDateTime.now().plusDays(3),true));
       saveLocalToDoInFirebase(todos);
     }
 
     Log.i(logger,"Save todos into local db .... "+todos.size());
 
-    localDatabase.toDoDAO().insertTodos(todos).toObservable().subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread()).blockingSubscribe();
+    Completable.fromAction(() -> localDatabase.toDoDAO().insertTodos(todos)).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(()-> Log.i(logger,"Save firebase documents to local database"));
 
     return todos;
   }
@@ -116,13 +116,13 @@ public class ToDoDataService {
 
   public void deleteAllLokalToDos(RepositoryCallback callback) {
     Log.i(logger,"Delete all lokal todos ...");
-    Observable.fromCallable(() -> {localDatabase.toDoDAO().deleteAll();return "";})
+    Completable.fromAction(() -> {localDatabase.toDoDAO().deleteAll();})
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe((e) ->{
-      Log.i(logger,"Deleted all lokal todos");
-      callback.onComplete(new ArrayList<>(),"Es wurden alle Daten lokal gelöscht.");
-    });
+        .subscribe(() -> {Log.i(logger,"Deleted all lokal todos");
+          callback.onComplete(new ArrayList<>(),"Es wurden alle Daten lokal gelöscht.");
+        });
+
   }
 
   private void deleteAllFirebaseToDos(

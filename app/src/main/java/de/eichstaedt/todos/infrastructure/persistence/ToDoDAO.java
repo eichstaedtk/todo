@@ -16,14 +16,11 @@ public interface ToDoDAO {
     @Query("SELECT * FROM todos")
     List<ToDo> getAll();
 
-    @Query("SELECT * FROM todos")
-    Single<List<ToDo>> getAllAsync();
+    @Insert
+    void insertTodos(List<ToDo> todos);
 
     @Insert
-    Completable insertTodos(List<ToDo> todos);
-
-    @Insert
-    Completable insertAsync(ToDo toDo);
+    void insertAsync(ToDo toDo);
 
     @Query("DELETE FROM todos")
     void deleteAll();
