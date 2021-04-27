@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import de.eichstaedt.todos.domain.ToDo;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import java.time.LocalDateTime;
@@ -92,7 +93,7 @@ public class ToDoDataService {
 
     if(todos.isEmpty())
     {
-      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now().plusDays(7),true));
+      todos.add(new ToDo("Einkaufen","bei Kaufland", LocalDateTime.now().plusDays(3),true));
       saveLocalToDoInFirebase(todos);
     }
 
@@ -115,13 +116,16 @@ public class ToDoDataService {
 
   public void deleteAllLokalToDos(RepositoryCallback callback) {
     Log.i(logger,"Delete all lokal todos ...");
-    localDatabase.toDoDAO().deleteAll().doOnComplete(() ->{
+    Observable.fromCallable(() -> {localDatabase.toDoDAO().deleteAll();return "";})
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe((e) ->{
       Log.i(logger,"Deleted all lokal todos");
       callback.onComplete(new ArrayList<>(),"Es wurden alle Daten lokal gelöscht.");
-    }).doOnError(e -> Log.e(logger,"Error during delete all lokal todos ...",e));
+    });
   }
 
-  public void deleteAllFirebaseToDos(
+  private void deleteAllFirebaseToDos(
       List<DocumentSnapshot> documents) {
             documents.stream().forEach(d ->
                 firestore.collection(COLLECTION_PATH).document(d.getId()).delete());

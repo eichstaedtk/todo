@@ -23,14 +23,8 @@ public interface ToDoDAO {
     Completable insertTodos(List<ToDo> todos);
 
     @Insert
-    void insert(ToDo toDo);
-
-    @Insert
     Completable insertAsync(ToDo toDo);
 
     @Query("DELETE FROM todos")
-    Completable deleteAll();
-
-    @Delete
-    Completable deleteTodos(List<ToDo> todos);
+    void deleteAll();
 }
