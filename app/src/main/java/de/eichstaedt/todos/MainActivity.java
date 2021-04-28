@@ -1,17 +1,22 @@
 package de.eichstaedt.todos;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import de.eichstaedt.todos.infrastructure.view.ToDoListAdapter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
@@ -27,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private ToDoListAdapter adapter;
 
+    private FloatingActionButton addNewToDoButton;
+
+    public static final int RETURN_SAVE_TODO = 42;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +44,36 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService = new ToDoDataService(ToDoRepository.getInstance(getApplicationContext()));
         dataService.readToDos(this);
 
+        this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
+        this.addNewToDoButton.setOnClickListener((view) -> {
+            Intent openDetailView = new Intent(this,DetailViewActivity.class);
+            this.startActivityForResult(openDetailView,MainActivity.RETURN_SAVE_TODO);
+        });
         Log.i(logger,"Application successful started ...");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.i(logger,"On Activity Result "+requestCode+" "+resultCode);
+
+        if(requestCode == RETURN_SAVE_TODO)
+        {
+            Log.i(logger,"Return to save to Do");
+
+            if(resultCode == Activity.RESULT_OK) {
+                String todoName = data.getStringExtra(DetailViewActivity.ARG_NAME);
+                String todoBeschreibung = data.getStringExtra(DetailViewActivity.ARG_BESCHREIBUNG);
+
+                ToDo toDo = new ToDo(todoName,todoBeschreibung, LocalDateTime.now().plusDays(7),false);
+
+                dataService.saveToDo(toDo);
+
+                dataService.readToDos(this);
+            }
+        }
+
     }
 
     @Override

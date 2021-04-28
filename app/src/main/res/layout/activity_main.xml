@@ -27,4 +27,15 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.071" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/addNewToDoButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:srcCompat="@drawable/baseline_add_white_24dp"
+      android:layout_margin="16dp"
+      />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

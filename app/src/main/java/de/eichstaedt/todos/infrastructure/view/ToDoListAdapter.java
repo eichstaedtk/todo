@@ -13,8 +13,10 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import de.eichstaedt.todos.DetailViewActivity;
+import de.eichstaedt.todos.MainActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
@@ -57,7 +59,7 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     }else {
       name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
-    name.setOnClickListener((v) -> onItemSelected(toDoList.get(position),getContext()));
+    name.setOnClickListener((v) -> onItemSelected(toDoList.get(position),(MainActivity) getContext()));
 
     CheckBox erledigt = convertView.findViewById(R.id.todoErledigt);
     erledigt.setChecked(toDoList.get(position).isErledigt());
@@ -72,11 +74,13 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     return convertView;
   }
 
-  protected void onItemSelected(ToDo toDo, Context context) {
+  protected void onItemSelected(ToDo toDo, MainActivity context) {
+
     Intent openDetailView = new Intent(context,DetailViewActivity.class);
     openDetailView.putExtra(DetailViewActivity.ARG_NAME,toDo.getName());
     openDetailView.putExtra(DetailViewActivity.ARG_BESCHREIBUNG,toDo.getBeschreibung());
-    context.startActivity(openDetailView);
+
+    context.startActivityForResult(openDetailView,MainActivity.RETURN_SAVE_TODO);
   }
 
   public List<ToDo> getToDoList() {
