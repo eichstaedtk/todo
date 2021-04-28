@@ -22,7 +22,7 @@ import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 
-public class MainActivity extends AppCompatActivity implements RepositoryCallback<List<ToDo>> {
+public class MainActivity extends AppCompatActivity implements RepositoryCallback<List<ToDo>>, ReloadViewCallback {
 
     protected static final String logger = MainActivity.class.getName();
 
@@ -45,11 +45,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService.readToDos(this);
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
-        this.addNewToDoButton.setOnClickListener((view) -> {
-            Intent openDetailView = new Intent(this,DetailViewActivity.class);
-            this.startActivityForResult(openDetailView,MainActivity.RETURN_SAVE_TODO);
-        });
+        this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
+
         Log.i(logger,"Application successful started ...");
+    }
+
+    private void onClickAddToDoButton() {
+        Intent openDetailView = new Intent(this, DetailViewActivity.class);
+        this.startActivityForResult(openDetailView, MainActivity.RETURN_SAVE_TODO);
     }
 
     @Override
@@ -68,9 +71,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
                 ToDo toDo = new ToDo(todoName,todoBeschreibung, LocalDateTime.now().plusDays(7),false);
 
-                dataService.saveToDo(toDo);
-
-                dataService.readToDos(this);
+                dataService.saveToDo(toDo,this);
             }
         }
 
@@ -115,5 +116,17 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         todoList.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onComplete(String message) {
+
+        TextView start = findViewById(R.id.start);
+
+        Log.i(logger,"Save ToDos finished");
+
+        start.setText(message);
+
+        dataService.readToDos(this);
     }
 }

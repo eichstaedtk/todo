@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import de.eichstaedt.todos.ReloadViewCallback;
 import de.eichstaedt.todos.domain.ToDo;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -75,7 +76,7 @@ public class ToDoDataService {
 
   }
 
-  public void saveToDo(ToDo toDo) {
+  public void saveToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().insertAsync(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
       if(!offline) {
@@ -83,6 +84,7 @@ public class ToDoDataService {
             documentReference -> Log.d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
             .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
       }
+      callback.onComplete("ToDo gespeichert "+toDo.getName());
     });
   }
 
