@@ -11,7 +11,7 @@ public class ToDoTest {
 
   @Test
   public void testToDoCreationWithoutId() {
-    ToDo einkaufen = new ToDo("Einkaufen","Wocheneinkauf", LocalDateTime.now());
+    ToDo einkaufen = new ToDo("Einkaufen","Wocheneinkauf", LocalDateTime.now(),false);
 
     assertFalse(einkaufen.getId().isEmpty());
     assertEquals("Einkaufen",einkaufen.getName());
