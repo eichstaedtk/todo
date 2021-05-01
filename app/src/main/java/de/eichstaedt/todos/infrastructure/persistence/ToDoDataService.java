@@ -77,16 +77,35 @@ public class ToDoDataService {
   }
 
   public void saveToDo(ToDo toDo, ReloadViewCallback callback) {
-    Completable.fromAction(()-> localDatabase.toDoDAO().insertAsync(toDo)).subscribeOn(Schedulers.io())
+    Completable.fromAction(()-> localDatabase.toDoDAO().insertToDo(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      if(!offline) {
-        firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo)).addOnSuccessListener(
-            documentReference -> Log.d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
-            .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
+      saveInFirebase(toDo);
+      if(callback != null) {
+        callback.onComplete("ToDo gespeichert " + toDo.getName());
       }
-      callback.onComplete("ToDo gespeichert "+toDo.getName());
     });
   }
+
+  public void updateToDo(ToDo toDo, ReloadViewCallback callback) {
+    Completable.fromAction(()-> localDatabase.toDoDAO().update(toDo)).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
+      saveInFirebase(toDo);
+      if(callback != null) {
+        callback.onComplete("ToDo gespeichert " + toDo.getName());
+      }
+    });
+  }
+
+  private void saveInFirebase(ToDo toDo) {
+    if (!offline) {
+      firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
+          .addOnSuccessListener(
+              documentReference -> Log
+                  .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
+          .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
+    }
+  }
+
 
   private List<ToDo> saveFireBaseDocumentInLocalDatabase(
       List<DocumentSnapshot> documents) {
@@ -122,7 +141,9 @@ public class ToDoDataService {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(() -> {Log.i(logger,"Deleted all lokal todos");
-          callback.onComplete(new ArrayList<>(),"Es wurden alle Daten lokal gelöscht.");
+          if(callback != null) {
+            callback.onComplete(new ArrayList<>(), "Es wurden alle Daten lokal gelöscht.");
+          }
         });
 
   }

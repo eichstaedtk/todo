@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.List;
@@ -20,8 +21,11 @@ public interface ToDoDAO {
     void insertTodos(List<ToDo> todos);
 
     @Insert
-    void insertAsync(ToDo toDo);
+    void insertToDo(ToDo toDo);
 
     @Query("DELETE FROM todos")
     void deleteAll();
+
+    @Update
+    void update(ToDo toDo);
 }

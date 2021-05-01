@@ -105,4 +105,16 @@ public class ToDo {
     public void setFaellig(LocalDateTime faellig) {
         this.faellig = faellig;
     }
+
+    @Override
+    public String toString() {
+        return "ToDo{" +
+            "id='" + id + '\'' +
+            ", name='" + name + '\'' +
+            ", beschreibung='" + beschreibung + '\'' +
+            ", erledigt=" + erledigt +
+            ", wichtig=" + wichtig +
+            ", faellig=" + faellig +
+            '}';
+    }
 }

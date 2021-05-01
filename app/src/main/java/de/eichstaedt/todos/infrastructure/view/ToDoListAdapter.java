@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -20,17 +22,24 @@ import de.eichstaedt.todos.MainActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
+import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ToDoListAdapter extends ArrayAdapter<String> {
 
+  protected static final String logger = ToDoListAdapter.class.getName();
+
   private List<ToDo> toDoList;
 
-  public ToDoListAdapter(@NonNull Context context, List<ToDo> toDos) {
+  private ToDoDataService dataService;
+
+  public ToDoListAdapter(@NonNull Context context, List<ToDo> toDos,
+      ToDoDataService dataService) {
     super(context, toDos.size());
     this.toDoList = toDos;
+    this.dataService = dataService;
   }
 
   @Override
@@ -41,6 +50,8 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
   @NonNull
   @Override
   public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+    Log.i(logger,"Creating new view for todo ... "+toDoList.get(position));
 
     if(convertView == null) {
       LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -63,9 +74,11 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
 
     CheckBox erledigt = convertView.findViewById(R.id.todoErledigt);
     erledigt.setChecked(toDoList.get(position).isErledigt());
+    erledigt.setOnClickListener((v) -> {this.onClick(v,toDoList.get(position));});
 
     CheckBox wichtig = convertView.findViewById(R.id.todoWichtig);
     wichtig.setChecked(toDoList.get(position).isWichtig());
+    wichtig.setOnClickListener((v) -> {this.onClick(v,toDoList.get(position));});
 
     TextView faellig = convertView.findViewById(R.id.todoFaelligText);
     faellig.setText(toDoList.get(position).getFaellig().format(DateTimeFormatter.ofPattern(
@@ -83,7 +96,18 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     context.startActivityForResult(openDetailView,MainActivity.RETURN_SAVE_TODO);
   }
 
-  public List<ToDo> getToDoList() {
-    return toDoList;
+
+  public void onClick(View v, ToDo toDo) {
+
+    if(v.getId() ==  R.id.todoWichtig) {
+      toDo.setWichtig(((CheckBox)v).isChecked());
+      dataService.updateToDo(toDo, (s)-> this.notifyDataSetChanged());
+    }
+
+    if(v.getId() ==  R.id.todoErledigt) {
+      toDo.setErledigt(((CheckBox)v).isChecked());
+      dataService.updateToDo(toDo, (s)-> this.notifyDataSetChanged());
+    }
+
   }
 }

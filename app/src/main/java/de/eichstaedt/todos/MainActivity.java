@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             todoList.addHeaderView(name);
         }
 
-        adapter = new ToDoListAdapter(this,result);
+        adapter = new ToDoListAdapter(this,result, dataService);
 
         todoList.setAdapter(adapter);
 
