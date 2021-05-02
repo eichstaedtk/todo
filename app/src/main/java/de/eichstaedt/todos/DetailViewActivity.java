@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.infrastructure.view.DetailViewBindingContract;
+import de.eichstaedt.todos.infrastructure.view.DetailViewPresenter;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import java.util.Date;
 
@@ -32,22 +33,13 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewB
     super.onCreate(savedInstanceState);
 
     ActivityDetailviewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detailview);
+    DetailViewPresenter presenter = new DetailViewPresenter(this,getApplicationContext());
     toDoDetailView = new ToDoDetailView(getIntent().getStringExtra(ARG_ID),getIntent().getStringExtra(ARG_NAME),getIntent().getStringExtra(ARG_BESCHREIBUNG),false,false,new Date());
     binding.setTodo(toDoDetailView);
-
-    this.saveToDoButton = findViewById(R.id.saveToDoButton);
-    this.saveToDoButton.setOnClickListener((view)-> onClickSaveToDoButton());
+    binding.setPresenter(presenter);
 
   }
 
-  private void onClickSaveToDoButton() {
-    Intent returnIntent = new Intent(this, MainActivity.class);
-    returnIntent.putExtra(ARG_ID,toDoDetailView.getId());
-    returnIntent.putExtra(ARG_NAME,toDoDetailView.getName());
-    returnIntent.putExtra(ARG_BESCHREIBUNG,toDoDetailView.getBeschreibung());
-    this.setResult(Activity.RESULT_OK,returnIntent);
-    finish();
-  }
 
   @Override
   public void showData(ToDoDetailView toDoDetailView) {

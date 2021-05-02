@@ -4,6 +4,7 @@ public interface DetailViewBindingContract {
 
   interface Presenter {
     void onShowData(ToDoDetailView toDoDetailView);
+    void onClickSaveToDoButton(ToDoDetailView toDoDetailView);
   }
 
   interface View {
