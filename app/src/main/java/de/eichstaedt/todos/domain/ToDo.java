@@ -1,22 +1,23 @@
 package de.eichstaedt.todos.domain;
 
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
 import de.eichstaedt.todos.infrastructure.persistence.LocalDateTimeConverter;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.parceler.Parcel;
 
+@Parcel
 @Entity(tableName = "todos")
 @TypeConverters({LocalDateTimeConverter.class})
 public class ToDo {
 
     public ToDo() {
+        this.id = UUID.randomUUID().toString();
     }
 
     @Ignore

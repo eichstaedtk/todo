@@ -5,6 +5,10 @@ import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 import java.util.Date;
 
+/**
+ * Class for Detail View View Model with Databinding
+ */
+
 public class ToDoDetailView extends BaseObservable {
 
   public ToDoDetailView(String id,String name, String beschreibung, boolean erledigt, boolean wichtig,
@@ -82,5 +86,17 @@ public class ToDoDetailView extends BaseObservable {
 
   public void setFaellig(Date faellig) {
     this.faellig = faellig;
+  }
+
+  @Override
+  public String toString() {
+    return "ToDoDetailView{" +
+        "id='" + id + '\'' +
+        ", name='" + name + '\'' +
+        ", beschreibung='" + beschreibung + '\'' +
+        ", erledigt=" + erledigt +
+        ", wichtig=" + wichtig +
+        ", faellig=" + faellig +
+        '}';
   }
 }

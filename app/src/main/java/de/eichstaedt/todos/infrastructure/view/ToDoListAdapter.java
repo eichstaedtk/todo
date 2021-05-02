@@ -1,10 +1,14 @@
 package de.eichstaedt.todos.infrastructure.view;
 
+import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
+import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +30,7 @@ import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.parceler.Parcels;
 
 public class ToDoListAdapter extends ArrayAdapter<String> {
 
@@ -94,9 +99,10 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
   protected void onItemSelected(ToDo toDo, MainActivity context) {
 
     Intent openDetailView = new Intent(context,DetailViewActivity.class);
-    openDetailView.putExtra(DetailViewActivity.ARG_ID,toDo.getId());
-    openDetailView.putExtra(DetailViewActivity.ARG_NAME,toDo.getName());
-    openDetailView.putExtra(DetailViewActivity.ARG_BESCHREIBUNG,toDo.getBeschreibung());
+
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
+    openDetailView.putExtra(TODO_BUNDLE, bundle);
 
     context.startActivityForResult(openDetailView,MainActivity.RETURN_UPDATE_TODO);
   }

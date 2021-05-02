@@ -1,5 +1,8 @@
 package de.eichstaedt.todos;
 
+import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
+import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -21,6 +24,7 @@ import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
+import org.parceler.Parcels;
 
 public class MainActivity extends AppCompatActivity implements RepositoryCallback<List<ToDo>>, ReloadViewCallback {
 
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private void onClickAddToDoButton() {
         Intent openDetailView = new Intent(this, DetailViewActivity.class);
+        ToDo newToDo = new ToDo();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TODO_PARCEL, Parcels.wrap(newToDo));
+        openDetailView.putExtra(TODO_BUNDLE, bundle);
         this.startActivityForResult(openDetailView, MainActivity.RETURN_SAVE_TODO);
     }
 
@@ -68,12 +76,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             Log.i(logger,"Return to save to Do");
 
             if(resultCode == Activity.RESULT_OK) {
-                String todoName = data.getStringExtra(DetailViewActivity.ARG_NAME);
-                String todoBeschreibung = data.getStringExtra(DetailViewActivity.ARG_BESCHREIBUNG);
-
-                ToDo toDo = new ToDo(todoName,todoBeschreibung, LocalDateTime.now().plusDays(7),false);
-
-                dataService.saveToDo(toDo,this);
+                Bundle b = data.getBundleExtra(TODO_BUNDLE);
+                ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
+                ToDo toDoNew = new ToDo(toDo.getName(),toDo.getBeschreibung(), LocalDateTime.now().plusDays(7),false);
+                dataService.saveToDo(toDoNew,this);
             }
         }
 
@@ -81,12 +87,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             Log.i(logger,"Return to update to Do");
 
             if(resultCode == Activity.RESULT_OK) {
-                String todoid = data.getStringExtra(DetailViewActivity.ARG_ID);
-                String todoName = data.getStringExtra(DetailViewActivity.ARG_NAME);
-                String todoBeschreibung = data.getStringExtra(DetailViewActivity.ARG_BESCHREIBUNG);
-
-                ToDo toDo = new ToDo(todoid,todoName,todoBeschreibung);
-
+                Bundle b = data.getBundleExtra(TODO_BUNDLE);
+                ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
                 dataService.updateToDo(toDo,this);
             }
         }

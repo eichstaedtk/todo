@@ -1,45 +1,44 @@
 package de.eichstaedt.todos.infrastructure.view;
 
-import static de.eichstaedt.todos.DetailViewActivity.ARG_BESCHREIBUNG;
-import static de.eichstaedt.todos.DetailViewActivity.ARG_ID;
-import static de.eichstaedt.todos.DetailViewActivity.ARG_NAME;
+import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
+import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import de.eichstaedt.todos.DetailViewActivity;
 import de.eichstaedt.todos.MainActivity;
-import de.eichstaedt.todos.infrastructure.view.DetailViewBindingContract.View;
+import de.eichstaedt.todos.domain.ToDo;
+import org.parceler.Parcels;
 
 public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
 
-  private DetailViewBindingContract.View view;
+  private DetailViewActivity activity;
 
   private Context context;
 
   protected static final String logger = DetailViewPresenter.class.getName();
 
   public DetailViewPresenter(
-      View view, Context context) {
-    this.view = view;
+      DetailViewActivity activity, Context context) {
+    this.activity = activity;
     this.context = context;
-  }
-
-  @Override
-  public void onShowData(ToDoDetailView toDoDetailView) {
-      view.showData(toDoDetailView);
   }
 
   @Override
   public void onClickSaveToDoButton(ToDoDetailView toDoDetailView) {
     Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.getId());
     Intent returnIntent = new Intent(context, MainActivity.class);
-    returnIntent.putExtra(ARG_ID,toDoDetailView.getId());
-    returnIntent.putExtra(ARG_NAME,toDoDetailView.getName());
-    returnIntent.putExtra(ARG_BESCHREIBUNG,toDoDetailView.getBeschreibung());
-    ((DetailViewActivity)view).setResult(Activity.RESULT_OK,returnIntent);
-    ((DetailViewActivity)view).finish();
+
+    ToDo toDo = new ToDo(toDoDetailView.getId(),toDoDetailView.getName(),toDoDetailView.getBeschreibung());
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
+    returnIntent.putExtra(TODO_BUNDLE, bundle);
+
+    activity.setResult(Activity.RESULT_OK,returnIntent);
+    activity.finish();
   }
 
 }
