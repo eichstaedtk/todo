@@ -3,6 +3,7 @@ package de.eichstaedt.todos.infrastructure.view;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
 public class ToDoDetailView extends BaseObservable {
 
   public ToDoDetailView(String id,String name, String beschreibung, boolean erledigt, boolean wichtig,
-      Date faellig) {
+      LocalDateTime faellig) {
     this.id = id;
     this.name = name;
     this.beschreibung = beschreibung;
@@ -31,7 +32,7 @@ public class ToDoDetailView extends BaseObservable {
 
   private boolean wichtig;
 
-  private Date faellig;
+  private LocalDateTime faellig;
 
   public String getId() {
     return id;
@@ -80,11 +81,11 @@ public class ToDoDetailView extends BaseObservable {
   }
 
   @Bindable
-  public Date getFaellig() {
+  public LocalDateTime getFaellig() {
     return faellig;
   }
 
-  public void setFaellig(Date faellig) {
+  public void setFaellig(LocalDateTime faellig) {
     this.faellig = faellig;
   }
 

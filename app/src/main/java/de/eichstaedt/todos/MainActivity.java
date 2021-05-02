@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             if(resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getBundleExtra(TODO_BUNDLE);
                 ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
-                ToDo toDoNew = new ToDo(toDo.getName(),toDo.getBeschreibung(), LocalDateTime.now().plusDays(7),false);
-                dataService.saveToDo(toDoNew,this);
+                dataService.saveToDo(toDo,this);
             }
         }
 

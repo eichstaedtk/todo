@@ -99,11 +99,9 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
   protected void onItemSelected(ToDo toDo, MainActivity context) {
 
     Intent openDetailView = new Intent(context,DetailViewActivity.class);
-
     Bundle bundle = new Bundle();
     bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
     openDetailView.putExtra(TODO_BUNDLE, bundle);
-
     context.startActivityForResult(openDetailView,MainActivity.RETURN_UPDATE_TODO);
   }
 

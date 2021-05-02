@@ -7,6 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 import de.eichstaedt.todos.infrastructure.persistence.LocalDateTimeConverter;
+import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.parceler.Parcel;
@@ -18,6 +19,16 @@ public class ToDo {
 
     public ToDo() {
         this.id = UUID.randomUUID().toString();
+        this.faellig = LocalDateTime.now();
+    }
+
+    public ToDo(@NonNull ToDoDetailView toDoDetailView) {
+        this.id = toDoDetailView.getId();
+        this.name = toDoDetailView.getName();
+        this.beschreibung = toDoDetailView.getBeschreibung();
+        this.erledigt = toDoDetailView.isErledigt();
+        this.wichtig = toDoDetailView.isWichtig();
+        this.faellig = toDoDetailView.getFaellig();
     }
 
     @Ignore

@@ -29,10 +29,10 @@ public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
 
   @Override
   public void onClickSaveToDoButton(ToDoDetailView toDoDetailView) {
-    Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.getId());
+    Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.toString());
     Intent returnIntent = new Intent(context, MainActivity.class);
 
-    ToDo toDo = new ToDo(toDoDetailView.getId(),toDoDetailView.getName(),toDoDetailView.getBeschreibung());
+    ToDo toDo = new ToDo(toDoDetailView);
     Bundle bundle = new Bundle();
     bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
     returnIntent.putExtra(TODO_BUNDLE, bundle);

@@ -10,7 +10,6 @@ import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.view.DetailViewPresenter;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
-import java.util.Date;
 import org.parceler.Parcels;
 
 public class DetailViewActivity extends AppCompatActivity {
@@ -34,7 +33,7 @@ public class DetailViewActivity extends AppCompatActivity {
     Bundle b = intent.getBundleExtra(TODO_BUNDLE);
     ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
     toDoDetailView = new ToDoDetailView(toDo.getId(), toDo.getName(),
-        toDo.getBeschreibung(),toDo.isErledigt(),toDo.isWichtig(),new Date());
+        toDo.getBeschreibung(),toDo.isErledigt(),toDo.isWichtig(),toDo.getFaellig());
 
     binding.setTodo(toDoDetailView);
     binding.setPresenter(presenter);
