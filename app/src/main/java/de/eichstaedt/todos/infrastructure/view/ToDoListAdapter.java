@@ -62,10 +62,12 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     name.setText(toDoList.get(position).getName());
 
     if(!toDoList.get(position).isErledigt()) {
-      if (toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())) {
-        name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
-      } else {
-        name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoNotUrgent));
+      if(toDoList.get(position).getFaellig() != null) {
+        if (toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())) {
+          name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
+        } else {
+          name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoNotUrgent));
+        }
       }
     }else {
       name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -80,9 +82,11 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     wichtig.setChecked(toDoList.get(position).isWichtig());
     wichtig.setOnClickListener((v) -> {this.onClick(v,toDoList.get(position));});
 
-    TextView faellig = convertView.findViewById(R.id.todoFaelligText);
-    faellig.setText(toDoList.get(position).getFaellig().format(DateTimeFormatter.ofPattern(
-        FirebaseDocumentMapper.DATE_FORMAT)));
+    if(toDoList.get(position).getFaellig() != null) {
+      TextView faellig = convertView.findViewById(R.id.todoFaelligText);
+      faellig.setText(toDoList.get(position).getFaellig().format(DateTimeFormatter.ofPattern(
+          FirebaseDocumentMapper.DATE_FORMAT)));
+    }
 
     return convertView;
   }
@@ -90,10 +94,11 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
   protected void onItemSelected(ToDo toDo, MainActivity context) {
 
     Intent openDetailView = new Intent(context,DetailViewActivity.class);
+    openDetailView.putExtra(DetailViewActivity.ARG_ID,toDo.getId());
     openDetailView.putExtra(DetailViewActivity.ARG_NAME,toDo.getName());
     openDetailView.putExtra(DetailViewActivity.ARG_BESCHREIBUNG,toDo.getBeschreibung());
 
-    context.startActivityForResult(openDetailView,MainActivity.RETURN_SAVE_TODO);
+    context.startActivityForResult(openDetailView,MainActivity.RETURN_UPDATE_TODO);
   }
 
 

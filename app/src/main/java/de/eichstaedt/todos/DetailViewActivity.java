@@ -15,6 +15,8 @@ import java.util.Date;
 
 public class DetailViewActivity extends AppCompatActivity implements DetailViewBindingContract.View {
 
+  public static final String ARG_ID = "id";
+
   public static final String ARG_NAME = "name";
 
   public static final String ARG_BESCHREIBUNG = "beschreibung";
@@ -30,7 +32,7 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewB
     super.onCreate(savedInstanceState);
 
     ActivityDetailviewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detailview);
-    toDoDetailView = new ToDoDetailView(getIntent().getStringExtra(ARG_NAME),getIntent().getStringExtra(ARG_BESCHREIBUNG),false,false,new Date());
+    toDoDetailView = new ToDoDetailView(getIntent().getStringExtra(ARG_ID),getIntent().getStringExtra(ARG_NAME),getIntent().getStringExtra(ARG_BESCHREIBUNG),false,false,new Date());
     binding.setTodo(toDoDetailView);
 
     this.saveToDoButton = findViewById(R.id.saveToDoButton);
@@ -40,6 +42,7 @@ public class DetailViewActivity extends AppCompatActivity implements DetailViewB
 
   private void onClickSaveToDoButton() {
     Intent returnIntent = new Intent(this, MainActivity.class);
+    returnIntent.putExtra(ARG_ID,toDoDetailView.getId());
     returnIntent.putExtra(ARG_NAME,toDoDetailView.getName());
     returnIntent.putExtra(ARG_BESCHREIBUNG,toDoDetailView.getBeschreibung());
     this.setResult(Activity.RESULT_OK,returnIntent);

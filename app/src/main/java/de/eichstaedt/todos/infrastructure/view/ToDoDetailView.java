@@ -7,14 +7,17 @@ import java.util.Date;
 
 public class ToDoDetailView extends BaseObservable {
 
-  public ToDoDetailView(String name, String beschreibung, boolean erledigt, boolean wichtig,
+  public ToDoDetailView(String id,String name, String beschreibung, boolean erledigt, boolean wichtig,
       Date faellig) {
+    this.id = id;
     this.name = name;
     this.beschreibung = beschreibung;
     this.erledigt = erledigt;
     this.wichtig = wichtig;
     this.faellig = faellig;
   }
+
+  private String id;
 
   private String name;
 
@@ -25,6 +28,14 @@ public class ToDoDetailView extends BaseObservable {
   private boolean wichtig;
 
   private Date faellig;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   @Bindable
   public String getName() {

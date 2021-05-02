@@ -20,7 +20,9 @@ public class FirebaseDocumentMapper {
     value.put(TODO_ID,todo.getId());
     value.put(TODO_NAME,todo.getName());
     value.put(TODO_BESCHREIBUNG,todo.getBeschreibung());
-    value.put(TODO_FAELLIG,todo.getFaellig().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+    if(todo.getFaellig() != null) {
+      value.put(TODO_FAELLIG, todo.getFaellig().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+    }
     return value;
   }
 

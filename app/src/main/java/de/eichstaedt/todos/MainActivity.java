@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     public static final int RETURN_SAVE_TODO = 42;
 
+    public static final int RETURN_UPDATE_TODO = 43;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,20 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
                 ToDo toDo = new ToDo(todoName,todoBeschreibung, LocalDateTime.now().plusDays(7),false);
 
                 dataService.saveToDo(toDo,this);
+            }
+        }
+
+        if(requestCode == RETURN_UPDATE_TODO) {
+            Log.i(logger,"Return to update to Do");
+
+            if(resultCode == Activity.RESULT_OK) {
+                String todoid = data.getStringExtra(DetailViewActivity.ARG_ID);
+                String todoName = data.getStringExtra(DetailViewActivity.ARG_NAME);
+                String todoBeschreibung = data.getStringExtra(DetailViewActivity.ARG_BESCHREIBUNG);
+
+                ToDo toDo = new ToDo(todoid,todoName,todoBeschreibung);
+
+                dataService.updateToDo(toDo,this);
             }
         }
 
