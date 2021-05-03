@@ -4,7 +4,6 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * Class for Detail View View Model with Databinding
