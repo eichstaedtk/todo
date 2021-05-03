@@ -63,6 +63,7 @@ public class ToDoListAdapter extends ArrayAdapter<String> {
     name.setText(toDoList.get(position).getName());
 
     if(!toDoList.get(position).isErledigt()) {
+      name.setPaintFlags(0);
       if(toDoList.get(position).getFaellig() != null) {
         if (toDoList.get(position).getFaellig().isBefore(LocalDateTime.now())) {
           name.setTextColor(ContextCompat.getColor(getContext(), R.color.todoUrgent));
