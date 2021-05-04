@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private GridLayoutManager gridLayoutManager;
 
-    private RecyclerView.LayoutManager layoutManager;
-
     private FloatingActionButton addNewToDoButton;
 
     public static final int RETURN_SAVE_TODO = 42;
@@ -130,9 +128,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         todoList = findViewById(R.id.todoList);
 
-        gridLayoutManager = new GridLayoutManager(this,10);
-        layoutManager = new LinearLayoutManager(this);
-        todoList.setLayoutManager(layoutManager);
+        gridLayoutManager = new GridLayoutManager(this, result.size(), GridLayoutManager.HORIZONTAL, false);
+        todoList.setLayoutManager(gridLayoutManager);
 
         adapter = new ToDoRecyclerViewAdapter(result, dataService);
 

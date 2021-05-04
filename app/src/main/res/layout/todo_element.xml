@@ -3,31 +3,33 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content" >
 
-  <TextView
-    android:id="@+id/todoNameText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:text="Name"
-    android:textSize="40px" />
-  <TextView
-    android:id="@+id/todoFaelligText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
-    android:text="Fallig"
-    android:textSize="40px" />
+    <TextView
+      android:id="@+id/todoNameText"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="40"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:text="Name"
+      android:textSize="40px" />
 
-  <CheckBox
-    android:id="@+id/todoErledigt"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-  </CheckBox>
+    <TextView
+      android:id="@+id/todoFaelligText"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="40"
+      android:layout_marginRight="10dp"
+      android:text="Fallig"
+      android:textSize="40px" />
 
-  <CheckBox
-    android:id="@+id/todoWichtig"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-  </CheckBox>
+    <CheckBox
+      android:id="@+id/todoErledigt"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="10"></CheckBox>
+    <CheckBox
+      android:id="@+id/todoWichtig"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="10"></CheckBox>
 </LinearLayout>
