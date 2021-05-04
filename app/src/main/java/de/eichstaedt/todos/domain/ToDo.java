@@ -1,5 +1,7 @@
 package de.eichstaedt.todos.domain;
 
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,6 +11,7 @@ import androidx.room.TypeConverters;
 import de.eichstaedt.todos.infrastructure.persistence.LocalDateTimeConverter;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import org.parceler.Parcel;
 
@@ -28,7 +31,7 @@ public class ToDo {
         this.beschreibung = toDoDetailView.getBeschreibung();
         this.erledigt = toDoDetailView.isErledigt();
         this.wichtig = toDoDetailView.isWichtig();
-        this.faellig = toDoDetailView.getFaellig();
+        this.faellig = LocalDateTime.parse(toDoDetailView.getFaellig(),DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     @Ignore

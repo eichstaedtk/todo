@@ -1,9 +1,12 @@
 package de.eichstaedt.todos.infrastructure.view;
 
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Class for Detail View View Model with Databinding
@@ -18,7 +21,7 @@ public class ToDoDetailView extends BaseObservable {
     this.beschreibung = beschreibung;
     this.erledigt = erledigt;
     this.wichtig = wichtig;
-    this.faellig = faellig;
+    this.faellig = faellig.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
   }
 
   private String id;
@@ -31,7 +34,7 @@ public class ToDoDetailView extends BaseObservable {
 
   private boolean wichtig;
 
-  private LocalDateTime faellig;
+  private String faellig;
 
   public String getId() {
     return id;
@@ -80,11 +83,11 @@ public class ToDoDetailView extends BaseObservable {
   }
 
   @Bindable
-  public LocalDateTime getFaellig() {
+  public String getFaellig() {
     return faellig;
   }
 
-  public void setFaellig(LocalDateTime faellig) {
+  public void setFaellig(String faellig) {
     this.faellig = faellig;
   }
 
