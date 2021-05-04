@@ -2,6 +2,7 @@ package de.eichstaedt.todos;
 
 import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+import static de.eichstaedt.todos.R.id.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,11 +16,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import de.eichstaedt.todos.infrastructure.view.ToDoListAdapter;
 
-import java.time.LocalDateTime;
+import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
@@ -30,11 +34,15 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     protected static final String logger = MainActivity.class.getName();
 
-    private ListView todoList;
+    private RecyclerView todoList;
 
     private ToDoDataService dataService;
 
-    private ToDoListAdapter adapter;
+    private ToDoRecyclerViewAdapter adapter;
+
+    private GridLayoutManager gridLayoutManager;
+
+    private RecyclerView.LayoutManager layoutManager;
 
     private FloatingActionButton addNewToDoButton;
 
@@ -103,9 +111,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.lokaleDelete : dataService.deleteAllLokalToDos(this);break;
-            case R.id.remoteDelete : dataService.deleteAllFirebaseToDos();break;
-            case R.id.load: dataService.readToDos(this);break;
+            case lokaleDelete : dataService.deleteAllLokalToDos(this);break;
+            case remoteDelete : dataService.deleteAllFirebaseToDos();break;
+            case load: dataService.readToDos(this);break;
         }
 
         return false;
@@ -122,13 +130,11 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         todoList = findViewById(R.id.todoList);
 
-        if(todoList.getHeaderViewsCount() == 0) {
-            TextView name = new TextView(this);
-            name.setText("Aktuelle Aufgaben");
-            todoList.addHeaderView(name);
-        }
+        gridLayoutManager = new GridLayoutManager(this,10);
+        layoutManager = new LinearLayoutManager(this);
+        todoList.setLayoutManager(layoutManager);
 
-        adapter = new ToDoListAdapter(this,result, dataService);
+        adapter = new ToDoRecyclerViewAdapter(result, dataService);
 
         todoList.setAdapter(adapter);
 
