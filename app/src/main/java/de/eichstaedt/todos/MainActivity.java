@@ -10,19 +10,15 @@ import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
-import de.eichstaedt.todos.infrastructure.view.ToDoListAdapter;
-
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
