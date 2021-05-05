@@ -18,7 +18,7 @@
       android:id="@+id/todoFaelligText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="40"
+      android:layout_weight="30"
       android:maxWidth="150dp"
       android:layout_marginRight="10dp"
       android:text="Fallig"
@@ -28,10 +28,10 @@
       android:id="@+id/todoErledigt"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="10"></CheckBox>
+      android:layout_weight="15"></CheckBox>
     <CheckBox
       android:id="@+id/todoWichtig"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="10"></CheckBox>
+      android:layout_weight="15"></CheckBox>
 </LinearLayout>

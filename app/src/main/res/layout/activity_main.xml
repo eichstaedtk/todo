@@ -7,13 +7,6 @@
   android:layout_height="match_parent"
   tools:context=".MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/todoList"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/start" />
-
     <TextView
       android:id="@+id/start"
       android:layout_width="wrap_content"
@@ -27,6 +20,59 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.071" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/header"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/start">
+
+        <TextView
+          android:id="@+id/todoNameHeader"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="40"
+          android:layout_marginLeft="10dp"
+          android:text="Name"
+          android:textSize="40px" />
+
+        <TextView
+          android:id="@+id/todoFaelligHeader"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="30"
+          android:text="Fällig"
+          android:textSize="40px" />
+
+        <TextView
+          android:id="@+id/todoErledigtText"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="15"
+          android:text="Erledigt"
+          android:textSize="40px" />
+
+        <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="15"
+          android:text="Wichtig"
+          android:textSize="40px" />
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/header">
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/todoList"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/addNewToDoButton"
