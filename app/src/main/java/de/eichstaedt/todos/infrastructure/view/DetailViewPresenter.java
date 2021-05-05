@@ -53,7 +53,22 @@ public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
 
     ToDo toDo = new ToDo(toDoDetailView);
     Bundle bundle = new Bundle();
+    bundle.putString(MainActivity.RETURN_ACTION,MainActivity.RETURN_ACTION_SAVE);
     bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
+    returnIntent.putExtra(TODO_BUNDLE, bundle);
+
+    activity.setResult(Activity.RESULT_OK,returnIntent);
+    activity.finish();
+  }
+
+  @Override
+  public void onClickDeleteToDoButton(ToDoDetailView toDoDetailView) {
+    Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.toString());
+    Intent returnIntent = new Intent(context, MainActivity.class);
+    ToDo toDo = new ToDo(toDoDetailView);
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
+    bundle.putString(MainActivity.RETURN_ACTION,MainActivity.RETURN_ACTION_DELETE);
     returnIntent.putExtra(TODO_BUNDLE, bundle);
 
     activity.setResult(Activity.RESULT_OK,returnIntent);

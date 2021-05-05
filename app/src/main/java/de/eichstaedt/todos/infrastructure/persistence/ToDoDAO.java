@@ -26,6 +26,9 @@ public interface ToDoDAO {
     @Query("DELETE FROM todos")
     void deleteAll();
 
+    @Delete
+    void delete(ToDo toDo);
+
     @Update
     void update(ToDo toDo);
 }

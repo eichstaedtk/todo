@@ -44,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     public static final int RETURN_UPDATE_TODO = 43;
 
+    public static final String RETURN_ACTION = "ACTION";
+
+    public static final String RETURN_ACTION_SAVE = "SAVE";
+
+    public static final String RETURN_ACTION_DELETE = "DELETE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,19 +84,34 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             Log.i(logger,"Return to save to Do");
 
             if(resultCode == Activity.RESULT_OK) {
+
                 Bundle b = data.getBundleExtra(TODO_BUNDLE);
                 ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
-                dataService.saveToDo(toDo,this);
+                dataService.saveToDo(toDo, this);
             }
         }
 
         if(requestCode == RETURN_UPDATE_TODO) {
             Log.i(logger,"Return to update to Do");
 
-            if(resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
+
                 Bundle b = data.getBundleExtra(TODO_BUNDLE);
-                ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
-                dataService.updateToDo(toDo,this);
+                Log.i(logger,"Return with Action: "+b.getString(RETURN_ACTION));
+
+                if(RETURN_ACTION_SAVE.equals(b.getString(RETURN_ACTION))) {
+
+                    ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
+                    Log.i(logger, "Update Todo with dataservice: " + toDo.getName());
+                    dataService.updateToDo(toDo, this);
+                }
+
+                if(RETURN_ACTION_DELETE.equals(b.getString(RETURN_ACTION)))
+                {
+                     ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
+                     Log.i(logger,"Delete Todo with dataservice: "+toDo.getName());
+                     dataService.deleteToDo(toDo,this);
+                }
             }
         }
 

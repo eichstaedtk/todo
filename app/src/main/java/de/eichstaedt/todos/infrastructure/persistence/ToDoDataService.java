@@ -76,6 +76,16 @@ public class ToDoDataService {
 
   }
 
+  public void deleteToDo(ToDo toDo, ReloadViewCallback callback) {
+    Completable.fromAction(()-> localDatabase.toDoDAO().delete(toDo)).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
+      deleteToDoInFirebase(toDo);
+      if(callback != null) {
+        callback.onComplete("ToDo gelöscht " + toDo.getName());
+      }
+    });
+  }
+
   public void saveToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().insertToDo(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
@@ -146,6 +156,10 @@ public class ToDoDataService {
           }
         });
 
+  }
+
+  private void deleteToDoInFirebase(ToDo toDo) {
+    firestore.collection(COLLECTION_PATH).document(toDo.getId()).delete();
   }
 
   private void deleteAllFirebaseToDos(
