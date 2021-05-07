@@ -9,9 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.library.baseAdapters.BR;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.TimeFormat;
 import de.eichstaedt.todos.DetailViewActivity;
 import de.eichstaedt.todos.MainActivity;
@@ -64,15 +65,23 @@ public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
   @Override
   public void onClickDeleteToDoButton(ToDoDetailView toDoDetailView) {
     Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.toString());
-    Intent returnIntent = new Intent(context, MainActivity.class);
-    ToDo toDo = new ToDo(toDoDetailView);
-    Bundle bundle = new Bundle();
-    bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
-    bundle.putString(MainActivity.RETURN_ACTION,MainActivity.RETURN_ACTION_DELETE);
-    returnIntent.putExtra(TODO_BUNDLE, bundle);
 
-    activity.setResult(Activity.RESULT_OK,returnIntent);
-    activity.finish();
+    new MaterialAlertDialogBuilder(activity).setTitle(R.string.confirm_delete)
+        .setNegativeButton(R.string.no,(dialog, which ) -> {
+            dialog.dismiss();
+        })
+        .setPositiveButton(R.string.yes,(dialog, which)->{
+          Intent returnIntent = new Intent(context, MainActivity.class);
+          ToDo toDo = new ToDo(toDoDetailView);
+          Bundle bundle = new Bundle();
+          bundle.putParcelable(TODO_PARCEL, Parcels.wrap(toDo));
+          bundle.putString(MainActivity.RETURN_ACTION,MainActivity.RETURN_ACTION_DELETE);
+          returnIntent.putExtra(TODO_BUNDLE, bundle);
+
+          activity.setResult(Activity.RESULT_OK,returnIntent);
+          activity.finish();
+        })
+        .show();
   }
 
   public void showDatePicker(ToDoDetailView toDoDetailView) {

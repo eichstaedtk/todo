@@ -2,4 +2,7 @@
     <string name="app_name">Ihre Aufgaben</string>
     <string name="hint_name">Name</string>
     <string name="hint_beschreibung">Beschreibung</string>
+    <string name="confirm_delete">Aufgabe löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>
