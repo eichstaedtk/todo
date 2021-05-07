@@ -3,6 +3,9 @@ package de.eichstaedt.todos;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
 import static de.eichstaedt.todos.R.id.*;
+import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigt;
+import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndDatumWichtig;
+import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndWichtigDatum;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,8 +21,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import de.eichstaedt.todos.domain.ToDoSorter;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
+import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter.Sorting;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
@@ -129,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             case lokaleDelete : dataService.deleteAllLokalToDos(this);break;
             case remoteDelete : dataService.deleteAllFirebaseToDos();break;
             case load: dataService.readToDos(this);break;
+            case sortWichtigDatum: sortByErledigtAndWichtigDatum(adapter.getValues());
+                                    adapter.setSortDecision(Sorting.WICHTIG_DATUM);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+            case sortDatumWichtig: sortByErledigtAndDatumWichtig(adapter.getValues());
+                                    adapter.notifyDataSetChanged();
+                                    adapter.setSortDecision(Sorting.DATUM_WICHTIG);
+                                    ;break;
         }
 
         return false;
@@ -148,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         gridLayoutManager = new GridLayoutManager(this, result.size(), GridLayoutManager.HORIZONTAL, false);
         todoList.setLayoutManager(gridLayoutManager);
 
-        adapter = new ToDoRecyclerViewAdapter(result, dataService);
+        adapter = new ToDoRecyclerViewAdapter(sortByErledigt(result), dataService);
 
         todoList.setAdapter(adapter);
 

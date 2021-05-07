@@ -2,6 +2,7 @@ package de.eichstaedt.todos.infrastructure.view;
 
 import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigt;
 
 import android.content.Intent;
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ import de.eichstaedt.todos.DetailViewActivity;
 import de.eichstaedt.todos.MainActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.ToDoSorter;
 import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import java.time.LocalDateTime;
@@ -31,11 +33,28 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerVi
 
   private ToDoDataService dataService;
 
+  public enum Sorting {WICHTIG_DATUM, DATUM_WICHTIG}
+
+  private Sorting sortDecision;
+
   protected static final String logger = ToDoRecyclerViewAdapter.class.getName();
 
   public ToDoRecyclerViewAdapter(List<ToDo> values, ToDoDataService toDoDataService) {
     this.values = values;
     this.dataService = toDoDataService;
+  }
+
+  public List<ToDo> getValues() {
+    return values;
+  }
+
+  public Sorting getSortDecision() {
+    return sortDecision;
+  }
+
+  public void setSortDecision(
+      Sorting sortDecision) {
+    this.sortDecision = sortDecision;
   }
 
   @NonNull
@@ -84,14 +103,34 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerVi
 
     if(v.getId() ==  R.id.todoWichtig) {
       toDo.setWichtig(((CheckBox)v).isChecked());
-      dataService.updateToDo(toDo, (s)-> this.notifyDataSetChanged());
+      updateToDo(toDo);
     }
 
     if(v.getId() ==  R.id.todoErledigt) {
       toDo.setErledigt(((CheckBox)v).isChecked());
-      dataService.updateToDo(toDo, (s)-> this.notifyDataSetChanged());
+      updateToDo(toDo);
     }
 
+  }
+
+  private void updateToDo(ToDo toDo) {
+    dataService.updateToDo(toDo, (s)-> {
+
+      if(Sorting.WICHTIG_DATUM.equals(sortDecision))
+      {
+        ToDoSorter.sortByErledigtAndWichtigDatum(values);
+      }
+
+      if(Sorting.DATUM_WICHTIG.equals(sortDecision)){
+        ToDoSorter.sortByErledigtAndDatumWichtig(values);
+      }
+
+      if(sortDecision == null) {
+        sortByErledigt(values);
+      }
+
+      this.notifyDataSetChanged();
+    });
   }
 
   protected void onItemSelected(ToDo toDo, MainActivity context) {

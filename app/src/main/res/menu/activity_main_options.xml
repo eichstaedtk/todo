@@ -7,6 +7,8 @@
         <item android:id="@+id/lokaleDelete" android:title="Löschen (lokal)"></item>
         <item android:id="@+id/remoteDelete" android:title="Löschen (web)"></item>
         <item android:id="@+id/load" android:title="Laden"></item>
+        <item android:id="@+id/sortWichtigDatum" android:title="Sortieren nach Wichtig, Datum"></item>
+        <item android:id="@+id/sortDatumWichtig" android:title="Sortieren nach Datum, Wichtig"></item>
       </menu>
     </item>
 </menu>
