@@ -9,6 +9,7 @@ import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndWichtigDatu
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import android.view.Menu;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     public static final String RETURN_ACTION_SAVE = "SAVE";
 
     public static final String RETURN_ACTION_DELETE = "DELETE";
+
+    private MenuItem sortByWichtigAndDatum;
+
+    private MenuItem sortByDatumAndWichtig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_options,menu);
+        sortByWichtigAndDatum = menu.findItem(sortWichtigDatum);
+        sortByDatumAndWichtig = menu.findItem(sortDatumWichtig);
         return true;
     }
 
@@ -137,10 +144,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             case remoteDelete : dataService.deleteAllFirebaseToDos();break;
             case load: dataService.readToDos(this);break;
             case sortWichtigDatum: sortByErledigtAndWichtigDatum(adapter.getValues());
+                                    sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
+                                    sortByDatumAndWichtig.setIcon(null);
                                     adapter.setSortDecision(Sorting.WICHTIG_DATUM);
                                     adapter.notifyDataSetChanged();
                                     break;
             case sortDatumWichtig: sortByErledigtAndDatumWichtig(adapter.getValues());
+                                    sortByWichtigAndDatum.setIcon(null);
+                                    sortByDatumAndWichtig.setIcon(R.drawable.outline_done_black_18);
                                     adapter.notifyDataSetChanged();
                                     adapter.setSortDecision(Sorting.DATUM_WICHTIG);
                                     ;break;
