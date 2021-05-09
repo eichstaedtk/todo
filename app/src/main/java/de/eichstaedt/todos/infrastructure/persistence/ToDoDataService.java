@@ -2,6 +2,7 @@ package de.eichstaedt.todos.infrastructure.persistence;
 
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapFirebaseDocumentToToDo;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapToDoToFirebaseDocument;
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapUserToFirebaseDocument;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import de.eichstaedt.todos.ReloadViewCallback;
 import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.User;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -96,6 +98,16 @@ public class ToDoDataService {
     });
   }
 
+  public void saveUser(User user, ReloadViewCallback callback) {
+    Completable.fromAction(()-> localDatabase.toDoDAO().insertUser(user)).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
+      saveUserInFirebase(user);
+      if(callback != null) {
+        callback.onComplete("ToDo gespeichert " + user.getName());
+      }
+    });
+  }
+
   public void updateToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().update(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
@@ -109,6 +121,16 @@ public class ToDoDataService {
   private void saveInFirebase(ToDo toDo) {
     if (!offline) {
       firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
+          .addOnSuccessListener(
+              documentReference -> Log
+                  .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
+          .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
+    }
+  }
+
+  private void saveUserInFirebase(User user) {
+    if (!offline) {
+      firestore.collection(COLLECTION_PATH).add(mapUserToFirebaseDocument(user))
           .addOnSuccessListener(
               documentReference -> Log
                   .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))

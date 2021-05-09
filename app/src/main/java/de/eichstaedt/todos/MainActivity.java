@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.domain.ToDoSorter;
+import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter.Sorting;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
         this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
+
+        /*
+        User konrad = new User("Konrad","konrad.eichstaedt@gmx.de",123456);
+        dataService.saveUser(konrad,this);
+        */
+
 
         Log.i(logger,"Application successful started ...");
     }

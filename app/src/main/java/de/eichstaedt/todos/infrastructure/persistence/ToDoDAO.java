@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+import de.eichstaedt.todos.domain.User;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.List;
@@ -22,6 +23,9 @@ public interface ToDoDAO {
 
     @Insert
     void insertToDo(ToDo toDo);
+
+    @Insert
+    void insertUser(User user);
 
     @Query("DELETE FROM todos")
     void deleteAll();

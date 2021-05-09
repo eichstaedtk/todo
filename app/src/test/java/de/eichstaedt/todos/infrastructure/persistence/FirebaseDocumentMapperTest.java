@@ -10,7 +10,6 @@ import de.eichstaedt.todos.domain.ToDo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -27,10 +26,10 @@ public class FirebaseDocumentMapperTest {
 
     Map<String,String> firebaseObject = FirebaseDocumentMapper.mapToDoToFirebaseDocument(einkaufen);
 
-    assertEquals(firebaseObject.get(FirebaseDocumentMapper.TODO_ID),einkaufen.getId());
-    assertEquals(firebaseObject.get(FirebaseDocumentMapper.TODO_NAME),einkaufen.getName());
-    assertEquals(firebaseObject.get(FirebaseDocumentMapper.TODO_BESCHREIBUNG),einkaufen.getBeschreibung());
-    assertEquals(firebaseObject.get(FirebaseDocumentMapper.TODO_FAELLIG),today.format(
+    assertEquals(firebaseObject.get(FirebaseDocumentMapper.ID),einkaufen.getId());
+    assertEquals(firebaseObject.get(FirebaseDocumentMapper.NAME),einkaufen.getName());
+    assertEquals(firebaseObject.get(FirebaseDocumentMapper.BESCHREIBUNG),einkaufen.getBeschreibung());
+    assertEquals(firebaseObject.get(FirebaseDocumentMapper.FAELLIG),today.format(
         DateTimeFormatter.ofPattern(DATE_FORMAT)));
   }
 
@@ -40,10 +39,10 @@ public class FirebaseDocumentMapperTest {
     LocalDateTime today = LocalDateTime.of(2021,4,18,13,20,00);
 
     DocumentSnapshot documentSnapshot = mock(DocumentSnapshot.class);
-    when(documentSnapshot.getString(FirebaseDocumentMapper.TODO_ID)).thenReturn("1");
-    when(documentSnapshot.getString(FirebaseDocumentMapper.TODO_NAME)).thenReturn("Einkaufen");
-    when(documentSnapshot.getString(FirebaseDocumentMapper.TODO_BESCHREIBUNG)).thenReturn("Wocheneinkauf");
-    when(documentSnapshot.getString(FirebaseDocumentMapper.TODO_FAELLIG)).thenReturn(today.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+    when(documentSnapshot.getString(FirebaseDocumentMapper.ID)).thenReturn("1");
+    when(documentSnapshot.getString(FirebaseDocumentMapper.NAME)).thenReturn("Einkaufen");
+    when(documentSnapshot.getString(FirebaseDocumentMapper.BESCHREIBUNG)).thenReturn("Wocheneinkauf");
+    when(documentSnapshot.getString(FirebaseDocumentMapper.FAELLIG)).thenReturn(today.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
 
     ToDo einkaufen = FirebaseDocumentMapper.mapFirebaseDocumentToToDo(documentSnapshot);
 
