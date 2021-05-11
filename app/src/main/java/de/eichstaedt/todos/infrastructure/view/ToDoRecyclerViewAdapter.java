@@ -21,7 +21,7 @@ import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.ToDoSorter;
 import de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
+import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerVi
 
   private List<ToDo> values;
 
-  private ToDoDataService dataService;
+  private DataService dataService;
 
   public enum Sorting {WICHTIG_DATUM, DATUM_WICHTIG}
 
@@ -39,9 +39,9 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerVi
 
   protected static final String logger = ToDoRecyclerViewAdapter.class.getName();
 
-  public ToDoRecyclerViewAdapter(List<ToDo> values, ToDoDataService toDoDataService) {
+  public ToDoRecyclerViewAdapter(List<ToDo> values, DataService dataService) {
     this.values = values;
-    this.dataService = toDoDataService;
+    this.dataService = dataService;
   }
 
   public List<ToDo> getValues() {

@@ -1,6 +1,6 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
-public interface RepositoryCallback<T> {
+public interface ToDoRepositoryCallback<T> {
 
     void onComplete(T result, String message);
 }

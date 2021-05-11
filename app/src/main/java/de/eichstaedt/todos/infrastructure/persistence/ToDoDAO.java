@@ -24,9 +24,6 @@ public interface ToDoDAO {
     @Insert
     void insertToDo(ToDo toDo);
 
-    @Insert
-    void insertUser(User user);
-
     @Query("DELETE FROM todos")
     void deleteAll();
 

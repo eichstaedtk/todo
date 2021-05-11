@@ -9,7 +9,6 @@ import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndWichtigDatu
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import android.view.Menu;
@@ -22,26 +21,26 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import de.eichstaedt.todos.domain.ToDoSorter;
 import de.eichstaedt.todos.domain.User;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
+import de.eichstaedt.todos.infrastructure.persistence.DataService;
+import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter.Sorting;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
-import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
+import de.eichstaedt.todos.infrastructure.persistence.ToDoRepositoryCallback;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
+import java.util.Optional;
 import org.parceler.Parcels;
 
-public class MainActivity extends AppCompatActivity implements RepositoryCallback<List<ToDo>>, ReloadViewCallback {
+public class MainActivity extends AppCompatActivity implements ToDoRepositoryCallback<List<ToDo>>,
+    UserRepositoryCallback, ReloadViewCallback {
 
     protected static final String logger = MainActivity.class.getName();
 
     private RecyclerView todoList;
 
-    private ToDoDataService dataService;
+    private DataService dataService;
 
     private ToDoRecyclerViewAdapter adapter;
 
@@ -68,17 +67,13 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataService = new ToDoDataService(ToDoRepository.getInstance(getApplicationContext()));
+        dataService = new DataService(ToDoRepository.getInstance(getApplicationContext()));
         dataService.readToDos(this);
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
         this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
 
-        /*
-        User konrad = new User("Konrad","konrad.eichstaedt@gmx.de",123456);
-        dataService.saveUser(konrad,this);
-        */
-
+        dataService.findUserByEmail("konrad.eichstaedt@gmx.de",this);
 
         Log.i(logger,"Application successful started ...");
     }
@@ -198,5 +193,16 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         start.setText(message);
 
         dataService.readToDos(this);
+    }
+
+    @Override
+    public void onComplete(Optional<User> user) {
+
+        Log.i(logger,"Callback User Repository "+user.isPresent());
+        if(!user.isPresent()) {
+            User konrad = new User("Konrad", "konrad.eichstaedt@gmx.de", 123456);
+            dataService.saveUserInFirebase(konrad);
+        }
+
     }
 }

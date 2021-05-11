@@ -1,13 +1,18 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.*;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapFirebaseDocumentToToDo;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapToDoToFirebaseDocument;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapUserToFirebaseDocument;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import de.eichstaedt.todos.ReloadViewCallback;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
@@ -19,36 +24,39 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Class which handle local or remote persistence solution for ToDos entities
  */
 
-public class ToDoDataService {
+public class DataService {
 
-  protected static final String logger = ToDoDataService.class.getName();
+  protected static final String logger = DataService.class.getName();
 
-  public static final String COLLECTION_PATH = "todos";
+  public static final String TODO_COLLECTION_PATH = "todos";
 
-  public ToDoDataService(@NonNull ToDoDatabase toDoDatabase) {
+  public static final String USER_COLLECTION_PATH = "user";
+
+  public DataService(@NonNull ToDoDatabase toDoDatabase) {
     this.localDatabase = toDoDatabase;
   }
 
   private boolean offline = true;
 
-  protected static final String LOGGER = ToDoDataService.class.getName();
+  protected static final String LOGGER = DataService.class.getName();
 
   private final FirebaseFirestore
       firestore = FirebaseFirestore.getInstance();
 
   private final ToDoDatabase localDatabase;
 
-  public void readToDos(RepositoryCallback callback) {
+  public void readToDos(ToDoRepositoryCallback callback) {
 
     Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(localToDos -> firestore.collection(COLLECTION_PATH).get().addOnCompleteListener(task -> {
+        .subscribe(localToDos -> firestore.collection(TODO_COLLECTION_PATH).get().addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
             Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size() + " and local todos "+localToDos.size());
 
@@ -98,15 +106,27 @@ public class ToDoDataService {
     });
   }
 
-  public void saveUser(User user, ReloadViewCallback callback) {
-    Completable.fromAction(()-> localDatabase.toDoDAO().insertUser(user)).subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      saveUserInFirebase(user);
-      if(callback != null) {
-        callback.onComplete("ToDo gespeichert " + user.getName());
-      }
-    });
+  public void findUserByEmail(String email, UserRepositoryCallback callback) {
+    firestore.collection(USER_COLLECTION_PATH)
+        .whereEqualTo("email", email)
+        .get()
+        .addOnCompleteListener(task -> {
+          Log.i(logger,"Finding user in firebase "+task.isSuccessful()+ " Docs "+task.getResult().size());
+          if (task.isSuccessful() && task.getResult().size() > 0) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+              callback.onComplete(Optional.of(mapFirebaseDocumentToUser(document)));
+            }
+          } else {
+            callback.onComplete(Optional.empty());
+          }
+        }).addOnFailureListener((task) -> {
+
+          Log.i(logger,"Error finding user in firebase ", task.getCause());
+          callback.onComplete(Optional.empty());
+        });
+
   }
+
 
   public void updateToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().update(toDo)).subscribeOn(Schedulers.io())
@@ -120,7 +140,7 @@ public class ToDoDataService {
 
   private void saveInFirebase(ToDo toDo) {
     if (!offline) {
-      firestore.collection(COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
+      firestore.collection(TODO_COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
           .addOnSuccessListener(
               documentReference -> Log
                   .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
@@ -128,14 +148,15 @@ public class ToDoDataService {
     }
   }
 
-  private void saveUserInFirebase(User user) {
-    if (!offline) {
-      firestore.collection(COLLECTION_PATH).add(mapUserToFirebaseDocument(user))
+  public void saveUserInFirebase(User user) {
+    Log.i(LOGGER, "Save User on Firebase " +user);
+
+      firestore.collection(USER_COLLECTION_PATH).add(mapUserToFirebaseDocument(user))
           .addOnSuccessListener(
               documentReference -> Log
-                  .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
-          .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
-    }
+                  .d(LOGGER, "Save User on Firebase " + documentReference.getId()))
+          .addOnFailureListener(e -> Log.w(LOGGER, "Error saving User on Firebase", e));
+
   }
 
 
@@ -162,12 +183,12 @@ public class ToDoDataService {
     localToDos.stream().map(todo -> {
       Map<String, String> value = mapToDoToFirebaseDocument(todo);
       return  value;
-    }).forEach(d -> firestore.collection(COLLECTION_PATH).add(d).addOnSuccessListener(
+    }).forEach(d -> firestore.collection(TODO_COLLECTION_PATH).add(d).addOnSuccessListener(
         documentReference -> Log.d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
         .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e)));
   }
 
-  public void deleteAllLokalToDos(RepositoryCallback callback) {
+  public void deleteAllLokalToDos(ToDoRepositoryCallback callback) {
     Log.i(logger,"Delete all lokal todos ...");
     Completable.fromAction(() -> {localDatabase.toDoDAO().deleteAll();})
         .subscribeOn(Schedulers.io())
@@ -181,19 +202,27 @@ public class ToDoDataService {
   }
 
   private void deleteToDoInFirebase(ToDo toDo) {
-    firestore.collection(COLLECTION_PATH).document(toDo.getId()).delete();
+    firestore.collection(TODO_COLLECTION_PATH).document(toDo.getId()).delete();
   }
 
   private void deleteAllFirebaseToDos(
       List<DocumentSnapshot> documents) {
             documents.stream().forEach(d ->
-                firestore.collection(COLLECTION_PATH).document(d.getId()).delete());
+                firestore.collection(TODO_COLLECTION_PATH).document(d.getId()).delete());
             Log.i(logger,"Deleted all firebase documents");
 
   }
 
+  private void deleteAllFirebaseUser(
+      List<DocumentSnapshot> documents) {
+    documents.stream().forEach(d ->
+        firestore.collection(USER_COLLECTION_PATH).document(d.getId()).delete());
+    Log.i(logger,"Deleted all firebase user");
+
+  }
+
   public void deleteAllFirebaseToDos() {
-    firestore.collection(COLLECTION_PATH)
+    firestore.collection(TODO_COLLECTION_PATH)
         .get()
         .addOnCompleteListener(task -> {
           if (task.isSuccessful()) {

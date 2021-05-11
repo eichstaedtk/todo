@@ -1,14 +1,10 @@
 package de.eichstaedt.todos.domain;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 import java.util.UUID;
 import org.parceler.Parcel;
 
 @Parcel
-@Entity
 public class User {
 
   public User() {
@@ -22,20 +18,23 @@ public class User {
     this.passwort = passwort;
   }
 
-  @PrimaryKey
+  public User(String id, String name, String email, Integer passwort, String mobilnummer) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.passwort = passwort;
+    this.mobilnummer = mobilnummer;
+  }
+
   @NonNull
   private String id;
 
-  @ColumnInfo(name = "NAME")
   private String name;
 
-  @ColumnInfo(name = "EMAIL")
   private String email;
 
-  @ColumnInfo(name = "PASSWORD")
   private Integer passwort;
 
-  @ColumnInfo(name = "MOBIL")
   private String mobilnummer;
 
   public String getId() {

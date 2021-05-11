@@ -16,7 +16,7 @@ import de.eichstaedt.todos.MainActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoDataService;
+import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
 
   private ActivityDetailviewBinding binding;
 
-  private ToDoDataService dataService;
+  private DataService dataService;
 
   protected static final String logger = DetailViewPresenter.class.getName();
 
@@ -41,7 +41,7 @@ public class DetailViewPresenter implements DetailViewBindingContract.Presenter{
     this.activity = activity;
     this.context = context;
     this.binding = binding;
-    this.dataService = new ToDoDataService(ToDoRepository.getInstance(context));
+    this.dataService = new DataService(ToDoRepository.getInstance(context));
   }
 
   @Override

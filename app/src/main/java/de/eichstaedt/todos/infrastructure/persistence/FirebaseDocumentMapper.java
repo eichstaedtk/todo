@@ -49,4 +49,10 @@ public class FirebaseDocumentMapper {
             DateTimeFormatter.ofPattern(DATE_FORMAT)));
   }
 
+  public static User mapFirebaseDocumentToUser(DocumentSnapshot documentSnapshot) {
+    return  new User(documentSnapshot.getString(ID), documentSnapshot.getString(NAME),
+        documentSnapshot.getString(EMAIL),
+        Integer.parseInt(documentSnapshot.getString(PASSWORD)), documentSnapshot.getString(MOBIL));
+  }
+
 }
