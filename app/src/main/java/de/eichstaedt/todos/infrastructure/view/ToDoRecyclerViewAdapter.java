@@ -48,6 +48,10 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerVi
     return values;
   }
 
+  public void setValues(List<ToDo> values) {
+    this.values = values;
+  }
+
   public Sorting getSortDecision() {
     return sortDecision;
   }

@@ -33,14 +33,25 @@ import java.util.stream.Collectors;
 
 public class DataService {
 
+  private static DataService service;
+
   protected static final String logger = DataService.class.getName();
 
   public static final String TODO_COLLECTION_PATH = "todos";
 
   public static final String USER_COLLECTION_PATH = "user";
 
-  public DataService(@NonNull ToDoDatabase toDoDatabase) {
+  private DataService(@NonNull ToDoDatabase toDoDatabase) {
     this.localDatabase = toDoDatabase;
+  }
+
+  public static DataService instance(@NonNull ToDoDatabase toDoDatabase) {
+
+    if(service == null){
+      service = new DataService(toDoDatabase);
+    }
+
+    return service;
   }
 
   private boolean offline = true;

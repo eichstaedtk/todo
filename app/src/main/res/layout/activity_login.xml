@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+  <data>
+    <variable
+      name="controller"
+      type="de.eichstaedt.todos.LoginActivity"></variable>
+  </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,6 +25,7 @@
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     tools:layout_editor_absoluteX="100dp"
+    android:text="@={controller.email}"
     android:autofillHints="" />
   <EditText
     android:id="@+id/editTextNumberPassword"
@@ -27,6 +36,7 @@
     app:layout_constraintRight_toRightOf="parent"
     android:ems="10"
     android:inputType="numberPassword"
+    android:text="@={controller.passwort}"
     tools:layout_editor_absoluteX="100dp"
     tools:layout_editor_absoluteY="325dp" />
 
@@ -36,8 +46,11 @@
     android:layout_height="0dp"
     android:text="Anmelden"
     android:layout_marginTop="16dp"
+    android:onClick="@{(v) -> controller.login()}"
     app:layout_constraintTop_toBottomOf="@+id/loginEmail"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
