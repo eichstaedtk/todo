@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  * Class for Detail View View Model with Databinding
  */
 
-public class ToDoDetailView extends BaseObservable {
+public class ToDoDetailView {
 
   public ToDoDetailView(String id,String name, String beschreibung, boolean erledigt, boolean wichtig,
       LocalDateTime faellig) {
@@ -44,27 +44,22 @@ public class ToDoDetailView extends BaseObservable {
     this.id = id;
   }
 
-  @Bindable
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
-    this.notifyPropertyChanged(BR.name);
   }
 
-  @Bindable
   public String getBeschreibung() {
     return beschreibung;
   }
 
   public void setBeschreibung(String beschreibung) {
     this.beschreibung = beschreibung;
-    this.notifyPropertyChanged(BR.beschreibung);
   }
 
-  @Bindable
   public boolean isErledigt() {
     return erledigt;
   }
@@ -73,7 +68,6 @@ public class ToDoDetailView extends BaseObservable {
     this.erledigt = erledigt;
   }
 
-  @Bindable
   public boolean isWichtig() {
     return wichtig;
   }
@@ -82,7 +76,6 @@ public class ToDoDetailView extends BaseObservable {
     this.wichtig = wichtig;
   }
 
-  @Bindable
   public String getFaellig() {
     return faellig;
   }
