@@ -117,9 +117,10 @@ public class DataService {
     });
   }
 
-  public void findUserByEmail(String email, UserRepositoryCallback callback) {
+  public void findUserByEmail(String email,String password, UserRepositoryCallback callback) {
     firestore.collection(USER_COLLECTION_PATH)
-        .whereEqualTo("email", email)
+        .whereEqualTo(EMAIL, email)
+        .whereEqualTo(PASSWORD,password)
         .get()
         .addOnCompleteListener(task -> {
           Log.i(logger,"Finding user in firebase "+task.isSuccessful()+ " Docs "+task.getResult().size());

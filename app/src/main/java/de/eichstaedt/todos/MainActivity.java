@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements ToDoRepositoryCal
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
         this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
 
-        dataService.findUserByEmail("konrad.eichstaedt@gmx.de",this);
-
         Log.i(logger,"Application successful started ...");
     }
 
