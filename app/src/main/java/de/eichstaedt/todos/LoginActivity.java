@@ -1,5 +1,7 @@
 package de.eichstaedt.todos;
 
+import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;
+import org.parceler.Parcels;
 
 public class LoginActivity extends AppCompatActivity implements UserRepositoryCallback {
 
@@ -35,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   public void login() {
     Log.i(logger,"Starting Login ...");
-
     dataService.findUserByEmail(email,this);
   }
 
@@ -59,9 +61,8 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   public void onComplete(Optional<User> user) {
 
     if(user.isPresent() && Integer.parseInt(passwort) == user.get().getPasswort()) {
-      Intent openmain = new Intent(this, MainActivity.class);
+      Intent openmain = new Intent(LoginActivity.this, MainActivity.class);
       this.startActivity(openmain);
-      this.finish();
     }else {
       Log.i(logger,"Login fehlgeschlagen");
     }
