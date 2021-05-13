@@ -123,6 +123,7 @@ public class DataService {
         .whereEqualTo(PASSWORD,password)
         .get()
         .addOnCompleteListener(task -> {
+
           Log.i(logger,"Finding user in firebase "+task.isSuccessful()+ " Docs "+task.getResult().size());
           if (task.isSuccessful() && task.getResult().size() > 0) {
             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -244,6 +245,7 @@ public class DataService {
   }
 
   public boolean isOffline() {
+
     return offline;
   }
 }

@@ -10,8 +10,10 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.Bindable;
 import androidx.databinding.DataBindingUtil;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import de.eichstaedt.todos.databinding.ActivityLoginBinding;
 import de.eichstaedt.todos.domain.User;
@@ -19,6 +21,7 @@ import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements UserRepositoryCallback,
     OnFocusChangeListener {
@@ -37,6 +40,10 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private TextInputEditText emailInput;
 
+  private TextInputEditText passwordInput;
+
+  private LinearProgressIndicator progress;
+
   private static final String logger = LoginActivity.class.getName();
 
   @Override
@@ -47,12 +54,27 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     binding.setController(this);
     anmelden = findViewById(R.id.LoginButton);
     errorText = findViewById(R.id.loginErrorText);
+
     emailInput = findViewById(R.id.emailTextInput);
     emailInput.setOnFocusChangeListener(this);
+
+    passwordInput = findViewById(R.id.passwordTextInput);
+    passwordInput.setOnFocusChangeListener(this);
+
+    progress = findViewById(R.id.loginProgress);
+    progress.setVisibility(View.INVISIBLE);
   }
 
   public void login() {
     Log.i(logger,"Starting Login ...");
+    progress.setVisibility(View.VISIBLE);
+
+    /*
+    if(dataService.isOffline())
+    {
+      startToDoActivity();
+    }*/
+
     dataService.findUserByEmail(email,passwort,this);
   }
 
@@ -63,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   public void setEmail(String email) {
     this.email = email;
     anmelden.setEnabled(loginActive());
+    errorText.setText("");
   }
 
   public String getPasswort() {
@@ -72,18 +95,25 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   public void setPasswort(String passwort) {
     this.passwort = passwort;
     anmelden.setEnabled(loginActive());
+    errorText.setText("");
   }
 
   @Override
   public void onComplete(Optional<User> user) {
 
+    progress.setVisibility(View.INVISIBLE);
+
     if(user.isPresent()) {
-      Intent openmain = new Intent(LoginActivity.this, MainActivity.class);
-      this.startActivity(openmain);
+      startToDoActivity();
     }else {
       Log.i(logger,"Login fehlgeschlagen");
       errorText.setText("Anmeldung gescheitert!");
     }
+  }
+
+  private void startToDoActivity() {
+    Intent openmain = new Intent(LoginActivity.this, MainActivity.class);
+    this.startActivity(openmain);
   }
 
   public boolean loginActive(){
@@ -95,16 +125,26 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     Log.i(logger,"Fovus changed on "+v.getId()+" "+hasFocus);
     if(v.getId() == R.id.emailTextInput && !hasFocus){
       if(!isValidEmail(emailInput.getText())) {
-        errorText.setText("E-Mail Adresse ungültig!");
+        emailInput.setError("E-Mail Adresse ungültig!");
       }
-    }else {
-      errorText.setText("");
     }
+
+    if(v.getId() == R.id.passwordTextInput && !hasFocus){
+      if(!isValidPassword(passwordInput.getText())) {
+        passwordInput.setError("Passwort ungültig!");
+      }
+    }
+
+  }
+
+  public static boolean isValidPassword(CharSequence target) {
+
+    Pattern pattern = Pattern.compile("\\d{6}");
+
+    return (!TextUtils.isEmpty(target) && pattern.matcher(target).matches());
   }
 
   public static boolean isValidEmail(CharSequence target) {
     return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
   }
-
-
 }
