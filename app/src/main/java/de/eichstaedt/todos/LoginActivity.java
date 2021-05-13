@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.adapters.TextViewBindingAdapter.OnTextChanged;
+import com.google.android.material.button.MaterialButton;
 import de.eichstaedt.todos.databinding.ActivityLoginBinding;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
@@ -23,6 +25,8 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private DataService dataService;
 
+  private MaterialButton anmelden;
+
   private static final String logger = LoginActivity.class.getName();
 
   @Override
@@ -31,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     dataService = DataService.instance(ToDoRepository.getInstance(getApplicationContext()));
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);
+    anmelden = findViewById(R.id.LoginButton);
   }
 
   public void login() {
@@ -44,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   public void setEmail(String email) {
     this.email = email;
+    anmelden.setEnabled(loginActive());
   }
 
   public String getPasswort() {
@@ -52,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   public void setPasswort(String passwort) {
     this.passwort = passwort;
+    anmelden.setEnabled(loginActive());
   }
 
   @Override
@@ -63,6 +70,9 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     }else {
       Log.i(logger,"Login fehlgeschlagen");
     }
+  }
 
+  public boolean loginActive(){
+    return email != null && !email.isEmpty() && passwort != null && !passwort.isEmpty();
   }
 }

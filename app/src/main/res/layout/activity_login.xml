@@ -14,31 +14,39 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <EditText
+  <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/loginEmail"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="272dp"
-    android:ems="10"
-    android:inputType="textEmailAddress"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    tools:layout_editor_absoluteX="100dp"
-    android:text="@={controller.email}"
-    android:autofillHints="" />
-  <EditText
-    android:id="@+id/editTextNumberPassword"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/emailTextInput"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:inputType="textEmailAddress"
+      android:hint="E-Mail"
+      layout_width="match_parent"
+      layout_height="wrap_content"
+      android:text="@={controller.email}" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/loginPassword"
     app:layout_constraintTop_toBottomOf="@+id/loginEmail"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    android:ems="10"
-    android:inputType="numberPassword"
-    android:text="@={controller.passwort}"
-    tools:layout_editor_absoluteX="100dp"
-    tools:layout_editor_absoluteY="325dp" />
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:inputType="textPassword"
+      android:hint="Passwort"
+      layout_width="match_parent"
+      layout_height="wrap_content"
+      android:text="@={controller.passwort}" />
+  </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/LoginButton"
@@ -46,8 +54,9 @@
     android:layout_height="0dp"
     android:text="Anmelden"
     android:layout_marginTop="16dp"
+    android:enabled="@{controller.loginActive()}"
     android:onClick="@{(v) -> controller.login()}"
-    app:layout_constraintTop_toBottomOf="@+id/loginEmail"
+    app:layout_constraintTop_toBottomOf="@+id/loginPassword"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"/>
 
