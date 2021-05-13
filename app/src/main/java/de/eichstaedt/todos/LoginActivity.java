@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     dataService = DataService.instance(ToDoRepository.getInstance(getApplicationContext()));
+    dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);
     anmelden = findViewById(R.id.LoginButton);
@@ -68,14 +69,11 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   public void login() {
     Log.i(logger,"Starting Login ...");
     progress.setVisibility(View.VISIBLE);
-
-    /*
-    if(dataService.isOffline())
-    {
+    if(!dataService.isOffline()) {
+      dataService.findUserByEmail(email, passwort, this);
+    }else {
       startToDoActivity();
-    }*/
-
-    dataService.findUserByEmail(email,passwort,this);
+    }
   }
 
   public String getEmail() {
@@ -85,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   public void setEmail(String email) {
     this.email = email;
     anmelden.setEnabled(loginActive());
-    errorText.setText("");
+    addOfflineMessage();
   }
 
   public String getPasswort() {
@@ -96,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     this.passwort = passwort;
     anmelden.setEnabled(loginActive());
     errorText.setText("");
+    addOfflineMessage();
   }
 
   @Override
@@ -117,11 +116,19 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   }
 
   public boolean loginActive(){
+    if(dataService.isOffline())
+    {
+      return true;
+    }
+
     return email != null && !email.isEmpty() && passwort != null && !passwort.isEmpty();
   }
 
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
+
+    addOfflineMessage();
+
     Log.i(logger,"Fovus changed on "+v.getId()+" "+hasFocus);
     if(v.getId() == R.id.emailTextInput && !hasFocus){
       if(!isValidEmail(emailInput.getText())) {
@@ -135,6 +142,15 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
       }
     }
 
+  }
+
+  private void addOfflineMessage() {
+    if(dataService.isOffline())
+    {
+      errorText.setText("Offline bitte ohne Dateneingabe anmelden ...");
+    }else {
+      errorText.setText("");
+    }
   }
 
   public static boolean isValidPassword(CharSequence target) {

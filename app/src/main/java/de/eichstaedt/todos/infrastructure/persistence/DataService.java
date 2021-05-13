@@ -67,33 +67,43 @@ public class DataService {
 
     Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(localToDos -> firestore.collection(TODO_COLLECTION_PATH).get().addOnCompleteListener(task -> {
-          if (task.isSuccessful()) {
-            Log.i(LOGGER,"Got Successful Documents from Google Firebase "+task.getResult().size() + " and local todos "+localToDos.size());
+        .subscribe(localToDos -> {
+          if(!offline) {
+            firestore.collection(TODO_COLLECTION_PATH).get().addOnCompleteListener(task -> {
+              if (task.isSuccessful()) {
+                Log.i(LOGGER,
+                    "Got Successful Documents from Google Firebase " + task.getResult().size()
+                        + " and local todos " + localToDos.size());
 
-            List<ToDo> result = new ArrayList<>();
+                List<ToDo> result = new ArrayList<>();
 
-            if(localToDos.isEmpty())
-            {
-              Log.i(logger,"UseCase Online but no local todos "+localToDos.size());
-              result.addAll(saveFireBaseDocumentInLocalDatabase(task.getResult().getDocuments()));
-            }else {
-              Log.i(logger,"UseCase Online but local todos");
-              Log.i(logger,"Delete All Remote "+task.getResult().getDocuments().size());
-              deleteAllFirebaseToDos(task.getResult().getDocuments());
-              Log.i(logger,"Save local to Firebase "+ localToDos.size());
-              saveLocalToDoInFirebase(localToDos);
-              result.addAll(localToDos);
-            }
+                if (localToDos.isEmpty()) {
+                  Log.i(logger, "UseCase Online but no local todos " + localToDos.size());
+                  result
+                      .addAll(saveFireBaseDocumentInLocalDatabase(task.getResult().getDocuments()));
+                } else {
+                  Log.i(logger, "UseCase Online but local todos");
+                  Log.i(logger, "Delete All Remote " + task.getResult().getDocuments().size());
+                  deleteAllFirebaseToDos(task.getResult().getDocuments());
+                  Log.i(logger, "Save local to Firebase " + localToDos.size());
+                  saveLocalToDoInFirebase(localToDos);
+                  result.addAll(localToDos);
+                }
 
-            callback.onComplete(result,"Online: Daten erfolgreich geladen");
-            offline = false;
+                callback.onComplete(result, "Online: Daten erfolgreich geladen");
 
-          } else {
-            Log.e(LOGGER,"Error Loading Data from Google Firebase ",task.getException());
-            callback.onComplete(localToDos, "Offline: "+task.getException().getMessage()+" Daten lokal geladen");
+              } else {
+                Log.e(LOGGER, "Error Loading Data from Google Firebase ", task.getException());
+                callback.onComplete(localToDos,
+                    "Offline: " + task.getException().getMessage() + " Daten lokal geladen");
+              }
+            });
+          }else {
+            Log.e(LOGGER, "Error Loading Data from Google Firebase ");
+            callback.onComplete(localToDos,
+                "Offline: Daten lokal geladen");
           }
-        }));
+        });
 
   }
 
@@ -220,9 +230,11 @@ public class DataService {
 
   private void deleteAllFirebaseToDos(
       List<DocumentSnapshot> documents) {
-            documents.stream().forEach(d ->
-                firestore.collection(TODO_COLLECTION_PATH).document(d.getId()).delete());
-            Log.i(logger,"Deleted all firebase documents");
+    if (!isOffline()) {
+      documents.stream().forEach(d ->
+          firestore.collection(TODO_COLLECTION_PATH).document(d.getId()).delete());
+      Log.i(logger, "Deleted all firebase documents");
+    }
 
   }
 
@@ -245,7 +257,17 @@ public class DataService {
   }
 
   public boolean isOffline() {
-
     return offline;
+  }
+
+  public void checkOfflineState() {
+    Observable.fromCallable(() -> firestore.enableNetwork())
+        .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(task -> {
+      if(task.isSuccessful())
+      {
+        offline = false;
+        Log.i(logger,"System offline state "+offline);
+      }
+    });
   }
 }
