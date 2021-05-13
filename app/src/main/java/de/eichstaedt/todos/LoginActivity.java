@@ -1,7 +1,5 @@
 package de.eichstaedt.todos;
 
-import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +12,6 @@ import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;
-import org.parceler.Parcels;
 
 public class LoginActivity extends AppCompatActivity implements UserRepositoryCallback {
 
