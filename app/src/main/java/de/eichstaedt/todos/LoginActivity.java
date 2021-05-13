@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
 
+    dataService.checkOfflineState();
     addOfflineMessage();
 
     Log.i(logger,"Fovus changed on "+v.getId()+" "+hasFocus);

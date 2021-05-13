@@ -5,6 +5,7 @@ import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMap
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapToDoToFirebaseDocument;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapUserToFirebaseDocument;
 
+import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +41,7 @@ public class DataService {
   public static final String TODO_COLLECTION_PATH = "todos";
 
   public static final String USER_COLLECTION_PATH = "user";
+
 
   private DataService(@NonNull ToDoDatabase toDoDatabase) {
     this.localDatabase = toDoDatabase;
@@ -262,12 +264,18 @@ public class DataService {
 
   public void checkOfflineState() {
     Observable.fromCallable(() -> firestore.enableNetwork())
-        .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(task -> {
+        .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe((task) -> {
+
       if(task.isSuccessful())
       {
         offline = false;
-        Log.i(logger,"System offline state "+offline);
+        Log.i(logger,"System offline state "+task.getException());
       }
+
+      if(task.getException() != null) {
+        offline = true;
+      }
+
     });
   }
 }
