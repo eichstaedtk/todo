@@ -40,7 +40,7 @@ public class DetailViewActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     Log.i(logger,"Creating DetailView Activity");
 
-    dataService = DataService.instance(ToDoRepository.getInstance(getApplicationContext()));
+    dataService = DataService.instance(getApplicationContext());
     dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_detailview);
     Intent intent = getIntent();

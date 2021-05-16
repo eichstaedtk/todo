@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    dataService = DataService.instance(ToDoRepository.getInstance(getApplicationContext()));
+    dataService = DataService.instance(getApplicationContext());
     dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);

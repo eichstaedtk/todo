@@ -8,12 +8,9 @@ import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMap
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import de.eichstaedt.todos.ReloadViewCallback;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
@@ -47,10 +44,10 @@ public class DataService {
     this.localDatabase = toDoDatabase;
   }
 
-  public static DataService instance(@NonNull ToDoDatabase toDoDatabase) {
+  public static DataService instance(@NonNull Context context) {
 
     if(service == null){
-      service = new DataService(toDoDatabase);
+      service = new DataService(ToDoRepository.getInstance(context));
     }
 
     return service;

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ToDoRepositoryCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataService = DataService.instance(ToDoRepository.getInstance(getApplicationContext()));
+        dataService = DataService.instance(getApplicationContext());
         dataService.checkOfflineState();
         dataService.readToDos(this);
 
