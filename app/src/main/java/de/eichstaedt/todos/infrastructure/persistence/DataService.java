@@ -1,11 +1,14 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import static androidx.core.content.ContextCompat.getSystemService;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.*;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapFirebaseDocumentToToDo;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapToDoToFirebaseDocument;
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.mapUserToFirebaseDocument;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,15 +42,17 @@ public class DataService {
 
   public static final String USER_COLLECTION_PATH = "user";
 
+  private Context context;
 
-  private DataService(@NonNull ToDoDatabase toDoDatabase) {
+  private DataService(@NonNull ToDoDatabase toDoDatabase, Context context) {
     this.localDatabase = toDoDatabase;
+    this.context = context;
   }
 
   public static DataService instance(@NonNull Context context) {
 
     if(service == null){
-      service = new DataService(ToDoRepository.getInstance(context));
+      service = new DataService(ToDoRepository.getInstance(context),context);
     }
 
     return service;
@@ -260,19 +265,26 @@ public class DataService {
   }
 
   public void checkOfflineState() {
-    Observable.fromCallable(() -> firestore.enableNetwork())
-        .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe((task) -> {
 
-      if(task.isSuccessful())
-      {
-        offline = false;
-        Log.i(logger,"System offline state "+task.getException());
-      }
+    ConnectivityManager connMgr = getSystemService(context, ConnectivityManager.class);
+    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-      if(task.getException() != null) {
-        offline = true;
-      }
+    if(networkInfo != null && networkInfo.isConnected()) {
 
-    });
+      Observable.fromCallable(() -> firestore.enableNetwork())
+          .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe((task) -> {
+
+            if (task.isSuccessful()) {
+              offline = false;
+              Log.i(logger, "System offline state " + task.getException());
+            }
+
+            if (task.getException() != null) {
+              offline = true;
+            }
+
+          });
+    }
   }
 }
