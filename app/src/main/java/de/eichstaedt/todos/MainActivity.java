@@ -28,12 +28,11 @@ import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter.Sorting;
 import java.util.List;
 import de.eichstaedt.todos.domain.ToDo;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoRepositoryCallback;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
+import de.eichstaedt.todos.infrastructure.persistence.RepositoryCallback;
 import java.util.Optional;
 import org.parceler.Parcels;
 
-public class MainActivity extends AppCompatActivity implements ToDoRepositoryCallback<List<ToDo>>,
+public class MainActivity extends AppCompatActivity implements RepositoryCallback<List<ToDo>>,
     UserRepositoryCallback, ReloadViewCallback {
 
     protected static final String logger = MainActivity.class.getName();
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements ToDoRepositoryCal
                                     sortByDatumAndWichtig.setIcon(R.drawable.outline_done_black_18);
                                     adapter.notifyDataSetChanged();
                                     adapter.setSortDecision(Sorting.DATUM_WICHTIG);
-                                    ;break;
+                break;
         }
 
         return false;

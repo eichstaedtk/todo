@@ -8,7 +8,7 @@ import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMap
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.NetworkCapabilities;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,7 +42,7 @@ public class DataService {
 
   public static final String USER_COLLECTION_PATH = "user";
 
-  private Context context;
+  private final Context context;
 
   private DataService(@NonNull ToDoDatabase toDoDatabase, Context context) {
     this.localDatabase = toDoDatabase;
@@ -67,7 +67,7 @@ public class DataService {
 
   private final ToDoDatabase localDatabase;
 
-  public void readToDos(ToDoRepositoryCallback callback) {
+  public void readToDos(RepositoryCallback callback) {
 
     Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -215,7 +215,7 @@ public class DataService {
         .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e)));
   }
 
-  public void deleteAllLokalToDos(ToDoRepositoryCallback callback) {
+  public void deleteAllLokalToDos(RepositoryCallback callback) {
     Log.i(logger,"Delete all lokal todos ...");
     Completable.fromAction(() -> {localDatabase.toDoDAO().deleteAll();})
         .subscribeOn(Schedulers.io())
@@ -267,9 +267,10 @@ public class DataService {
   public void checkOfflineState() {
 
     ConnectivityManager connMgr = getSystemService(context, ConnectivityManager.class);
-    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    NetworkCapabilities networkCapabilities = connMgr.getNetworkCapabilities(connMgr.getActiveNetwork());
 
-    if(networkInfo != null && networkInfo.isConnected()) {
+    if(networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI )
+    || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))) {
 
       Observable.fromCallable(() -> firestore.enableNetwork())
           .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread())
