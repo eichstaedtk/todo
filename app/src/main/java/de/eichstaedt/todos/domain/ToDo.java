@@ -6,23 +6,30 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Junction;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 import androidx.room.TypeConverters;
 import de.eichstaedt.todos.infrastructure.persistence.LocalDateTimeConverter;
+import de.eichstaedt.todos.infrastructure.persistence.SetConverter;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import org.parceler.Parcel;
 
 @Parcel
 @Entity(tableName = "todos")
-@TypeConverters({LocalDateTimeConverter.class})
+@TypeConverters({LocalDateTimeConverter.class, SetConverter.class})
 public class ToDo {
 
     public ToDo() {
         this.id = UUID.randomUUID().toString();
         this.faellig = LocalDateTime.now();
+        this.kontakte = new HashSet<>();
     }
 
     public ToDo(@NonNull ToDoDetailView toDoDetailView) {
@@ -32,6 +39,7 @@ public class ToDo {
         this.erledigt = toDoDetailView.isErledigt();
         this.wichtig = toDoDetailView.isWichtig();
         this.faellig = LocalDateTime.parse(toDoDetailView.getFaellig(),DateTimeFormatter.ofPattern(DATE_FORMAT));
+        this.kontakte = new HashSet<>();
     }
 
     @Ignore
@@ -39,6 +47,7 @@ public class ToDo {
         this.id = id;
         this.name = name;
         this.beschreibung = beschreibung;
+        this.kontakte = new HashSet<>();
     }
 
     @Ignore
@@ -49,6 +58,7 @@ public class ToDo {
         this.faellig = faellig;
         this.wichtig = wichtig;
         this.erledigt = false;
+        this.kontakte = new HashSet<>();
     }
 
     @Ignore
@@ -59,6 +69,7 @@ public class ToDo {
         this.faellig = faellig;
         this.wichtig = false;
         this.erledigt = false;
+        this.kontakte = new HashSet<>();
     }
 
     @PrimaryKey
@@ -79,6 +90,9 @@ public class ToDo {
 
     @ColumnInfo(name = "FAELLIG_DATUM")
     private LocalDateTime faellig;
+
+    @ColumnInfo(name = "KONTAKTE")
+    private Set<String> kontakte;
 
     public String getId() {
         return id;
@@ -128,6 +142,14 @@ public class ToDo {
         this.faellig = faellig;
     }
 
+    public Set<String> getKontakte() {
+        return kontakte;
+    }
+
+    public void setKontakte(Set<String> kontakte) {
+        this.kontakte = kontakte;
+    }
+
     @Override
     public String toString() {
         return "ToDo{" +
@@ -137,6 +159,24 @@ public class ToDo {
             ", erledigt=" + erledigt +
             ", wichtig=" + wichtig +
             ", faellig=" + faellig +
+            ", kontakte=" + kontakte.size() +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ToDo toDo = (ToDo) o;
+        return id.equals(toDo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
