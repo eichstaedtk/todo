@@ -7,6 +7,7 @@ import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 /**
  * Class for Detail View View Model with Databinding
@@ -15,13 +16,14 @@ import java.time.format.DateTimeFormatter;
 public class ToDoDetailView {
 
   public ToDoDetailView(String id,String name, String beschreibung, boolean erledigt, boolean wichtig,
-      LocalDateTime faellig) {
+      LocalDateTime faellig, Set<String> kontakte) {
     this.id = id;
     this.name = name;
     this.beschreibung = beschreibung;
     this.erledigt = erledigt;
     this.wichtig = wichtig;
     this.faellig = faellig.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    this.kontakte = kontakte;
   }
 
   private String id;
@@ -35,6 +37,8 @@ public class ToDoDetailView {
   private boolean wichtig;
 
   private String faellig;
+
+  private final Set<String> kontakte;
 
   public String getId() {
     return id;
@@ -82,6 +86,10 @@ public class ToDoDetailView {
 
   public void setFaellig(String faellig) {
     this.faellig = faellig;
+  }
+
+  public Set<String> getKontakte() {
+    return kontakte;
   }
 
   @Override

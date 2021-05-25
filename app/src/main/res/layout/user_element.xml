@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+  <data>
+    <variable
+      name="user"
+      type="de.eichstaedt.todos.infrastructure.view.UserSelectionModel" />
+    <variable
+      name="adapter"
+      type="de.eichstaedt.todos.infrastructure.view.UserArrayAdapter" />
+  </data>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+  <CheckBox
+    android:id="@+id/userselected"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="15"
+    android:checked="@{adapter.userIsSelected()}"
+    android:onCheckedChanged="@{()-> adapter.onSelectUser()}">
+  </CheckBox>
+
+  <TextView
+    android:id="@+id/username"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="30"
+    android:maxWidth="150dp"
+    android:text="@{user.name}"
+    android:textSize="40px" >
+  </TextView>
+
+  <TextView
+    android:id="@+id/useremail"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="30"
+    android:maxWidth="150dp"
+    android:text="@{user.email}"
+    android:textSize="40px" >
+  </TextView>
+
+</LinearLayout>
+</layout>

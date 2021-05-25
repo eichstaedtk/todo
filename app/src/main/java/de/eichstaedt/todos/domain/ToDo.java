@@ -39,7 +39,7 @@ public class ToDo {
         this.erledigt = toDoDetailView.isErledigt();
         this.wichtig = toDoDetailView.isWichtig();
         this.faellig = LocalDateTime.parse(toDoDetailView.getFaellig(),DateTimeFormatter.ofPattern(DATE_FORMAT));
-        this.kontakte = new HashSet<>();
+        this.kontakte = toDoDetailView.getKontakte();
     }
 
     @Ignore

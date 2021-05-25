@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -13,12 +14,15 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
+import de.eichstaedt.todos.infrastructure.view.UserArrayAdapter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.TimeZone;
 import org.parceler.Parcels;
 
@@ -32,6 +36,8 @@ public class DetailViewActivity extends AppCompatActivity {
   private ActivityDetailviewBinding binding;
 
   private DataService dataService;
+
+  private UserArrayAdapter userArrayAdapter;
 
   protected static final String logger = DetailViewActivity.class.getName();
 
@@ -48,7 +54,12 @@ public class DetailViewActivity extends AppCompatActivity {
     Bundle b = intent.getBundleExtra(TODO_BUNDLE);
     ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
     toDoDetailView = new ToDoDetailView(toDo.getId(), toDo.getName(),
-        toDo.getBeschreibung(),toDo.isErledigt(),toDo.isWichtig(),toDo.getFaellig());
+        toDo.getBeschreibung(),toDo.isErledigt(),toDo.isWichtig(),toDo.getFaellig(), toDo.getKontakte());
+
+    dataService.findAllUser((List<User> user) -> {
+      userArrayAdapter = new UserArrayAdapter(this,user, toDo);
+      binding.userSelectionListView.setAdapter(userArrayAdapter);
+    });
 
     binding.setController(this);
   }

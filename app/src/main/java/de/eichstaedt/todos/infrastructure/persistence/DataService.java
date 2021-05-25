@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +130,14 @@ public class DataService {
         callback.onComplete("ToDo gespeichert " + toDo.getName());
       }
     });
+  }
+
+  public void findAllUser(Consumer<List<User>> user) {
+    firestore.collection(USER_COLLECTION_PATH).get().addOnCompleteListener(task ->
+        user.accept(task.getResult().getDocuments()
+            .stream()
+            .map(FirebaseDocumentMapper::mapFirebaseDocumentToUser)
+            .collect(Collectors.toList())));
   }
 
   public void findUserByEmail(String email,String password, UserRepositoryCallback callback) {
