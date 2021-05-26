@@ -199,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         Log.i(logger,"Callback User Repository "+user.isPresent());
         if(!user.isPresent()) {
             User konrad = new User("Konrad", "konrad.eichstaedt@gmx.de", 123456);
+            User nicole = new User("Nicole", "nicole.eichstaedt@gmx.de", 123456);
             dataService.saveUserInFirebase(konrad);
+            dataService.saveUserInFirebase(nicole);
         }
 
     }

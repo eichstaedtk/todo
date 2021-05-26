@@ -19,8 +19,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="15"
-    android:checked="@{adapter.userIsSelected()}"
-    android:onCheckedChanged="@{()-> adapter.onSelectUser()}">
+    android:checked="@={user.selected}">
   </CheckBox>
 
   <TextView

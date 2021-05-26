@@ -1,12 +1,14 @@
 package de.eichstaedt.todos.infrastructure.view;
 
+import de.eichstaedt.todos.domain.ToDo;
+
 public class UserSelectionModel {
 
-  public UserSelectionModel(String id, String name, String email, boolean selected) {
+  public UserSelectionModel(String id, String name, String email, ToDo toDo) {
     this.id = id;
     this.name = name;
     this.email = email;
-    this.selected = selected;
+    this.toDo = toDo;
   }
 
   private final String id;
@@ -15,7 +17,7 @@ public class UserSelectionModel {
 
   private String email;
 
-  private boolean selected;
+  private final ToDo toDo;
 
   public String getName() {
     return name;
@@ -34,11 +36,16 @@ public class UserSelectionModel {
   }
 
   public boolean isSelected() {
-    return selected;
+    return toDo.getKontakte().contains(id);
   }
 
   public void setSelected(boolean selected) {
-    this.selected = selected;
+    if(selected)
+    {
+      toDo.getKontakte().add(id);
+    }else {
+      toDo.getKontakte().remove(id);
+    }
   }
 
   public String getId() {
@@ -51,7 +58,6 @@ public class UserSelectionModel {
         "id='" + id + '\'' +
         ", name='" + name + '\'' +
         ", email='" + email + '\'' +
-        ", selected=" + selected +
         '}';
   }
 }

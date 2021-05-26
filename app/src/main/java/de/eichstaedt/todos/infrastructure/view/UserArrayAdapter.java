@@ -57,26 +57,13 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
     if(users != null && users.size() > 0) {
       User user = users.get(position);
       UserSelectionModel model = new UserSelectionModel(user.getId(),user.getName(),
-          user.getEmail(), toDo.getKontakte().contains(user.getId()));
+          user.getEmail(), toDo);
       binding.setUser(model);
     }
 
     return result;
   }
 
-
-  public void onSelectUser() {
-    Log.i(logger,"Selecting User: "+binding.userselected.isChecked());
-    if(binding.userselected.isChecked()){
-      toDo.getKontakte().add(binding.getUser().getId());
-    }else {
-      toDo.getKontakte().remove(binding.getUser().getId());
-    }
-  }
-
-  public boolean userIsSelected() {
-    return toDo.getKontakte().contains(binding.getUser().getId());
-  }
 
   @Override
   public int getCount() {
