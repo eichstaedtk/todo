@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
@@ -115,6 +117,27 @@ public class DetailViewActivity extends AppCompatActivity {
     });
     datePicker.show(this.getSupportFragmentManager(),"DATE_PICKER");
 
+  }
+
+  public void showTimePicker() {
+
+    MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
+        .setTimeFormat(TimeFormat.CLOCK_24H)
+        .setHour(12)
+        .setMinute(0)
+        .setTitleText("Zeit auswählen")
+        .build();
+
+    timePicker.addOnPositiveButtonClickListener(dialog -> {
+        LocalDateTime faellig = LocalDateTime.parse(toDoDetailView.getFaellig(),DateTimeFormatter.ofPattern(DATE_FORMAT));
+        Log.i(logger,"TimePicket Get Hour : "+timePicker.getHour());
+        LocalDateTime faelligAdjusted = faellig.withHour(timePicker.getHour()).withMinute(timePicker.getMinute());
+        Log.i(logger,"TimePicket Set Faellig: "+faelligAdjusted.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        toDoDetailView.setFaellig(faelligAdjusted.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        dataService.updateToDo(new ToDo(toDoDetailView),(s) -> {binding.invalidateAll();});
+    });
+
+    timePicker.show(this.getSupportFragmentManager(),"TIME_PICKER");
   }
 
   public ToDoDetailView getToDoDetailView() {
