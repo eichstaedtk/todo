@@ -8,6 +8,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Class for Detail View View Model with Databinding
@@ -101,6 +102,7 @@ public class ToDoDetailView {
         ", erledigt=" + erledigt +
         ", wichtig=" + wichtig +
         ", faellig=" + faellig +
+        ", kontakte= "+kontakte.stream().collect(Collectors.joining(","))+
         '}';
   }
 }
