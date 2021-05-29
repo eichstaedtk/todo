@@ -8,11 +8,13 @@
     <TextView
       android:id="@+id/todoNameText"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="60dp"
       android:layout_weight="40"
       android:maxWidth="150dp"
       android:layout_marginLeft="10dp"
       android:layout_marginRight="10dp"
+      android:breakStrategy="high_quality"
+      android:maxLines="2"
       android:text="Name"
       android:textSize="18sp" />
 
