@@ -59,6 +59,10 @@ public class UserSelectionModel {
     }
   }
 
+  public ToDo getToDo() {
+    return toDo;
+  }
+
   public String getId() {
     return id;
   }

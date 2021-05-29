@@ -80,7 +80,7 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
   public void sendSmsMessage(UserSelectionModel user) {
     Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+user.getMobil()));
-    smsIntent.putExtra("sms_body", "Hello Master 2022");
+    smsIntent.putExtra("sms_body", user.getToDo().getName()+": "+user.getToDo().getBeschreibung());
     if (smsIntent.resolveActivity(context.getPackageManager()) != null) {
       context.startActivity(smsIntent);
     }
@@ -89,7 +89,8 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
   public void sendEmailMessage(UserSelectionModel user) {
 
     Intent emailIntent = new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:"+user.getEmail()));
-    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hello Master 2022");
+    emailIntent.putExtra(Intent.EXTRA_SUBJECT, user.getToDo().getName());
+    emailIntent.putExtra(Intent.EXTRA_TEXT, user.getToDo().getBeschreibung());
     if (emailIntent.resolveActivity(context.getPackageManager()) != null) {
       context.startActivity(emailIntent);
     }
