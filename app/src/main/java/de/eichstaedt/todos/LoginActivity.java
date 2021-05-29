@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private TextView errorText;
 
-  private TextInputEditText emailInput;
+    private TextInputEditText emailInput;
 
   private TextInputEditText passwordInput;
 
@@ -131,10 +131,12 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
 
-    dataService.checkOfflineState();
-    addOfflineMessage();
+    if(hasFocus) {
+      dataService.checkOfflineState();
+      addOfflineMessage();
+    }
 
-    Log.i(logger,"Fovus changed on "+v.getId()+" "+hasFocus);
+    Log.i(logger,"Focus changed on "+v.getId()+" "+hasFocus);
     if(v.getId() == R.id.emailTextInput && !hasFocus){
       if(!isValidEmail(emailInput.getText())) {
         emailInput.setError("E-Mail Adresse ungültig!");
