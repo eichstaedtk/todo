@@ -54,14 +54,17 @@ public class DetailViewActivity extends AppCompatActivity {
     Intent intent = getIntent();
 
     Bundle b = intent.getBundleExtra(TODO_BUNDLE);
-    ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
-    toDoDetailView = new ToDoDetailView(toDo.getId(), toDo.getName(),
-        toDo.getBeschreibung(),toDo.isErledigt(),toDo.isWichtig(),toDo.getFaellig(), toDo.getKontakte());
+    if(b != null) {
+      ToDo toDo = Parcels.unwrap(b.getParcelable(TODO_PARCEL));
+      toDoDetailView = new ToDoDetailView(toDo.getId(), toDo.getName(),
+          toDo.getBeschreibung(), toDo.isErledigt(), toDo.isWichtig(), toDo.getFaellig(),
+          toDo.getKontakte());
 
-    dataService.findAllUser((List<User> user) -> {
-      userArrayAdapter = new UserArrayAdapter(this,user, toDo);
-      binding.userSelectionListView.setAdapter(userArrayAdapter);
-    });
+      dataService.findAllUser((List<User> user) -> {
+        userArrayAdapter = new UserArrayAdapter(this, user, toDo);
+        binding.userSelectionListView.setAdapter(userArrayAdapter);
+      });
+    }
 
     binding.setController(this);
   }

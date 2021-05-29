@@ -67,10 +67,19 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
   }
 
   public void sendSmsMessage(UserSelectionModel user) {
-    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+user.getMobil()));
-    intent.putExtra("sms_body", "Hello Master 2022");
-    if (intent.resolveActivity(context.getPackageManager()) != null) {
-      context.startActivity(intent);
+    Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+user.getMobil()));
+    smsIntent.putExtra("sms_body", "Hello Master 2022");
+    if (smsIntent.resolveActivity(context.getPackageManager()) != null) {
+      context.startActivity(smsIntent);
+    }
+  }
+
+  public void sendEmailMessage(UserSelectionModel user) {
+
+    Intent emailIntent = new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:"+user.getEmail()));
+    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hello Master 2022");
+    if (emailIntent.resolveActivity(context.getPackageManager()) != null) {
+      context.startActivity(emailIntent);
     }
   }
 
