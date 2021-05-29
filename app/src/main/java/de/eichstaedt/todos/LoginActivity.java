@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private LinearProgressIndicator progress;
 
+  private final boolean developmentMode = true;
+
   private static final String logger = LoginActivity.class.getName();
 
   @Override
@@ -62,6 +64,11 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
     progress = findViewById(R.id.loginProgress);
     progress.setVisibility(View.INVISIBLE);
+
+    if(developmentMode)
+    {
+      startToDoActivity();
+    }
   }
 
   public void login() {

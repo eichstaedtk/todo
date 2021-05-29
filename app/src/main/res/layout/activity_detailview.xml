@@ -11,9 +11,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+      android:id="@+id/aufgabeheader"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Aufgabe bearbeiten"
+      android:textSize="20sp"
+      android:layout_margin="16dp"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"/>
+
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/itemName"
-      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/aufgabeheader"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
@@ -47,20 +57,32 @@
       android:id="@+id/todoErledigt"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
       android:text="Erledigt"
       android:checked="@={controller.toDoDetailView.erledigt}"
       app:layout_constraintTop_toBottomOf="@id/itemBeschreibung"
-      app:layout_constraintLeft_toLeftOf="@id/itemBeschreibung"></CheckBox>
+      app:layout_constraintLeft_toLeftOf="parent"></CheckBox>
 
     <CheckBox
       android:id="@+id/todoWichtig"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
       android:text="Wichtig"
       android:checked="@={controller.toDoDetailView.wichtig}"
       app:layout_constraintTop_toBottomOf="@id/todoErledigt"
-      app:layout_constraintLeft_toLeftOf="@id/todoErledigt">
+      app:layout_constraintLeft_toLeftOf="parent">
     </CheckBox>
+
+    <TextView
+      android:id="@+id/outputLabel"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Fällig: "
+      android:textSize="20sp"
+      android:layout_marginLeft="16dp"
+      app:layout_constraintTop_toBottomOf="@id/todoWichtig"
+      app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
       android:id="@+id/output"
@@ -68,8 +90,9 @@
       android:layout_height="wrap_content"
       android:text="@={controller.toDoDetailView.faellig}"
       android:textSize="20sp"
+      android:layout_marginRight="16dp"
       app:layout_constraintTop_toBottomOf="@id/todoWichtig"
-      app:layout_constraintLeft_toLeftOf="parent"/>
+      app:layout_constraintRight_toRightOf="parent"/>
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/todoFaelligButton"
@@ -77,6 +100,7 @@
       android:layout_height="0dp"
       android:text="Datum setzen"
       android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
       android:onClick="@{(v) -> controller.showDatePicker()}"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
@@ -87,6 +111,7 @@
       android:layout_width="wrap_content"
       android:layout_height="0dp"
       android:layout_marginTop="16dp"
+      android:layout_marginRight="16dp"
       android:onClick="@{(v) -> controller.showTimePicker()}"
       android:text="Zeit setzen"
       app:layout_constraintEnd_toEndOf="parent"
@@ -98,6 +123,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="Kontakte verknüpfen"
+      android:layout_marginLeft="16dp"
       android:textSize="20sp"
       app:layout_constraintTop_toBottomOf="@id/todoFaelligButton"
       app:layout_constraintLeft_toLeftOf="parent"/>
@@ -107,7 +133,9 @@
       app:layout_constraintTop_toBottomOf="@id/userSelectionHeader"
       app:layout_constraintLeft_toLeftOf="parent"
       android:layout_width="match_parent"
-      android:layout_height="150dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_height="250dp"
       tools:listitem="@layout/user_element"
       />
 
