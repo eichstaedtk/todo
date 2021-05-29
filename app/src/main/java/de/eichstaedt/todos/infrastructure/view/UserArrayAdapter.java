@@ -1,6 +1,8 @@
 package de.eichstaedt.todos.infrastructure.view;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,11 +59,19 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
     if(users != null && users.size() > 0) {
       User user = users.get(position);
       UserSelectionModel model = new UserSelectionModel(user.getId(),user.getName(),
-          user.getEmail(), toDo);
+          user.getEmail(), user.getMobilnummer(),toDo);
       binding.setUser(model);
     }
 
     return result;
+  }
+
+  public void sendSmsMessage(UserSelectionModel user) {
+    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+user.getMobil()));
+    intent.putExtra("sms_body", "Hello Master 2022");
+    if (intent.resolveActivity(context.getPackageManager()) != null) {
+      context.startActivity(intent);
+    }
   }
 
 

@@ -11,6 +11,7 @@
   </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
@@ -36,11 +37,24 @@
     android:id="@+id/useremail"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="30"
+    android:layout_weight="40"
     android:maxWidth="150dp"
     android:text="@{user.email}"
     android:textSize="40px" >
   </TextView>
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+    android:id="@+id/SendEmailButon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layout_marginLeft="16dp"
+    android:textColor="@color/black"
+    android:enabled="@{user.mobil != null}"
+    android:onClick="@{()-> adapter.sendSmsMessage(user)}"
+    app:icon="@drawable/baseline_send_black_18dp"
+    />
 
 </LinearLayout>
 </layout>
