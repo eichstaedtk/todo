@@ -67,9 +67,9 @@ public class ToDo {
         this.name = name;
         this.beschreibung = beschreibung;
         this.faellig = faellig;
-        this.wichtig = false;
-        this.erledigt = false;
-        this.kontakte = new HashSet<>();
+        this.wichtig = wichtig;
+        this.erledigt = erledigt;
+        this.kontakte = kontakte;
     }
 
     @PrimaryKey

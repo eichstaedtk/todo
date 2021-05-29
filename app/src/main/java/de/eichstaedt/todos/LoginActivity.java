@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private TextView errorText;
 
-    private TextInputEditText emailInput;
+  private TextInputEditText emailInput;
 
   private TextInputEditText passwordInput;
 
@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     dataService = DataService.instance(getApplicationContext());
+    dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);
     anmelden = findViewById(R.id.LoginButton);
@@ -130,11 +131,6 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
-
-    if(hasFocus) {
-      dataService.checkOfflineState();
-      addOfflineMessage();
-    }
 
     Log.i(logger,"Focus changed on "+v.getId()+" "+hasFocus);
     if(v.getId() == R.id.emailTextInput && !hasFocus){

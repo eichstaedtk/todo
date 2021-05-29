@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import de.eichstaedt.todos.domain.ToDo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ public class FirebaseDocumentMapperTest {
 
     LocalDateTime today = LocalDateTime.of(2021,4,18,13,20,00);
 
-    ToDo einkaufen = new ToDo("1","Einkaufen","Wocheneinkauf", today);
+    ToDo einkaufen = new ToDo("1","Einkaufen","Wocheneinkauf", today, false, true, new HashSet<>());
 
     Map<String,String> firebaseObject = FirebaseDocumentMapper.mapToDoToFirebaseDocument(einkaufen);
 

@@ -1,15 +1,13 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
-import android.util.JsonWriter;
+import android.util.Log;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +24,8 @@ public class FirebaseDocumentMapper {
   public static final String WICHTIG = "wichtig";
   public static final String ERLEDIGT = "erledigt";
   public static final String KONTAKTE = "kontakte";
+
+  private static final String logger = FirebaseDocumentMapper.class.getName();
 
   public static Map<String, String> mapUserToFirebaseDocument(User user) {
     Map<String,String> value = new HashMap<>();
@@ -54,6 +54,9 @@ public class FirebaseDocumentMapper {
   }
 
   public static ToDo mapFirebaseDocumentToToDo(DocumentSnapshot documentSnapshot) {
+
+    Log.i(logger,"Map Firebase Document"+documentSnapshot.toString());
+
      return  new ToDo(documentSnapshot.getString(ID), documentSnapshot.getString(NAME),
         documentSnapshot.getString(BESCHREIBUNG),
         LocalDateTime.parse(documentSnapshot.getString(FAELLIG),
