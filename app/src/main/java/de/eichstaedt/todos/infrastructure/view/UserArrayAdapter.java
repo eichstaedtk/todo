@@ -16,6 +16,7 @@ import de.eichstaedt.todos.databinding.UserElementBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
@@ -27,12 +28,20 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
   private UserElementBinding binding;
 
+  private final boolean showAll = false;
+
   protected static final String logger = UserArrayAdapter.class.getName();
 
   public UserArrayAdapter(@NonNull Activity context,
       List<User> users, ToDo toDo) {
     super(context, R.layout.user_element);
-    this.users = users;
+    if(showAll){
+      this.users = users;
+    }else {
+      this.users = users.stream().filter(u -> toDo.getKontakte().contains(u.getId())).collect(
+          Collectors.toList());
+    }
+
     this.context = context;
     this.toDo = toDo;
     Log.i(logger,"Creating user array adapter ... "+ users.size());
@@ -87,5 +96,9 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
   @Override
   public int getCount() {
     return users.size();
+  }
+
+  public boolean isShowAll() {
+    return showAll;
   }
 }
