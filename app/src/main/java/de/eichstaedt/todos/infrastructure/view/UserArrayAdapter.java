@@ -28,13 +28,16 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
   private UserElementBinding binding;
 
-  private final boolean showAll = false;
+  private boolean showAll = false;
 
   protected static final String logger = UserArrayAdapter.class.getName();
 
   public UserArrayAdapter(@NonNull Activity context,
-      List<User> users, ToDo toDo) {
+      List<User> users, ToDo toDo, boolean showAll) {
     super(context, R.layout.user_element);
+
+    this.showAll = showAll;
+
     if(showAll){
       this.users = users;
     }else {
@@ -100,5 +103,13 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
   public boolean isShowAll() {
     return showAll;
+  }
+
+  public void setShowAll(boolean showAll) {
+    this.showAll = showAll;
+  }
+
+  public List<User> getUsers() {
+    return users;
   }
 }

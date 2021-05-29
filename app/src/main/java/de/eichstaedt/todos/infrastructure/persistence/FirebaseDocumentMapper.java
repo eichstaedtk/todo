@@ -1,12 +1,17 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import android.util.JsonWriter;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class FirebaseDocumentMapper {
 
@@ -18,6 +23,9 @@ public class FirebaseDocumentMapper {
   public static final String EMAIL = "email";
   public static final String PASSWORD = "password";
   public static final String MOBIL = "mobil";
+  public static final String WICHTIG = "wichtig";
+  public static final String ERLEDIGT = "erledigt";
+  public static final String KONTAKTE = "kontakte";
 
   public static Map<String, String> mapUserToFirebaseDocument(User user) {
     Map<String,String> value = new HashMap<>();
@@ -36,6 +44,9 @@ public class FirebaseDocumentMapper {
     value.put(ID,todo.getId());
     value.put(NAME,todo.getName());
     value.put(BESCHREIBUNG,todo.getBeschreibung());
+    value.put(WICHTIG,todo.isWichtig() ? "true": "false");
+    value.put(ERLEDIGT,todo.isErledigt() ? "true": "false");
+    value.put(KONTAKTE, new Gson().toJson(todo.getKontakte()));
     if(todo.getFaellig() != null) {
       value.put(FAELLIG, todo.getFaellig().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
     }
@@ -46,7 +57,9 @@ public class FirebaseDocumentMapper {
      return  new ToDo(documentSnapshot.getString(ID), documentSnapshot.getString(NAME),
         documentSnapshot.getString(BESCHREIBUNG),
         LocalDateTime.parse(documentSnapshot.getString(FAELLIG),
-            DateTimeFormatter.ofPattern(DATE_FORMAT)));
+            DateTimeFormatter.ofPattern(DATE_FORMAT)), Boolean.parseBoolean(documentSnapshot.getString(WICHTIG)),
+         Boolean.parseBoolean(documentSnapshot.getString(ERLEDIGT)),new Gson().fromJson(documentSnapshot.getString(KONTAKTE),
+         Set.class));
   }
 
   public static User mapFirebaseDocumentToUser(DocumentSnapshot documentSnapshot) {

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -61,12 +60,21 @@ public class DetailViewActivity extends AppCompatActivity {
           toDo.getKontakte());
 
       dataService.findAllUser((List<User> user) -> {
-        userArrayAdapter = new UserArrayAdapter(this, user, toDo);
+        userArrayAdapter = new UserArrayAdapter(this, user, toDo, false);
         binding.userSelectionListView.setAdapter(userArrayAdapter);
       });
     }
 
     binding.setController(this);
+  }
+
+  public void onClickKontakteVerknuepfen() {
+    dataService.findAllUser((List<User> user) -> {
+      userArrayAdapter.getUsers().clear();
+      userArrayAdapter.getUsers().addAll(user);
+      userArrayAdapter.setShowAll(true);
+      userArrayAdapter.notifyDataSetChanged();
+    });
   }
 
   public void onClickSaveToDoButton() {
@@ -87,10 +95,8 @@ public class DetailViewActivity extends AppCompatActivity {
     Log.i(logger,"Click on Save the Details of ToDo "+toDoDetailView.toString());
 
     new MaterialAlertDialogBuilder(this).setTitle(R.string.confirm_delete)
-        .setNegativeButton(R.string.no,(dialog, which ) -> {
-          dialog.dismiss();
-        })
-        .setPositiveButton(R.string.yes,(dialog, which)->{
+        .setNegativeButton(R.string.no,(dialog, which ) -> dialog.dismiss())
+        .setPositiveButton(R.string.yes,(dialog, which)-> {
           Intent returnIntent = new Intent(getApplicationContext(), MainActivity.class);
           ToDo toDo = new ToDo(toDoDetailView);
           Bundle bundle = new Bundle();

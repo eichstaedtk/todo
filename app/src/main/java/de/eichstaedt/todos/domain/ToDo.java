@@ -62,7 +62,7 @@ public class ToDo {
     }
 
     @Ignore
-    public ToDo(String id,String name, String beschreibung, LocalDateTime faellig) {
+    public ToDo(String id,String name, String beschreibung, LocalDateTime faellig, boolean wichtig, boolean erledigt, Set<String> kontakte) {
         this.id = id;
         this.name = name;
         this.beschreibung = beschreibung;

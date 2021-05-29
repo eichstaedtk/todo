@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         gridLayoutManager = new GridLayoutManager(this, result.size(), GridLayoutManager.HORIZONTAL, false);
         todoList.setLayoutManager(gridLayoutManager);
 
-        adapter = new ToDoRecyclerViewAdapter(sortByErledigt(result), dataService);
-
+        adapter = new ToDoRecyclerViewAdapter(sortByErledigtAndWichtigDatum(result), dataService);
+        adapter.setSortDecision(Sorting.WICHTIG_DATUM);
         todoList.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
