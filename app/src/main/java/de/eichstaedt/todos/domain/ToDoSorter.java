@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ToDoSorter {
 
-  public static List<ToDo> sortByErledigt(List<ToDo> toDos) {
+  public static void sortByErledigt(List<ToDo> toDos) {
 
     Collections.sort(toDos, (o1, o2) -> {
       if(o1.isErledigt() && o2.isErledigt()) return 1;
@@ -14,8 +14,6 @@ public class ToDoSorter {
         return 0;
       }
     });
-
-    return toDos;
   }
 
   public static List<ToDo> sortByErledigtAndWichtigDatum(List<ToDo> toDos) {
