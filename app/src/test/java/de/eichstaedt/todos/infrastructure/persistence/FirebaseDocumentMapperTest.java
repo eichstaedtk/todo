@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,7 +40,8 @@ public class FirebaseDocumentMapperTest {
 
     LocalDateTime today = LocalDateTime.of(2021,4,18,13,20,00);
 
-    DocumentSnapshot documentSnapshot = mock(DocumentSnapshot.class);
+    DocumentSnapshot documentSnapshot = Mockito.mock(DocumentSnapshot.class);
+
     when(documentSnapshot.getString(FirebaseDocumentMapper.ID)).thenReturn("1");
     when(documentSnapshot.getString(FirebaseDocumentMapper.NAME)).thenReturn("Einkaufen");
     when(documentSnapshot.getString(FirebaseDocumentMapper.BESCHREIBUNG)).thenReturn("Wocheneinkauf");

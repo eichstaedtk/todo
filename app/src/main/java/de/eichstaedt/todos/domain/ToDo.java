@@ -43,14 +43,6 @@ public class ToDo {
     }
 
     @Ignore
-    public ToDo(@NonNull String id, String name, String beschreibung) {
-        this.id = id;
-        this.name = name;
-        this.beschreibung = beschreibung;
-        this.kontakte = new HashSet<>();
-    }
-
-    @Ignore
     public ToDo(String name, String beschreibung, LocalDateTime faellig, boolean wichtig) {
         this.id = UUID.randomUUID().toString();
         this.name = name;

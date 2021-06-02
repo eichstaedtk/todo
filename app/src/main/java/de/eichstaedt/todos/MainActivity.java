@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         adapter = new ToDoRecyclerViewAdapter(sortByErledigtAndWichtigDatum(result), dataService);
         adapter.setSortDecision(Sorting.WICHTIG_DATUM);
+        sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
         todoList.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();

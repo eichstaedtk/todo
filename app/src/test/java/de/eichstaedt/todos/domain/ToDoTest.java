@@ -18,6 +18,8 @@ public class ToDoTest {
     assertEquals("Einkaufen",einkaufen.getName());
     assertEquals("Wocheneinkauf",einkaufen.getBeschreibung());
     assertTrue(LocalDateTime.now().isAfter(einkaufen.getFaellig()));
+    assertFalse(einkaufen.isErledigt());
+    assertFalse(einkaufen.isWichtig());
   }
 
   @Test
