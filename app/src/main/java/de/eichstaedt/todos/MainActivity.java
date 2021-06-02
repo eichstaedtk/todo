@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         gridLayoutManager = new GridLayoutManager(this, result.size() == 0 ? 1 : result.size(), GridLayoutManager.HORIZONTAL, false);
         todoList.setLayoutManager(gridLayoutManager);
-
-        adapter = new ToDoRecyclerViewAdapter(sortByErledigtAndWichtigDatum(result), dataService);
+        sortByErledigtAndWichtigDatum(result);
+        adapter = new ToDoRecyclerViewAdapter(result, dataService);
         adapter.setSortDecision(Sorting.WICHTIG_DATUM);
         sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
         todoList.setAdapter(adapter);

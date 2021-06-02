@@ -16,7 +16,7 @@ public class ToDoSorter {
     });
   }
 
-  public static List<ToDo> sortByErledigtAndWichtigDatum(List<ToDo> toDos) {
+  public static void sortByErledigtAndWichtigDatum(List<ToDo> toDos) {
 
     Collections.sort(toDos, (o1, o2) -> {
       int c = ((Boolean)o1.isErledigt()).compareTo(o2.isErledigt());
@@ -32,11 +32,9 @@ public class ToDoSorter {
 
       return c;
     });
-
-    return toDos;
   }
 
-  public static List<ToDo> sortByErledigtAndDatumWichtig(List<ToDo> toDos) {
+  public static void sortByErledigtAndDatumWichtig(List<ToDo> toDos) {
 
     Collections.sort(toDos, (o1, o2) -> {
       int c = ((Boolean)o1.isErledigt()).compareTo(o2.isErledigt());
@@ -54,7 +52,6 @@ public class ToDoSorter {
       return c;
     });
 
-    return toDos;
   }
 
 }
