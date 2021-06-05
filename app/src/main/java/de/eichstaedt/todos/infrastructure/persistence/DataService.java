@@ -132,14 +132,6 @@ public class DataService {
     });
   }
 
-  public void findAllUser(Consumer<List<User>> user) {
-    firestore.collection(USER_COLLECTION_PATH).get().addOnCompleteListener(task ->
-        user.accept(task.getResult().getDocuments()
-            .stream()
-            .map(FirebaseDocumentMapper::mapFirebaseDocumentToUser)
-            .collect(Collectors.toList())));
-  }
-
   public void findUserByEmail(String email,String password, UserRepositoryCallback callback) {
     firestore.collection(USER_COLLECTION_PATH)
         .whereEqualTo(EMAIL, email)
@@ -251,13 +243,6 @@ public class DataService {
 
   }
 
-  private void deleteAllFirebaseUser(
-      List<DocumentSnapshot> documents) {
-    documents.stream().forEach(d ->
-        firestore.collection(USER_COLLECTION_PATH).document(d.getId()).delete());
-    Log.i(logger,"Deleted all firebase user");
-
-  }
 
   public void deleteAllFirebaseToDos() {
     firestore.collection(TODO_COLLECTION_PATH)

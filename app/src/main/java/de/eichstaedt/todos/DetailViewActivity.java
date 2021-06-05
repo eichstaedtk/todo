@@ -2,7 +2,6 @@ package de.eichstaedt.todos;
 
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,9 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.CommonDataKinds.Email;
-import android.provider.ContactsContract.CommonDataKinds.Identity;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
@@ -28,14 +25,13 @@ import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
-import de.eichstaedt.todos.infrastructure.persistence.ToDoRepository;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import de.eichstaedt.todos.infrastructure.view.UserArrayAdapter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import org.parceler.Parcels;
@@ -74,9 +70,14 @@ public class DetailViewActivity extends AppCompatActivity {
           toDo.getBeschreibung(), toDo.isErledigt(), toDo.isWichtig(), toDo.getFaellig(),
           toDo.getKontakte());
 
-      userArrayAdapter = new UserArrayAdapter(this, toDo.getKontakte().stream().map(id -> readContactAsUser(id)).collect(Collectors.toList())
-          , toDo, false);
-      binding.userSelectionListView.setAdapter(userArrayAdapter);
+      if(checkPermission()) {
+        userArrayAdapter = new UserArrayAdapter(this,
+            toDo.getKontakte().stream().map(id -> readContactAsUser(id))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList())
+            , toDo, false);
+        binding.userSelectionListView.setAdapter(userArrayAdapter);
+      }
     }
 
     binding.setController(this);
@@ -84,47 +85,54 @@ public class DetailViewActivity extends AppCompatActivity {
 
   public User readContactAsUser(String id) {
 
-    checkPermission();
-
     Cursor c = getContentResolver().query(Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID + " = ?",
         new String[]{id}, null);
 
-    String name = "";
-    String phNo = "";
-    String mail = "";
+    if(c != null) {
 
-    while (c.moveToNext()) {
+      String name = "";
+      String phNo = "";
+      String mail = "";
 
-      name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+      while (c.moveToNext()) {
 
-      Cursor phoneCursor = getContentResolver().query(
-          ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-          null,
-          ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-          new String[]{id}, null);
+        name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-      Cursor EmailCursor = getContentResolver().query(
-          Email.CONTENT_URI,
-          null,
-          ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-          new String[]{id}, null);
+        Cursor phoneCursor = getContentResolver().query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+            new String[]{id}, null);
 
-      while (phoneCursor.moveToNext()) {
-        phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+        Cursor EmailCursor = getContentResolver().query(
+            Email.CONTENT_URI,
+            null,
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+            new String[]{id}, null);
+
+        while (phoneCursor.moveToNext()) {
+          phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+        }
+
+        while (EmailCursor.moveToNext()) {
+          mail = EmailCursor.getString(EmailCursor.getColumnIndex(Email.ADDRESS));
+        }
       }
 
-      while (EmailCursor.moveToNext()) {
-        mail = EmailCursor.getString(EmailCursor.getColumnIndex(Email.ADDRESS));
+      if(id != null && name != null) {
+        return new User(id, name, mail, 123456, phNo);
       }
     }
 
-    return new User(id,name,mail,123456,phNo);
+    return null;
   }
 
   public void onClickKontakteVerknuepfen() {
 
-    Intent contactIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-    this.startActivityForResult(contactIntent,PICK_CONTACT);
+    if(checkPermission()) {
+      Intent contactIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+      this.startActivityForResult(contactIntent, PICK_CONTACT);
+    }
   }
 
   @Override
@@ -132,8 +140,6 @@ public class DetailViewActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
 
     Log.i(logger,"Getting Intent Result of Contact App "+resultCode+" RequestCode"+requestCode);
-
-    checkPermission();
 
     if ((requestCode == PICK_CONTACT) && (resultCode == RESULT_OK)) {
       Uri contactUri = data.getData();
@@ -156,13 +162,15 @@ public class DetailViewActivity extends AppCompatActivity {
     }
   }
 
-  private void checkPermission() {
+  private boolean checkPermission() {
     int hasPermission = checkSelfPermission(permission.READ_CONTACTS);
 
     if(hasPermission != PackageManager.PERMISSION_GRANTED)
     {
       requestPermissions(new String[]{permission.READ_CONTACTS},PICK_CONTACT);
     }
+
+    return hasPermission == PackageManager.PERMISSION_GRANTED;
   }
 
   public void onClickSaveToDoButton() {
