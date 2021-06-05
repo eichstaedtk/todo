@@ -11,10 +11,12 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import de.eichstaedt.todos.Application;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.UserElementBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
+import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,8 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
   private final ToDo toDo;
 
   private UserElementBinding binding;
+
+  private final DataService dataService;
 
   protected static final String logger = UserArrayAdapter.class.getName();
 
@@ -43,6 +47,7 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
     this.context = context;
     this.toDo = toDo;
+    this.dataService = ((Application)context.getApplication()).getDataService();
     Log.i(logger,"Creating user array adapter ... "+ users.size());
   }
 
@@ -90,6 +95,15 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
     if (emailIntent.resolveActivity(context.getPackageManager()) != null) {
       context.startActivity(emailIntent);
     }
+  }
+
+  public void removeContact(ContactModel contact) {
+    toDo.getKontakte().remove(contact.getId());
+    dataService.updateToDo(toDo,(result)->{
+      this.getUsers().removeIf(user -> user.getId().equals(contact.getId()));
+      this.notifyDataSetChanged();
+      binding.invalidateAll();
+    });
   }
 
 

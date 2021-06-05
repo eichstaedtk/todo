@@ -62,5 +62,17 @@
     app:icon="@drawable/baseline_mail_black_18dp"
     />
 
+  <com.google.android.material.button.MaterialButton
+    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+    android:id="@+id/RemoveContact"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layout_marginLeft="16dp"
+    android:textColor="@color/black"
+    android:onClick="@{()-> adapter.removeContact(contact)}"
+    app:icon="@drawable/baseline_delete_black_18"
+    />
+
 </LinearLayout>
 </layout>
