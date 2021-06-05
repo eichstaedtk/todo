@@ -74,13 +74,51 @@ public class DetailViewActivity extends AppCompatActivity {
           toDo.getBeschreibung(), toDo.isErledigt(), toDo.isWichtig(), toDo.getFaellig(),
           toDo.getKontakte());
 
-      dataService.findAllUser((List<User> user) -> {
-        userArrayAdapter = new UserArrayAdapter(this, user, toDo, false);
-        binding.userSelectionListView.setAdapter(userArrayAdapter);
-      });
+      userArrayAdapter = new UserArrayAdapter(this, toDo.getKontakte().stream().map(id -> readContactAsUser(id)).collect(Collectors.toList())
+          , toDo, false);
+      binding.userSelectionListView.setAdapter(userArrayAdapter);
     }
 
     binding.setController(this);
+  }
+
+  public User readContactAsUser(String id) {
+
+    checkPermission();
+
+    Cursor c = getContentResolver().query(Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID + " = ?",
+        new String[]{id}, null);
+
+    String name = "";
+    String phNo = "";
+    String mail = "";
+
+    while (c.moveToNext()) {
+
+      name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+      Cursor phoneCursor = getContentResolver().query(
+          ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+          null,
+          ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+          new String[]{id}, null);
+
+      Cursor EmailCursor = getContentResolver().query(
+          Email.CONTENT_URI,
+          null,
+          ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+          new String[]{id}, null);
+
+      while (phoneCursor.moveToNext()) {
+        phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+      }
+
+      while (EmailCursor.moveToNext()) {
+        mail = EmailCursor.getString(EmailCursor.getColumnIndex(Email.ADDRESS));
+      }
+    }
+
+    return new User(id,name,mail,123456,phNo);
   }
 
   public void onClickKontakteVerknuepfen() {
@@ -95,35 +133,35 @@ public class DetailViewActivity extends AppCompatActivity {
 
     Log.i(logger,"Getting Intent Result of Contact App "+resultCode+" RequestCode"+requestCode);
 
+    checkPermission();
+
+    if ((requestCode == PICK_CONTACT) && (resultCode == RESULT_OK)) {
+      Uri contactUri = data.getData();
+      Cursor c = getContentResolver().query(contactUri, null, null, null, null);
+
+      if(c != null && c.moveToFirst()) {
+        Log.i(logger,"Contact Fields"+ Arrays.asList(c.getColumnNames()).stream().collect(Collectors.joining(",")));
+        String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+        toDoDetailView.getKontakte().add(id);
+        ToDo todo = new ToDo(toDoDetailView);
+
+        dataService.updateToDo(todo,(result)->{
+          userArrayAdapter.getUsers().clear();
+          userArrayAdapter.getUsers().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid)).collect(Collectors.toList()));
+          userArrayAdapter.notifyDataSetChanged();
+          binding.invalidateAll();
+        });
+
+      }
+    }
+  }
+
+  private void checkPermission() {
     int hasPermission = checkSelfPermission(permission.READ_CONTACTS);
 
     if(hasPermission != PackageManager.PERMISSION_GRANTED)
     {
       requestPermissions(new String[]{permission.READ_CONTACTS},PICK_CONTACT);
-    }
-
-    if ((requestCode == PICK_CONTACT) && (resultCode == RESULT_OK)) {
-      Uri contactUri = data.getData();
-      Cursor c = getContentResolver().query(contactUri, null, null, null, null);
-      toDoDetailView.getKontakte().clear();
-
-      if(c != null && c.moveToFirst()) {
-        Log.i(logger,"Contact Fields"+ Arrays.asList(c.getColumnNames()).stream().collect(Collectors.joining(",")));
-        String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-        String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        String phNo = "";
-        String mail = "";
-
-        Cursor phoneCursor = getContentResolver().query(Phone.CONTENT_URI,null, Phone._ID+ "= ?", new String[]{id},null);
-
-        while (phoneCursor.moveToNext()){
-          phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.DISPLAY_NAME));
-        }
-
-        User user = new User(id,name,mail,123456,phNo);
-        dataService.saveUserInFirebase(user);
-        toDoDetailView.getKontakte().add(user.getId());
-      }
     }
   }
 

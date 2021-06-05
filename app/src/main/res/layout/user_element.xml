@@ -4,8 +4,8 @@
   <data>
     <import type="android.view.View"/>
     <variable
-      name="user"
-      type="de.eichstaedt.todos.infrastructure.view.UserSelectionModel" />
+      name="contact"
+      type="de.eichstaedt.todos.infrastructure.view.ContactModel" />
     <variable
       name="adapter"
       type="de.eichstaedt.todos.infrastructure.view.UserArrayAdapter" />
@@ -16,22 +16,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-  <CheckBox
-    android:id="@+id/userselected"
-    android:visibility="@{adapter.showAll ? View.VISIBLE : View.GONE}"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="15"
-    android:checked="@={user.selected}">
-  </CheckBox>
-
   <TextView
     android:id="@+id/username"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="30"
     android:maxWidth="150dp"
-    android:text="@{user.name}"
+    android:text="@{contact.name}"
     android:textSize="40px" >
   </TextView>
 
@@ -41,7 +32,7 @@
     android:layout_height="wrap_content"
     android:layout_weight="40"
     android:maxWidth="150dp"
-    android:text="@{user.email}"
+    android:text="@{contact.email}"
     android:textSize="40px" >
   </TextView>
 
@@ -53,8 +44,8 @@
     android:clickable="true"
     android:layout_marginLeft="16dp"
     android:textColor="@color/black"
-    android:enabled="@{user.mobil != null}"
-    android:onClick="@{()-> adapter.sendSmsMessage(user)}"
+    android:enabled="@{contact.mobil != null &amp;&amp;  !contact.mobil.isEmpty()}"
+    android:onClick="@{()-> adapter.sendSmsMessage(contact)}"
     app:icon="@drawable/baseline_send_black_18dp"
     />
 
@@ -66,8 +57,8 @@
     android:clickable="true"
     android:layout_marginLeft="16dp"
     android:textColor="@color/black"
-    android:enabled="@{user.email != null}"
-    android:onClick="@{()-> adapter.sendEmailMessage(user)}"
+    android:enabled="@{contact.email != null &amp;&amp;  !contact.email.isEmpty()}"
+    android:onClick="@{()-> adapter.sendEmailMessage(contact)}"
     app:icon="@drawable/baseline_mail_black_18dp"
     />
 

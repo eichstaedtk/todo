@@ -18,7 +18,7 @@ import de.eichstaedt.todos.domain.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
+public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
   private final List<User> users;
 
@@ -28,15 +28,11 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
   private UserElementBinding binding;
 
-  private boolean showAll = false;
-
   protected static final String logger = UserArrayAdapter.class.getName();
 
   public UserArrayAdapter(@NonNull Activity context,
       List<User> users, ToDo toDo, boolean showAll) {
     super(context, R.layout.user_element);
-
-    this.showAll = showAll;
 
     if(showAll){
       this.users = users;
@@ -70,15 +66,15 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
 
     if(users != null && users.size() > 0) {
       User user = users.get(position);
-      UserSelectionModel model = new UserSelectionModel(user.getId(),user.getName(),
+      ContactModel model = new ContactModel(user.getId(),user.getName(),
           user.getEmail(), user.getMobilnummer(),toDo);
-      binding.setUser(model);
+      binding.setContact(model);
     }
 
     return result;
   }
 
-  public void sendSmsMessage(UserSelectionModel user) {
+  public void sendSmsMessage(ContactModel user) {
     Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+user.getMobil()));
     smsIntent.putExtra("sms_body", user.getToDo().getName()+": "+user.getToDo().getBeschreibung());
     if (smsIntent.resolveActivity(context.getPackageManager()) != null) {
@@ -86,7 +82,7 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
     }
   }
 
-  public void sendEmailMessage(UserSelectionModel user) {
+  public void sendEmailMessage(ContactModel user) {
 
     Intent emailIntent = new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:"+user.getEmail()));
     emailIntent.putExtra(Intent.EXTRA_SUBJECT, user.getToDo().getName());
@@ -100,14 +96,6 @@ public class UserArrayAdapter extends ArrayAdapter<UserSelectionModel> {
   @Override
   public int getCount() {
     return users.size();
-  }
-
-  public boolean isShowAll() {
-    return showAll;
-  }
-
-  public void setShowAll(boolean showAll) {
-    this.showAll = showAll;
   }
 
   public List<User> getUsers() {
