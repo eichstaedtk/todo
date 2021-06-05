@@ -42,14 +42,14 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private LinearProgressIndicator progress;
 
-  private final boolean developmentMode = false;
+  private final boolean developmentMode = true;
 
   private static final String logger = LoginActivity.class.getName();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    dataService = DataService.instance(getApplicationContext());
+    dataService = ((Application)this.getApplication()).getDataService();
     dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);

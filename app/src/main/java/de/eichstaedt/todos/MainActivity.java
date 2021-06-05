@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataService = DataService.instance(getApplicationContext());
+        dataService = ((Application)this.getApplication()).getDataService();
         dataService.checkOfflineState();
         dataService.readToDos(this);
 

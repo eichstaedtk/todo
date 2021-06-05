@@ -2,9 +2,20 @@ package de.eichstaedt.todos;
 
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
 
+import android.Manifest;
+import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Identity;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +34,10 @@ import de.eichstaedt.todos.infrastructure.view.UserArrayAdapter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 import org.parceler.Parcels;
 
 public class DetailViewActivity extends AppCompatActivity {
@@ -40,6 +53,8 @@ public class DetailViewActivity extends AppCompatActivity {
 
   private UserArrayAdapter userArrayAdapter;
 
+  private static final int PICK_CONTACT = 0;
+
   protected static final String logger = DetailViewActivity.class.getName();
 
   @Override
@@ -47,7 +62,7 @@ public class DetailViewActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     Log.i(logger,"Creating DetailView Activity");
 
-    dataService = DataService.instance(getApplicationContext());
+    dataService = ((Application)this.getApplication()).getDataService();
     dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_detailview);
     Intent intent = getIntent();
@@ -69,12 +84,47 @@ public class DetailViewActivity extends AppCompatActivity {
   }
 
   public void onClickKontakteVerknuepfen() {
-    dataService.findAllUser((List<User> user) -> {
-      userArrayAdapter.getUsers().clear();
-      userArrayAdapter.getUsers().addAll(user);
-      userArrayAdapter.setShowAll(true);
-      userArrayAdapter.notifyDataSetChanged();
-    });
+
+    Intent contactIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+    this.startActivityForResult(contactIntent,PICK_CONTACT);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    Log.i(logger,"Getting Intent Result of Contact App "+resultCode+" RequestCode"+requestCode);
+
+    int hasPermission = checkSelfPermission(permission.READ_CONTACTS);
+
+    if(hasPermission != PackageManager.PERMISSION_GRANTED)
+    {
+      requestPermissions(new String[]{permission.READ_CONTACTS},PICK_CONTACT);
+    }
+
+    if ((requestCode == PICK_CONTACT) && (resultCode == RESULT_OK)) {
+      Uri contactUri = data.getData();
+      Cursor c = getContentResolver().query(contactUri, null, null, null, null);
+      toDoDetailView.getKontakte().clear();
+
+      if(c != null && c.moveToFirst()) {
+        Log.i(logger,"Contact Fields"+ Arrays.asList(c.getColumnNames()).stream().collect(Collectors.joining(",")));
+        String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+        String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        String phNo = "";
+        String mail = "";
+
+        Cursor phoneCursor = getContentResolver().query(Phone.CONTENT_URI,null, Phone._ID+ "= ?", new String[]{id},null);
+
+        while (phoneCursor.moveToNext()){
+          phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.DISPLAY_NAME));
+        }
+
+        User user = new User(id,name,mail,123456,phNo);
+        dataService.saveUserInFirebase(user);
+        toDoDetailView.getKontakte().add(user.getId());
+      }
+    }
   }
 
   public void onClickSaveToDoButton() {
