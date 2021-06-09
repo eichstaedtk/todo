@@ -31,9 +31,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.parceler.Parcels;
 
 public class DetailViewActivity extends AppCompatActivity {
@@ -69,10 +70,10 @@ public class DetailViewActivity extends AppCompatActivity {
           toDo.getBeschreibung(), toDo.isErledigt(), toDo.isWichtig(), toDo.getFaellig(),
           toDo.getKontakte());
 
-      if(checkPermission()) {
+      if(checkContactPermission()) {
         contactArrayAdapter = new ContactArrayAdapter(this,
-            toDo.getKontakte().stream().map(id -> readContactAsUser(id, toDo))
-                .filter(Objects::nonNull)
+            toDo.getKontakte().stream().map(id -> readContactAsUser(id, toDo)).flatMap(o -> o.isPresent() ? Stream
+                .of(o.get()) : Stream.empty())
                 .collect(Collectors.toList())
             , toDo, false);
         binding.userSelectionListView.setAdapter(contactArrayAdapter);
@@ -82,7 +83,7 @@ public class DetailViewActivity extends AppCompatActivity {
     binding.setController(this);
   }
 
-  public ContactModel readContactAsUser(String id, ToDo toDo) {
+  public Optional<ContactModel> readContactAsUser(String id, ToDo toDo) {
 
     Cursor c = getContentResolver().query(Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID + " = ?",
         new String[]{id}, null);
@@ -119,16 +120,16 @@ public class DetailViewActivity extends AppCompatActivity {
       }
 
       if(id != null && name != null) {
-        return new ContactModel(id, name, mail, phone, toDo);
+        return Optional.of(new ContactModel(id, name, mail, phone, toDo));
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   public void onClickKontakteVerknuepfen() {
 
-    if(checkPermission()) {
+    if(checkContactPermission()) {
       Intent contactIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
       this.startActivityForResult(contactIntent, PICK_CONTACT);
     }
@@ -152,7 +153,9 @@ public class DetailViewActivity extends AppCompatActivity {
 
         dataService.updateToDo(todo,(result)->{
           contactArrayAdapter.getContacts().clear();
-          contactArrayAdapter.getContacts().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid, todo)).collect(Collectors.toList()));
+          contactArrayAdapter.getContacts().addAll(todo.getKontakte().stream()
+              .map(contactid -> readContactAsUser(contactid, todo))
+              .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty()).collect(Collectors.toList()));
           contactArrayAdapter.notifyDataSetChanged();
           binding.invalidateAll();
         });
@@ -161,7 +164,7 @@ public class DetailViewActivity extends AppCompatActivity {
     }
   }
 
-  private boolean checkPermission() {
+  private boolean checkContactPermission() {
     int hasPermission = checkSelfPermission(permission.READ_CONTACTS);
 
     if(hasPermission != PackageManager.PERMISSION_GRANTED)
