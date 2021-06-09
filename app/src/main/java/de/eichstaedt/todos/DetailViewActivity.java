@@ -23,11 +23,10 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
-import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.view.ContactModel;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
-import de.eichstaedt.todos.infrastructure.view.UserArrayAdapter;
+import de.eichstaedt.todos.infrastructure.view.ContactArrayAdapter;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,7 +47,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
   private DataService dataService;
 
-  private UserArrayAdapter userArrayAdapter;
+  private ContactArrayAdapter contactArrayAdapter;
 
   private static final int PICK_CONTACT = 0;
 
@@ -71,12 +70,12 @@ public class DetailViewActivity extends AppCompatActivity {
           toDo.getKontakte());
 
       if(checkPermission()) {
-        userArrayAdapter = new UserArrayAdapter(this,
+        contactArrayAdapter = new ContactArrayAdapter(this,
             toDo.getKontakte().stream().map(id -> readContactAsUser(id, toDo))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList())
             , toDo, false);
-        binding.userSelectionListView.setAdapter(userArrayAdapter);
+        binding.userSelectionListView.setAdapter(contactArrayAdapter);
       }
     }
 
@@ -91,7 +90,7 @@ public class DetailViewActivity extends AppCompatActivity {
     if(c != null) {
 
       String name = "";
-      String phNo = "";
+      String phone = "";
       String mail = "";
 
       while (c.moveToNext()) {
@@ -111,7 +110,7 @@ public class DetailViewActivity extends AppCompatActivity {
             new String[]{id}, null);
 
         while (phoneCursor.moveToNext()) {
-          phNo = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+          phone = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
         }
 
         while (EmailCursor.moveToNext()) {
@@ -120,7 +119,7 @@ public class DetailViewActivity extends AppCompatActivity {
       }
 
       if(id != null && name != null) {
-        return new ContactModel(id, name, mail, phNo, toDo);
+        return new ContactModel(id, name, mail, phone, toDo);
       }
     }
 
@@ -152,9 +151,9 @@ public class DetailViewActivity extends AppCompatActivity {
         ToDo todo = new ToDo(toDoDetailView);
 
         dataService.updateToDo(todo,(result)->{
-          userArrayAdapter.getContacts().clear();
-          userArrayAdapter.getContacts().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid, todo)).collect(Collectors.toList()));
-          userArrayAdapter.notifyDataSetChanged();
+          contactArrayAdapter.getContacts().clear();
+          contactArrayAdapter.getContacts().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid, todo)).collect(Collectors.toList()));
+          contactArrayAdapter.notifyDataSetChanged();
           binding.invalidateAll();
         });
 

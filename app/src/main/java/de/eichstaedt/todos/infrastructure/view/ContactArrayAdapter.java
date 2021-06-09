@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import de.eichstaedt.todos.Application;
 import de.eichstaedt.todos.R;
-import de.eichstaedt.todos.databinding.UserElementBinding;
+import de.eichstaedt.todos.databinding.ContactElementBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
+public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
   private final List<ContactModel> contacts;
 
@@ -27,15 +27,15 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
   private final ToDo toDo;
 
-  private UserElementBinding binding;
+  private ContactElementBinding binding;
 
   private final DataService dataService;
 
-  protected static final String logger = UserArrayAdapter.class.getName();
+  protected static final String logger = ContactArrayAdapter.class.getName();
 
-  public UserArrayAdapter(@NonNull Activity context,
+  public ContactArrayAdapter(@NonNull Activity context,
       List<ContactModel> contacts, ToDo toDo, boolean showAll) {
-    super(context, R.layout.user_element);
+    super(context, R.layout.contact_element);
 
     if(showAll){
       this.contacts = contacts;
@@ -58,12 +58,12 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
     if (convertView == null) {
       LayoutInflater inflater = LayoutInflater.from(
           parent.getContext());
-      binding = DataBindingUtil.inflate(inflater, R.layout.user_element,parent,false);
+      binding = DataBindingUtil.inflate(inflater, R.layout.contact_element,parent,false);
       result = binding.getRoot();
       result.setTag(binding);
 
     } else {
-      binding = (UserElementBinding) result.getTag();
+      binding = (ContactElementBinding) result.getTag();
     }
 
     binding.setAdapter(this);

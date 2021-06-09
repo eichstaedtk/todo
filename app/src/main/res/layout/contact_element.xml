@@ -8,7 +8,7 @@
       type="de.eichstaedt.todos.infrastructure.view.ContactModel" />
     <variable
       name="adapter"
-      type="de.eichstaedt.todos.infrastructure.view.UserArrayAdapter" />
+      type="de.eichstaedt.todos.infrastructure.view.ContactArrayAdapter" />
   </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
