@@ -10,7 +10,12 @@ public class Application extends android.app.Application {
   public void onCreate() {
     super.onCreate();
     dataService = DataService.instance(getApplicationContext());
-    dataService.checkOfflineState();
+    try {
+      dataService.checkOfflineState().get();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
   }
 
   public DataService getDataService() {

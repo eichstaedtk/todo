@@ -3,6 +3,10 @@ package de.eichstaedt.todos.domain;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Use Case 4 ToDoList with Sorting
+ */
+
 public class ToDoSorter {
 
   public static void sortByErledigt(List<ToDo> toDos) {

@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -258,10 +260,11 @@ public class DataService {
     return offline;
   }
 
-  public void checkOfflineState() {
+  public Future<Boolean> checkOfflineState() {
 
     ConnectivityManager connMgr = getSystemService(context, ConnectivityManager.class);
     NetworkCapabilities networkCapabilities = connMgr.getNetworkCapabilities(connMgr.getActiveNetwork());
+    CompletableFuture<Boolean> result = new CompletableFuture<>();
 
     if(networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI )
     || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))) {
@@ -281,5 +284,9 @@ public class DataService {
 
           });
     }
+
+    result.complete(offline);
+
+    return result;
   }
 }

@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         setContentView(R.layout.activity_main);
 
         dataService = ((Application)this.getApplication()).getDataService();
-        dataService.checkOfflineState();
         dataService.readToDos(this);
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);

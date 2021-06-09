@@ -59,7 +59,6 @@ public class DetailViewActivity extends AppCompatActivity {
     Log.i(logger,"Creating DetailView Activity");
 
     dataService = ((Application)this.getApplication()).getDataService();
-    dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_detailview);
     Intent intent = getIntent();
 

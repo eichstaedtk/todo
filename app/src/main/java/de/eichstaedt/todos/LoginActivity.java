@@ -19,6 +19,7 @@ import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements UserRepositoryCallback,
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private LinearProgressIndicator progress;
 
-  private final boolean developmentMode = true;
+  private final boolean developmentMode = false;
 
   private static final String logger = LoginActivity.class.getName();
 
@@ -50,7 +51,6 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     dataService = ((Application)this.getApplication()).getDataService();
-    dataService.checkOfflineState();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);
     anmelden = findViewById(R.id.LoginButton);
