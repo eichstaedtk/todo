@@ -75,7 +75,7 @@ public class DetailViewActivity extends AppCompatActivity {
             toDo.getKontakte().stream().map(id -> readContactAsUser(id, toDo)).flatMap(o -> o.isPresent() ? Stream
                 .of(o.get()) : Stream.empty())
                 .collect(Collectors.toList())
-            , toDo, false);
+            , toDo);
         binding.userSelectionListView.setAdapter(contactArrayAdapter);
       }
     }

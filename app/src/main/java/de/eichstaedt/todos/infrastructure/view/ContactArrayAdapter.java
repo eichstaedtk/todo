@@ -17,7 +17,6 @@ import de.eichstaedt.todos.databinding.ContactElementBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
@@ -34,16 +33,10 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
   protected static final String logger = ContactArrayAdapter.class.getName();
 
   public ContactArrayAdapter(@NonNull Activity context,
-      List<ContactModel> contacts, ToDo toDo, boolean showAll) {
+      List<ContactModel> contacts, ToDo toDo) {
     super(context, R.layout.contact_element);
 
-    if(showAll){
-      this.contacts = contacts;
-    }else {
-      this.contacts = contacts.stream().filter(u -> toDo.getKontakte().contains(u.getId())).collect(
-          Collectors.toList());
-    }
-
+    this.contacts = contacts;
     this.context = context;
     this.toDo = toDo;
     this.dataService = ((Application)context.getApplication()).getDataService();
