@@ -111,7 +111,9 @@ public class DetailViewActivity extends AppCompatActivity {
             new String[]{id}, null);
 
         while (phoneCursor.moveToNext()) {
-          phone = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+          if(Phone.TYPE_MOBILE == phoneCursor.getInt(phoneCursor.getColumnIndex(Phone.TYPE))) {
+            phone = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+          }
         }
 
         while (EmailCursor.moveToNext()) {
