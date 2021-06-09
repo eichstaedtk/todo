@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -75,7 +74,7 @@ public class DataService {
     Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(localToDos -> {
-          if(!offline) {
+          if(!isOffline()) {
             firestore.collection(TODO_COLLECTION_PATH).get().addOnCompleteListener(task -> {
               if (task.isSuccessful()) {
                 Log.i(LOGGER,
@@ -117,7 +116,7 @@ public class DataService {
   public void deleteToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().delete(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      deleteToDoInFirebase(toDo);
+            deleteToDoInFirebase(toDo);
       if(callback != null) {
         callback.onComplete("ToDo gelöscht " + toDo.getName());
       }
@@ -135,26 +134,29 @@ public class DataService {
   }
 
   public void findUserByEmail(String email,String password, UserRepositoryCallback callback) {
-    firestore.collection(USER_COLLECTION_PATH)
-        .whereEqualTo(EMAIL, email)
-        .whereEqualTo(PASSWORD,password)
-        .get()
-        .addOnCompleteListener(task -> {
+    if (!isOffline()) {
+      firestore.collection(USER_COLLECTION_PATH)
+          .whereEqualTo(EMAIL, email)
+          .whereEqualTo(PASSWORD, password)
+          .get()
+          .addOnCompleteListener(task -> {
 
-          Log.i(logger,"Finding user in firebase "+task.isSuccessful()+ " Docs "+task.getResult().size());
-          if (task.isSuccessful() && task.getResult().size() > 0) {
-            for (QueryDocumentSnapshot document : task.getResult()) {
-              callback.onComplete(Optional.of(mapFirebaseDocumentToUser(document)));
+            Log.i(logger,
+                "Finding user in firebase " + task.isSuccessful() + " Docs " + task.getResult()
+                    .size());
+            if (task.isSuccessful() && task.getResult().size() > 0) {
+              for (QueryDocumentSnapshot document : task.getResult()) {
+                callback.onComplete(Optional.of(mapFirebaseDocumentToUser(document)));
+              }
+            } else {
+              callback.onComplete(Optional.empty());
             }
-          } else {
-            callback.onComplete(Optional.empty());
-          }
-        }).addOnFailureListener((task) -> {
+          }).addOnFailureListener((task) -> {
 
-          Log.i(logger,"Error finding user in firebase ", task.getCause());
-          callback.onComplete(Optional.empty());
-        });
-
+        Log.i(logger, "Error finding user in firebase ", task.getCause());
+        callback.onComplete(Optional.empty());
+      });
+    }
   }
 
 
@@ -169,7 +171,7 @@ public class DataService {
   }
 
   private void saveInFirebase(ToDo toDo) {
-    if (!offline) {
+    if (!isOffline()) {
       firestore.collection(TODO_COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
           .addOnSuccessListener(
               documentReference -> Log
@@ -179,13 +181,15 @@ public class DataService {
   }
 
   public void saveUserInFirebase(User user) {
-    Log.i(LOGGER, "Save User on Firebase " +user);
+    if (!isOffline()) {
+      Log.i(LOGGER, "Save User on Firebase " + user);
 
       firestore.collection(USER_COLLECTION_PATH).add(mapUserToFirebaseDocument(user))
           .addOnSuccessListener(
               documentReference -> Log
                   .d(LOGGER, "Save User on Firebase " + documentReference.getId()))
           .addOnFailureListener(e -> Log.w(LOGGER, "Error saving User on Firebase", e));
+    }
 
   }
 
@@ -232,7 +236,9 @@ public class DataService {
   }
 
   private void deleteToDoInFirebase(ToDo toDo) {
-    firestore.collection(TODO_COLLECTION_PATH).document(toDo.getId()).delete();
+    if(!isOffline()) {
+      firestore.collection(TODO_COLLECTION_PATH).document(toDo.getId()).delete();
+    }
   }
 
   private void deleteAllFirebaseToDos(
@@ -247,13 +253,15 @@ public class DataService {
 
 
   public void deleteAllFirebaseToDos() {
-    firestore.collection(TODO_COLLECTION_PATH)
-        .get()
-        .addOnCompleteListener(task -> {
-          if (task.isSuccessful()) {
-            deleteAllFirebaseToDos(task.getResult().getDocuments());
-          }
-        });
+    if(isOffline()) {
+      firestore.collection(TODO_COLLECTION_PATH)
+          .get()
+          .addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+              deleteAllFirebaseToDos(task.getResult().getDocuments());
+            }
+          });
+    }
   }
 
   public boolean isOffline() {

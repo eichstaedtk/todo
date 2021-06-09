@@ -15,14 +15,13 @@ import de.eichstaedt.todos.Application;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.UserElementBinding;
 import de.eichstaedt.todos.domain.ToDo;
-import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
-  private final List<User> users;
+  private final List<ContactModel> contacts;
 
   private final Activity context;
 
@@ -35,20 +34,20 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
   protected static final String logger = UserArrayAdapter.class.getName();
 
   public UserArrayAdapter(@NonNull Activity context,
-      List<User> users, ToDo toDo, boolean showAll) {
+      List<ContactModel> contacts, ToDo toDo, boolean showAll) {
     super(context, R.layout.user_element);
 
     if(showAll){
-      this.users = users;
+      this.contacts = contacts;
     }else {
-      this.users = users.stream().filter(u -> toDo.getKontakte().contains(u.getId())).collect(
+      this.contacts = contacts.stream().filter(u -> toDo.getKontakte().contains(u.getId())).collect(
           Collectors.toList());
     }
 
     this.context = context;
     this.toDo = toDo;
     this.dataService = ((Application)context.getApplication()).getDataService();
-    Log.i(logger,"Creating user array adapter ... "+ users.size());
+    Log.i(logger,"Creating user array adapter ... "+ contacts.size());
   }
 
   @NonNull
@@ -69,10 +68,10 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
     binding.setAdapter(this);
 
-    if(users != null && users.size() > 0) {
-      User user = users.get(position);
+    if(contacts != null && contacts.size() > 0) {
+      ContactModel user = contacts.get(position);
       ContactModel model = new ContactModel(user.getId(),user.getName(),
-          user.getEmail(), user.getMobilnummer(),toDo);
+          user.getEmail(), user.getMobil(),toDo);
       binding.setContact(model);
     }
 
@@ -100,7 +99,7 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
   public void removeContact(ContactModel contact) {
     toDo.getKontakte().remove(contact.getId());
     dataService.updateToDo(toDo,(result)->{
-      this.getUsers().removeIf(user -> user.getId().equals(contact.getId()));
+      this.getContacts().removeIf(user -> user.getId().equals(contact.getId()));
       this.notifyDataSetChanged();
       binding.invalidateAll();
     });
@@ -109,10 +108,10 @@ public class UserArrayAdapter extends ArrayAdapter<ContactModel> {
 
   @Override
   public int getCount() {
-    return users.size();
+    return contacts.size();
   }
 
-  public List<User> getUsers() {
-    return users;
+  public List<ContactModel> getContacts() {
+    return contacts;
   }
 }

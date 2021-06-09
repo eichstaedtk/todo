@@ -25,6 +25,7 @@ import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
+import de.eichstaedt.todos.infrastructure.view.ContactModel;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;
 import de.eichstaedt.todos.infrastructure.view.UserArrayAdapter;
 import java.time.Instant;
@@ -71,7 +72,7 @@ public class DetailViewActivity extends AppCompatActivity {
 
       if(checkPermission()) {
         userArrayAdapter = new UserArrayAdapter(this,
-            toDo.getKontakte().stream().map(id -> readContactAsUser(id))
+            toDo.getKontakte().stream().map(id -> readContactAsUser(id, toDo))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList())
             , toDo, false);
@@ -82,7 +83,7 @@ public class DetailViewActivity extends AppCompatActivity {
     binding.setController(this);
   }
 
-  public User readContactAsUser(String id) {
+  public ContactModel readContactAsUser(String id, ToDo toDo) {
 
     Cursor c = getContentResolver().query(Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID + " = ?",
         new String[]{id}, null);
@@ -119,7 +120,7 @@ public class DetailViewActivity extends AppCompatActivity {
       }
 
       if(id != null && name != null) {
-        return new User(id, name, mail, 123456, phNo);
+        return new ContactModel(id, name, mail, phNo, toDo);
       }
     }
 
@@ -151,8 +152,8 @@ public class DetailViewActivity extends AppCompatActivity {
         ToDo todo = new ToDo(toDoDetailView);
 
         dataService.updateToDo(todo,(result)->{
-          userArrayAdapter.getUsers().clear();
-          userArrayAdapter.getUsers().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid)).collect(Collectors.toList()));
+          userArrayAdapter.getContacts().clear();
+          userArrayAdapter.getContacts().addAll(todo.getKontakte().stream().map(contactid -> readContactAsUser(contactid, todo)).collect(Collectors.toList()));
           userArrayAdapter.notifyDataSetChanged();
           binding.invalidateAll();
         });
