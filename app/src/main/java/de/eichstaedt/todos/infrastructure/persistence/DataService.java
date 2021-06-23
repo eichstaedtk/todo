@@ -49,6 +49,13 @@ public class DataService {
   private DataService(@NonNull ToDoDatabase toDoDatabase, Context context) {
     this.localDatabase = toDoDatabase;
     this.context = context;
+    this.firestore = FirebaseFirestore.getInstance();
+  }
+
+  private DataService(@NonNull ToDoDatabase toDoDatabase, Context context,FirebaseFirestore firestore) {
+    this.localDatabase = toDoDatabase;
+    this.context = context;
+    this.firestore = firestore;
   }
 
   public static DataService instance(@NonNull Context context) {
@@ -60,12 +67,20 @@ public class DataService {
     return service;
   }
 
+  public static DataService instance(@NonNull Context context,FirebaseFirestore firestore) {
+
+    if(service == null){
+      service = new DataService(ToDoRepository.getInstance(context),context, firestore);
+    }
+
+    return service;
+  }
+
   private boolean offline = true;
 
   protected static final String LOGGER = DataService.class.getName();
 
-  private final FirebaseFirestore
-      firestore = FirebaseFirestore.getInstance();
+  private final FirebaseFirestore firestore;
 
   private final ToDoDatabase localDatabase;
 
@@ -90,7 +105,7 @@ public class DataService {
                 } else {
                   Log.i(logger, "UseCase Online but local todos");
                   Log.i(logger, "Delete All Remote " + task.getResult().getDocuments().size());
-                  deleteAllFirebaseToDos(task.getResult().getDocuments());
+                  deleteFirebaseToDos(task.getResult().getDocuments());
                   Log.i(logger, "Save local to Firebase " + localToDos.size());
                   saveLocalToDoInFirebase(localToDos);
                   result.addAll(localToDos);
@@ -241,7 +256,7 @@ public class DataService {
     }
   }
 
-  private void deleteAllFirebaseToDos(
+  private void deleteFirebaseToDos(
       List<DocumentSnapshot> documents) {
     if (!isOffline()) {
       documents.stream().forEach(d ->
@@ -252,13 +267,13 @@ public class DataService {
   }
 
 
-  public void deleteAllFirebaseToDos() {
-    if(isOffline()) {
+  public void deleteFirebaseToDos() {
+    if(!isOffline()) {
       firestore.collection(TODO_COLLECTION_PATH)
           .get()
           .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-              deleteAllFirebaseToDos(task.getResult().getDocuments());
+              deleteFirebaseToDos(task.getResult().getDocuments());
             }
           });
     }

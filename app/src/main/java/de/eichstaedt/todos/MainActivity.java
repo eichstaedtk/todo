@@ -3,7 +3,6 @@ package de.eichstaedt.todos;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
 import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
 import static de.eichstaedt.todos.R.id.*;
-import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigt;
 import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndDatumWichtig;
 import static de.eichstaedt.todos.domain.ToDoSorter.sortByErledigtAndWichtigDatum;
 
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService.checkOfflineState();
         switch (item.getItemId()) {
             case lokaleDelete : dataService.deleteAllLokalToDos(this);break;
-            case remoteDelete : dataService.deleteAllFirebaseToDos();break;
+            case remoteDelete : dataService.deleteFirebaseToDos();break;
             case load: dataService.readToDos(this);break;
             case sortWichtigDatum: sortByErledigtAndWichtigDatum(adapter.getValues());
                                     sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
