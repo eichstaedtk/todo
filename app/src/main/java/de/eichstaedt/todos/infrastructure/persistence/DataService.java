@@ -23,6 +23,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,13 +51,6 @@ public class DataService {
   private DataService(@NonNull ToDoDatabase toDoDatabase, Context context) {
     this.localDatabase = toDoDatabase;
     this.context = context;
-    this.firestore = FirebaseFirestore.getInstance();
-  }
-
-  private DataService(@NonNull ToDoDatabase toDoDatabase, Context context,FirebaseFirestore firestore) {
-    this.localDatabase = toDoDatabase;
-    this.context = context;
-    this.firestore = firestore;
   }
 
   public static DataService instance(@NonNull Context context) {
@@ -67,20 +62,12 @@ public class DataService {
     return service;
   }
 
-  public static DataService instance(@NonNull Context context,FirebaseFirestore firestore) {
-
-    if(service == null){
-      service = new DataService(ToDoRepository.getInstance(context),context, firestore);
-    }
-
-    return service;
-  }
-
   private boolean offline = true;
 
   protected static final String LOGGER = DataService.class.getName();
 
-  private final FirebaseFirestore firestore;
+  private final FirebaseFirestore
+      firestore = FirebaseFirestore.getInstance();
 
   private final ToDoDatabase localDatabase;
 
@@ -105,9 +92,9 @@ public class DataService {
                 } else {
                   Log.i(logger, "UseCase Online but local todos");
                   Log.i(logger, "Delete All Remote " + task.getResult().getDocuments().size());
-                  deleteFirebaseToDos(task.getResult().getDocuments());
+                  deleteAllFirebaseToDos(task.getResult().getDocuments());
                   Log.i(logger, "Save local to Firebase " + localToDos.size());
-                  saveLocalToDoInFirebase(localToDos);
+                  insertLocalToDoInFirebase(localToDos);
                   result.addAll(localToDos);
                 }
 
@@ -141,7 +128,7 @@ public class DataService {
   public void saveToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().insertToDo(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      saveInFirebase(toDo);
+      insertInFirebase(toDo);
       if(callback != null) {
         callback.onComplete("ToDo gespeichert " + toDo.getName());
       }
@@ -176,33 +163,67 @@ public class DataService {
 
 
   public void updateToDo(ToDo toDo, ReloadViewCallback callback) {
+    Log.i(logger,"Update ToDo "+toDo);
+
     Completable.fromAction(()-> localDatabase.toDoDAO().update(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      saveInFirebase(toDo);
+      updateInFirebase(toDo);
       if(callback != null) {
         callback.onComplete("ToDo gespeichert " + toDo.getName());
       }
     });
+
+
   }
 
-  private void saveInFirebase(ToDo toDo) {
+  private void updateInFirebase(ToDo toDo) {
+    Log.i(LOGGER, "Trying Save ToDo on Firebase " +toDo);
     if (!isOffline()) {
+
+      firestore.collection(TODO_COLLECTION_PATH)
+          .whereEqualTo(ID, toDo.getId())
+          .get()
+          .addOnCompleteListener(task -> {
+
+            Log.i(logger,
+                "Finding todo in firebase " + task.isSuccessful() + " Docs " + task.getResult()
+                    .size());
+            if (task.isSuccessful() && task.getResult().size() > 0) {
+              String docid = task.getResult().getDocuments().get(0).getId();
+
+              Map<String,Object> value = new HashMap<>();
+              value.putAll(mapToDoToFirebaseDocument(toDo));
+
+              firestore.collection(TODO_COLLECTION_PATH).document(docid).update(value);
+            }
+          }).addOnFailureListener((task) -> {
+
+        Log.i(logger, "Error finding todo in firebase ", task.getCause());
+      });
+
+    }
+  }
+
+  private void insertInFirebase(ToDo toDo) {
+    Log.i(LOGGER, "Trying Save ToDo on Firebase " +toDo);
+    if (!isOffline()) {
+
       firestore.collection(TODO_COLLECTION_PATH).add(mapToDoToFirebaseDocument(toDo))
           .addOnSuccessListener(
               documentReference -> Log
-                  .d(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
+                  .i(LOGGER, "Save ToDo on Firebase " + documentReference.getId()))
           .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e));
     }
   }
 
-  public void saveUserInFirebase(User user) {
+  public void insertUserInFirebase(User user) {
     if (!isOffline()) {
       Log.i(LOGGER, "Save User on Firebase " + user);
 
       firestore.collection(USER_COLLECTION_PATH).add(mapUserToFirebaseDocument(user))
           .addOnSuccessListener(
               documentReference -> Log
-                  .d(LOGGER, "Save User on Firebase " + documentReference.getId()))
+                  .i(LOGGER, "Save User on Firebase " + documentReference.getId()))
           .addOnFailureListener(e -> Log.w(LOGGER, "Error saving User on Firebase", e));
     }
 
@@ -217,7 +238,7 @@ public class DataService {
     if(todos.isEmpty())
     {
       todos.add(new ToDo("Test Aufgabe","Schnell was erledigen", LocalDateTime.now().plusDays(3),true));
-      saveLocalToDoInFirebase(todos);
+      insertLocalToDoInFirebase(todos);
     }
 
     Log.i(logger,"Save todos into local db .... "+todos.size());
@@ -228,7 +249,7 @@ public class DataService {
     return todos;
   }
 
-  private void saveLocalToDoInFirebase(List<ToDo> localToDos) {
+  private void insertLocalToDoInFirebase(List<ToDo> localToDos) {
     localToDos.stream().map(todo -> {
       Map<String, String> value = mapToDoToFirebaseDocument(todo);
       return  value;
@@ -256,7 +277,7 @@ public class DataService {
     }
   }
 
-  private void deleteFirebaseToDos(
+  private void deleteAllFirebaseToDos(
       List<DocumentSnapshot> documents) {
     if (!isOffline()) {
       documents.stream().forEach(d ->
@@ -273,7 +294,7 @@ public class DataService {
           .get()
           .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-              deleteFirebaseToDos(task.getResult().getDocuments());
+              deleteAllFirebaseToDos(task.getResult().getDocuments());
             }
           });
     }

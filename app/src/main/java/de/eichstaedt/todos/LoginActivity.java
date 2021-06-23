@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private LinearProgressIndicator progress;
 
-  private final boolean developmentMode = false;
+  private final boolean developmentMode = true;
 
   private static final String logger = LoginActivity.class.getName();
 
