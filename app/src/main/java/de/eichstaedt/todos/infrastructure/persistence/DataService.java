@@ -133,7 +133,7 @@ public class DataService {
     });
   }
 
-  public void findUserByEmail(String email,String password, UserRepositoryCallback callback) {
+  public void findUserByEmailAndPasswort(String email,String password, UserRepositoryCallback callback) {
     if (!isOffline()) {
       firestore.collection(USER_COLLECTION_PATH)
           .whereEqualTo(EMAIL, email)

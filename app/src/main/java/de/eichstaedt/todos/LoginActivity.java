@@ -19,7 +19,6 @@ import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements UserRepositoryCallback,
@@ -75,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     Log.i(logger,"Starting Login ...");
     progress.setVisibility(View.VISIBLE);
     if(!dataService.isOffline()) {
-      dataService.findUserByEmail(email, passwort, this);
+      dataService.findUserByEmailAndPasswort(email, passwort, this);
     }else {
       startToDoActivity();
     }
