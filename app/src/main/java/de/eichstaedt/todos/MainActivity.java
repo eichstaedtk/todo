@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         dataService.checkOfflineState();
         switch (item.getItemId()) {
             case lokaleDelete : dataService.deleteAllLokalToDos(this);break;
-            case remoteDelete : dataService.deleteFirebaseToDos();break;
+            case remoteDelete : dataService.deleteAllFirebaseToDos();break;
             case load: dataService.readToDos(this);break;
             case sortWichtigDatum: sortByErledigtAndWichtigDatum(adapter.getValues());
                                     sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);

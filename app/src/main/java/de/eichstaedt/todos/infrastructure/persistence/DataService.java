@@ -267,7 +267,7 @@ public class DataService {
   }
 
 
-  public void deleteFirebaseToDos() {
+  public void deleteAllFirebaseToDos() {
     if(!isOffline()) {
       firestore.collection(TODO_COLLECTION_PATH)
           .get()
