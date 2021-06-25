@@ -9,7 +9,7 @@ public class LocalDateTimeConverter {
   @TypeConverter
   public static LocalDateTime toDate(String dateString) {
     if (dateString == null) {
-      return null;
+      throw new IllegalArgumentException("Wrong String date value");
     } else {
       return LocalDateTime.parse(dateString,DateTimeFormatter.ofPattern(FirebaseDocumentMapper.DATE_FORMAT));
     }
@@ -18,7 +18,7 @@ public class LocalDateTimeConverter {
   @TypeConverter
   public static String toDateString(LocalDateTime date) {
     if (date == null) {
-      return null;
+      throw new IllegalArgumentException("Wrong LocalDateTime value");
     } else {
       return date.format(DateTimeFormatter.ofPattern(FirebaseDocumentMapper.DATE_FORMAT));
     }
