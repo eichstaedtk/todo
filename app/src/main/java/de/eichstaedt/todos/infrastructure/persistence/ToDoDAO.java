@@ -24,6 +24,9 @@ public interface ToDoDAO {
     @Query("SELECT * FROM todos")
     List<ToDo> getAll();
 
+    @Query("SELECT * FROM todos")
+    Flowable<List<ToDo>> getAllAsync();
+
     @Insert
     void insertTodos(List<ToDo> todos);
 

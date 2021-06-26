@@ -60,4 +60,19 @@ public class DataServiceTest {
 
     assertFalse(dataService.checkOfflineState().get());
   }
+
+  @Test
+  public void testdeleteToDo() {
+
+    Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    DataService dataService = DataService.instance(appContext);
+    ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+
+    dataService.saveToDo(neueAufgabe,
+        message -> Assert.assertEquals(neueAufgabe,dataService.getLocalDatabase().toDoDAO().findById(neueAufgabe.getId()).blockingFirst()));
+
+    dataService.deleteToDo(neueAufgabe,message -> Assert.assertEquals(0,dataService.getLocalDatabase().toDoDAO()
+        .getAllAsync().blockingFirst().size()));
+
+  }
 }
