@@ -35,7 +35,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="40"
           android:layout_marginLeft="10dp"
-          android:text="Name"
+          android:text="@string/name"
           android:textSize="40px" />
 
         <TextView
@@ -43,22 +43,23 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="30"
-          android:text="Fällig"
+          android:text="@string/faellig"
           android:textSize="40px" />
 
         <TextView
-          android:id="@+id/todoErledigtText"
+          android:id="@+id/todoErledigtHeader"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="15"
-          android:text="Erledigt"
+          android:text="@string/erledigt"
           android:textSize="40px" />
 
         <TextView
+          android:id="@+id/todoWichtigHeader"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="15"
-          android:text="Wichtig"
+          android:text="@string/wichtig"
           android:textSize="40px" />
 
     </LinearLayout>

@@ -19,7 +19,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * Instrumented test, which will execute on an Android device for Login Activity.
  *
  */
 @RunWith(AndroidJUnit4.class)

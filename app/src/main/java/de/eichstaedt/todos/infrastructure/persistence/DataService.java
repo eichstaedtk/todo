@@ -331,7 +331,7 @@ public class DataService {
     return localDatabase;
   }
 
-  void setLocalDatabase(ToDoDatabase localDatabase) {
+  public void setLocalDatabase(ToDoDatabase localDatabase) {
     this.localDatabase = localDatabase;
   }
 }

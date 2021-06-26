@@ -5,4 +5,8 @@
     <string name="confirm_delete">Aufgabe löschen?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="name">Name</string>
+    <string name="faellig">Fällig</string>
+    <string name="erledigt">Erledigt</string>
+    <string name="wichtig">Wichtig</string>
 </resources>
