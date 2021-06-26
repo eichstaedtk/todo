@@ -74,7 +74,7 @@ public class ContactModel {
 
   @Override
   public String toString() {
-    return "UserSelectionModel{" +
+    return "ContactModel{" +
         "id='" + id + '\'' +
         ", name='" + name + '\'' +
         ", email='" + email + '\'' +
