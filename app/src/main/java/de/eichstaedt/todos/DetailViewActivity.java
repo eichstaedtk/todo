@@ -212,8 +212,16 @@ public class DetailViewActivity extends AppCompatActivity {
 
   public void showDatePicker() {
 
+    Long now = System.currentTimeMillis();
+
+    if(toDoDetailView != null)
+    {
+      now = LocalDateTime.parse(toDoDetailView.getFaellig(), DateTimeFormatter.ofPattern(DATE_FORMAT))
+          .atZone(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli();
+    }
+
     MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-        .setSelection(System.currentTimeMillis())
+        .setSelection(now)
         .build();
 
     datePicker.addOnPositiveButtonClickListener(date -> {
@@ -230,10 +238,21 @@ public class DetailViewActivity extends AppCompatActivity {
 
   public void showTimePicker() {
 
+    int hour = 12;
+    int minute = 0;
+
+    if(toDoDetailView != null)
+    {
+      LocalDateTime faellig = LocalDateTime.parse(toDoDetailView.getFaellig(), DateTimeFormatter.ofPattern(DATE_FORMAT));
+
+      hour = faellig.getHour();
+      minute = faellig.getMinute();
+    }
+
     MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
         .setTimeFormat(TimeFormat.CLOCK_24H)
-        .setHour(12)
-        .setMinute(0)
+        .setHour(hour)
+        .setMinute(minute)
         .setTitleText("Zeit auswählen")
         .build();
 
