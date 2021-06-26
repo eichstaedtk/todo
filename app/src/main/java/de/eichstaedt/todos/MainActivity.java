@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private MenuItem sortByDatumAndWichtig;
 
-    CountingIdlingResource testCounter = new CountingIdlingResource("MAIN_TEST_COUNTER");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
         this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
-
-        testCounter.increment();
 
         Log.i(logger,"Application successful started ...");
     }
@@ -183,8 +179,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         todoList.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
-
-        testCounter.decrement();
     }
 
     @Override
@@ -210,9 +204,5 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             dataService.insertUserInFirebase(nicole);
         }
 
-    }
-
-    public CountingIdlingResource getTestCounter() {
-        return testCounter;
     }
 }

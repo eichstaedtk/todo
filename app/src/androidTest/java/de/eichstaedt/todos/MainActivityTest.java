@@ -90,16 +90,4 @@ public class MainActivityTest {
             .check(matches(withText("Offline: Daten lokal geladen")));
     }
 
-    @Test
-    public void testHeadLineOnline(){
-
-        activityRule.getScenario().onActivity(activity -> {
-            IdlingRegistry.getInstance().register(activity.getTestCounter());
-        });
-
-        onView(withId(R.id.headline))
-            .check(matches(withText("Online: Daten erfolgreich geladen")));
-
-    }
-
 }
