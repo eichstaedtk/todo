@@ -23,7 +23,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,7 +127,7 @@ public class DataService {
   public void saveToDo(ToDo toDo, ReloadViewCallback callback) {
     Completable.fromAction(()-> localDatabase.toDoDAO().insertToDo(toDo)).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread()).subscribe(() -> {
-      insertInFirebase(toDo);
+      insertToDoIntoFirebase(toDo);
       if(callback != null) {
         callback.onComplete("ToDo gespeichert " + toDo.getName());
       }
@@ -211,7 +210,7 @@ public class DataService {
     }
   }
 
-  private void insertInFirebase(ToDo toDo) {
+  private void insertToDoIntoFirebase(ToDo toDo) {
     Log.i(LOGGER, "Trying Save ToDo on Firebase " +toDo);
     if (!isOffline()) {
 
