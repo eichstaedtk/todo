@@ -1,4 +1,4 @@
-package de.eichstaedt.todos;
+package de.eichstaedt.todos.infrastructure.persistence;
 
 import java.util.concurrent.ExecutionException;
 

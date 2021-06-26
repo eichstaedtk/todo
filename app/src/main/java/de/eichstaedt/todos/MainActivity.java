@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
+import de.eichstaedt.todos.infrastructure.persistence.ReloadViewCallback;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter;
 import de.eichstaedt.todos.infrastructure.view.ToDoRecyclerViewAdapter.Sorting;
