@@ -1,5 +1,6 @@
 package de.eichstaedt.todos;
 
+import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -12,12 +13,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Context;
 import androidx.room.Room;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
+import de.eichstaedt.todos.domain.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDatabase;
+import java.time.LocalDateTime;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,6 +53,11 @@ public class MainActivityTest {
         dataService.getLocalDatabase().toDoDAO().deleteAll();
     }
 
+    @After
+    public void cleanup() {
+        dataService.getLocalDatabase().toDoDAO().deleteAll();
+    }
+
     @Test
     public void testHeader() {
 
@@ -60,6 +72,34 @@ public class MainActivityTest {
 
         onView(withId(R.id.todoWichtigHeader))
             .check(matches(withText("Wichtig")));
+    }
+
+    @Test
+    public void testHeadLine(){
+
+        onView(withId(R.id.headline))
+            .check(matches(withText("Daten werden geladen ....")));
+
+    }
+
+    @Test
+    public void testHeadLineOffline(){
+        dataService.setOffline(true);
+
+        onView(withId(R.id.headline))
+            .check(matches(withText("Offline: Daten lokal geladen")));
+    }
+
+    @Test
+    public void testHeadLineOnline(){
+
+        activityRule.getScenario().onActivity(activity -> {
+            IdlingRegistry.getInstance().register(activity.getTestCounter());
+        });
+
+        onView(withId(R.id.headline))
+            .check(matches(withText("Online: Daten erfolgreich geladen")));
+
     }
 
 }

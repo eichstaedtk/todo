@@ -334,4 +334,8 @@ public class DataService {
   public void setLocalDatabase(ToDoDatabase localDatabase) {
     this.localDatabase = localDatabase;
   }
+
+  public void setOffline(boolean offline) {
+    this.offline = offline;
+  }
 }

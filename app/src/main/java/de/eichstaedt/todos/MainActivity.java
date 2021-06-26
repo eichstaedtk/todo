@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     private MenuItem sortByDatumAndWichtig;
 
+    CountingIdlingResource testCounter = new CountingIdlingResource("MAIN_TEST_COUNTER");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         this.addNewToDoButton = findViewById(R.id.addNewToDoButton);
         this.addNewToDoButton.setOnClickListener((view) -> onClickAddToDoButton());
+
+        testCounter.increment();
 
         Log.i(logger,"Application successful started ...");
     }
@@ -161,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
     @Override
     public void onComplete(List<ToDo> result, String message) {
 
-        TextView start = findViewById(R.id.start);
+        TextView headline = findViewById(R.id.headline);
 
         Log.i(logger,"Subscribing to new ToDo List from Database ...");
 
-        start.setText(message);
+        headline.setText(message);
 
         todoList = findViewById(R.id.todoList);
 
@@ -178,16 +183,18 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
         todoList.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+
+        testCounter.decrement();
     }
 
     @Override
     public void onComplete(String message) {
 
-        TextView start = findViewById(R.id.start);
+        TextView headline = findViewById(R.id.headline);
 
         Log.i(logger,"Save ToDos finished");
 
-        start.setText(message);
+        headline.setText(message);
 
         dataService.readToDos(this);
     }
@@ -203,5 +210,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
             dataService.insertUserInFirebase(nicole);
         }
 
+    }
+
+    public CountingIdlingResource getTestCounter() {
+        return testCounter;
     }
 }
