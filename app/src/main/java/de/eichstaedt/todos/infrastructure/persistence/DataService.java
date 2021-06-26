@@ -313,11 +313,7 @@ public class DataService {
     if(networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI )
     || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))) {
 
-      Observable.fromCallable(() -> firestore.getFirestoreSettings().isPersistenceEnabled())
-          .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread())
-          .subscribe((enabled) -> {
-            Log.i(logger,"FIREBASE is ENABLED "+enabled);
-            offline = !enabled;}).dispose();
+      offline = !firestore.getFirestoreSettings().isPersistenceEnabled();
     }
 
     result.complete(offline);
