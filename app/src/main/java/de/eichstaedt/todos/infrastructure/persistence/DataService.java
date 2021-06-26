@@ -324,4 +324,8 @@ public class DataService {
 
     return result;
   }
+
+  public ToDoDatabase getLocalDatabase() {
+    return localDatabase;
+  }
 }
