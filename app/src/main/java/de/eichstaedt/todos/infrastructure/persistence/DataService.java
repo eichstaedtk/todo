@@ -317,7 +317,7 @@ public class DataService {
           .observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread())
           .subscribe((enabled) -> {
             Log.i(logger,"FIREBASE is ENABLED "+enabled);
-            offline = !enabled;});
+            offline = !enabled;}).dispose();
     }
 
     result.complete(offline);

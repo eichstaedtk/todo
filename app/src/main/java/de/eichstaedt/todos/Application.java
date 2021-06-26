@@ -15,11 +15,11 @@ public class Application extends android.app.Application {
     super.onCreate();
     dataService = DataService.instance(getApplicationContext());
     try {
-      boolean offline = dataService.checkOfflineState().get();
-      if(offline)
-      {
-        Toast.makeText(getApplicationContext(), "Keine Internetverbindung verfügbar", Toast.LENGTH_LONG).show();
-      }
+
+      dataService.checkOfflineState().get();
+
+      Log.i(logger,"Application strated with network "+dataService.isOffline());
+
     } catch (Exception e) {
       Log.e(logger,"Error during check the offline state",e);
     }

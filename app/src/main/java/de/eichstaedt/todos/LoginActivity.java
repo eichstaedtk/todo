@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
 
   private LinearProgressIndicator progress;
 
-  private final boolean developmentMode = true;
+  private final boolean developmentMode = false;
 
   private static final String logger = LoginActivity.class.getName();
 
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     dataService = ((Application)this.getApplication()).getDataService();
+    dataService.checkOfflineState().isDone();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     binding.setController(this);
     anmelden = findViewById(R.id.LoginButton);
@@ -64,9 +66,9 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     progress = findViewById(R.id.loginProgress);
     progress.setVisibility(View.INVISIBLE);
 
-    if(developmentMode)
+    if(developmentMode | dataService.isOffline())
     {
-      startToDoActivity();
+      showOfflineMessageAndProceedWithMainActivity();
     }
   }
 
@@ -76,8 +78,14 @@ public class LoginActivity extends AppCompatActivity implements UserRepositoryCa
     if(!dataService.isOffline()) {
       dataService.findUserByEmailAndPasswort(email, passwort, this);
     }else {
-      startToDoActivity();
+      showOfflineMessageAndProceedWithMainActivity();
     }
+  }
+
+  private void showOfflineMessageAndProceedWithMainActivity() {
+    Toast.makeText(getApplicationContext(), "Keine Internetverbindung verfügbar", Toast.LENGTH_LONG)
+        .show();
+    startToDoActivity();
   }
 
   public String getEmail() {

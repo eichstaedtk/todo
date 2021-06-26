@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
         Log.i(logger,"On Activity Result "+requestCode+" "+resultCode);
 
-        dataService.checkOfflineState();
-
         if(requestCode == RETURN_SAVE_TODO)
         {
             Log.i(logger,"Return to save to Do");
@@ -139,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryCallbac
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        dataService.checkOfflineState();
         switch (item.getItemId()) {
             case lokaleDelete : dataService.deleteAllLokalToDos(this);break;
             case remoteDelete : dataService.deleteAllFirebaseToDos();break;
