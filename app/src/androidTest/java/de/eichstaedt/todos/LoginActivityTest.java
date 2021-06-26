@@ -54,4 +54,16 @@ public class LoginActivityTest {
         onView(withId(R.id.emailTextInput))
             .check(matches(hasErrorText("E-Mail Adresse ungültig!")));
     }
+
+    @Test
+    public void testPasswordWithInProper() {
+
+        onView(withId(R.id.passwordTextInput))
+            .perform(typeText("123"), closeSoftKeyboard());
+
+        onView(withId(R.id.emailTextInput)).perform(click());
+
+        onView(withId(R.id.passwordTextInput))
+            .check(matches(hasErrorText("Passwort ungültig!")));
+    }
 }
