@@ -136,12 +136,18 @@ public class DataService {
   }
 
   public void findUserByEmailAndPasswort(String email,String password, UserRepositoryCallback callback) {
+    Log.i(logger,"Starting Check User by Email and Passwort");
     if (!isOffline()) {
       firestore.collection(USER_COLLECTION_PATH)
           .whereEqualTo(EMAIL, email)
-          .whereEqualTo(PASSWORD, password)
-          .get()
+          .whereEqualTo(PASSWORD, password).get()
           .addOnCompleteListener(task -> {
+
+            try {
+              Thread.sleep(2000);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
 
             Log.i(logger,
                 "Finding user in firebase " + task.isSuccessful() + " Docs " + task.getResult()
@@ -159,6 +165,7 @@ public class DataService {
         callback.onComplete(Optional.empty());
       });
     }
+    Log.i(logger,"Ending Check User by Email and Passwort");
   }
 
 
