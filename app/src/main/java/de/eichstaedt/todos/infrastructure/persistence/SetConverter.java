@@ -11,7 +11,7 @@ public class SetConverter {
   @TypeConverter
   public static Set<String> toSet(String setString) {
     if (setString == null) {
-      return null;
+      throw new IllegalArgumentException("Wrong String date value");
     } else {
       Gson gson = new Gson();
       return gson.fromJson(setString,Set.class);
@@ -21,7 +21,7 @@ public class SetConverter {
   @TypeConverter
   public static String toString(Set<String> set) {
     if (set == null) {
-      return null;
+      throw new IllegalArgumentException("Wrong Set value");
     } else {
       Gson gson = new Gson();
       return gson.toJson(set);
