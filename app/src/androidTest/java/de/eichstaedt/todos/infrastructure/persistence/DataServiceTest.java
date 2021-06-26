@@ -1,11 +1,14 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import static org.junit.Assert.assertFalse;
+
 import android.content.Context;
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import de.eichstaedt.todos.domain.ToDo;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -50,4 +53,11 @@ public class DataServiceTest {
 
   }
 
+  @Test
+  public void testCheckOflineState() throws ExecutionException, InterruptedException {
+    Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    DataService dataService = DataService.instance(appContext);
+
+    assertFalse(dataService.checkOfflineState().get());
+  }
 }
