@@ -54,7 +54,7 @@ public class DataServiceTest {
   }
 
   @Test
-  public void testCheckOflineState() throws ExecutionException, InterruptedException {
+  public void testCheckOfflineState() throws ExecutionException, InterruptedException {
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
     DataService dataService = DataService.instance(appContext);
 
