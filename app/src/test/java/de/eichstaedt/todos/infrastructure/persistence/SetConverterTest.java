@@ -9,7 +9,6 @@ public class SetConverterTest {
 
   @Test
   public void test_toSet() {
-
     assertEquals(new HashSet<>(),SetConverter.toSet("[]"));
   }
 }
