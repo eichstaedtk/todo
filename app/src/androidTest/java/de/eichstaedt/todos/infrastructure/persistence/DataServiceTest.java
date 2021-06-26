@@ -1,6 +1,7 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
 import android.content.Context;
+import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import de.eichstaedt.todos.domain.ToDo;
@@ -19,8 +20,11 @@ public class DataServiceTest {
   @Before
   public void setup() {
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    ToDoDatabase db = Room.inMemoryDatabaseBuilder(appContext, ToDoDatabase.class).build();
     dataService = DataService.instance(appContext);
+    dataService.setLocalDatabase(db);
     dataService.getLocalDatabase().toDoDAO().deleteAll();
+
   }
 
   @After

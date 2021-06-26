@@ -69,7 +69,7 @@ public class DataService {
   private final FirebaseFirestore
       firestore = FirebaseFirestore.getInstance();
 
-  private final ToDoDatabase localDatabase;
+  private ToDoDatabase localDatabase;
 
   public void readToDos(RepositoryCallback callback) {
 
@@ -327,5 +327,9 @@ public class DataService {
 
   public ToDoDatabase getLocalDatabase() {
     return localDatabase;
+  }
+
+  void setLocalDatabase(ToDoDatabase localDatabase) {
+    this.localDatabase = localDatabase;
   }
 }
