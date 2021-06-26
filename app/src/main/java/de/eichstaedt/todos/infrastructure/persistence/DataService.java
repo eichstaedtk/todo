@@ -69,7 +69,7 @@ public class DataService {
 
   private ToDoDatabase localDatabase;
 
-  public void readToDos(RepositoryCallback callback) {
+  public void readToDos(ToDoRepositoryCallback callback) {
 
     Observable.fromCallable(() -> localDatabase.toDoDAO().getAll()).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -263,7 +263,7 @@ public class DataService {
         .addOnFailureListener(e -> Log.w(LOGGER, "Error saving ToDo on Firebase", e)));
   }
 
-  public void deleteAllLokalToDos(RepositoryCallback callback) {
+  public void deleteAllLokalToDos(ToDoRepositoryCallback callback) {
     Log.i(logger,"Delete all lokal todos ...");
     Completable.fromAction(() -> {localDatabase.toDoDAO().deleteAll();})
         .subscribeOn(Schedulers.io())
