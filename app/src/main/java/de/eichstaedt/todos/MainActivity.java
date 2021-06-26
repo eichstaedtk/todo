@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.idling.CountingIdlingResource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.eichstaedt.todos.domain.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
