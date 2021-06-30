@@ -60,4 +60,27 @@ public class ToDoRepositoryTest {
 
     Assert.assertEquals(neueAufgabe,toDoDAO.findById(neueAufgabe.getId()).blockingFirst());
   }
+
+  @Test
+  public void testdeleteToDo() {
+    ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+    toDoDAO.insertToDo(neueAufgabe);
+    assertEquals(1,toDoDAO.getAll().size());
+    toDoDAO.delete(neueAufgabe);
+    assertEquals(0,toDoDAO.getAll().size());
+  }
+
+  @Test
+  public void testUpdate() {
+    ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+    toDoDAO.insertToDo(neueAufgabe);
+
+    Assert.assertEquals(neueAufgabe.getBeschreibung(),toDoDAO.findById(neueAufgabe.getId()).blockingFirst().getBeschreibung());
+
+    neueAufgabe.setBeschreibung("Neue Beschreibung");
+
+    toDoDAO.update(neueAufgabe);
+
+    Assert.assertEquals("Neue Beschreibung",toDoDAO.findById(neueAufgabe.getId()).blockingFirst().getBeschreibung());
+  }
 }
