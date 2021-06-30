@@ -1,5 +1,7 @@
 package de.eichstaedt.todos.infrastructure.persistence;
 
+import static org.junit.Assert.assertEquals;
+
 import android.content.Context;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -37,7 +39,7 @@ public class ToDoRepositoryTest {
 
     toDoDAO.insertToDo(neueAufgabe);
 
-    Assert.assertEquals(1,toDoDAO.getAll().size());
+    assertEquals(1,toDoDAO.getAll().size());
   }
 
   @Test
@@ -47,6 +49,15 @@ public class ToDoRepositoryTest {
 
     toDoDAO.insertTodos(Arrays.asList(alteAufgabe,neueAufgabe));
 
-    Assert.assertEquals(2,toDoDAO.getAll().size());
+    assertEquals(2,toDoDAO.getAll().size());
+  }
+
+  @Test
+  public void testFindById() {
+    ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+
+    toDoDAO.insertToDo(neueAufgabe);
+
+    Assert.assertEquals(neueAufgabe,toDoDAO.findById(neueAufgabe.getId()).blockingFirst());
   }
 }
