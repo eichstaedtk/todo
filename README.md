@@ -54,7 +54,12 @@ Ende des Dokuments beschriebenen Erweiterungen umsetzen müssen.
 # 3. Kontextabgrenzung
 Sicht aus der Vogelperspektive. Zeigt das System als Blackbox und den Zusammenhang zu Nachbarsystemen. 
 # 4. Lösungsstrategie
-Kernidee der Lösung. Zentrale Lösungsansätze.
+Als Programmiersprache wurde Java wegen der vorhandenen Kenntnisse ausgewählt. 
+Als Server Techologie wurde Firebase ausgewählt.
+Für die Umsetzung der nebenläufigen Hintergrundaufgaben wurde der Android Empfehlung durch Einsatz von RxJava gefolgt. 
+Für die Implementierung der Integrationstests wurde des Framework Espresso ausgewählt. 
+Als Dokumentationstandard wurde ARC42 auf Basis von Markdown ausgewählt. 
+Als Build Werkzeug wurde Gradle ausgewählt.  
 # 5. Bausteinsicht
 Statische Zerlegung des Systems in Bausteine.  
 # 6. Laufzeitsicht
@@ -63,13 +68,13 @@ Zeigt das Zusammenspiel der Architekturbausteine zur Laufzeit.
 Auf welchen Systemen laufen die Systemkomponenten. 
 # 8. Betrieb und Wiederherstellung #
 ## 8.1 Ansprechpartner , Service Level
-Verantwortliche Person oder Abteilung. 
+Konrad Eichstädt
 ## 8.2 Installation / Konfiguration ##
-Installations und Konfigurationsanleitung
 ## 8.3 Wiederherstellung ##
 Wie kann das defekte System wiederhergestellt werden. 
 # 9. Entwurfsentscheidungen
-Wichtige Architekturentscheidungen und Gründe. 
+Java als Programmiersprache
+RxJava für die Nebenläufigkeit
 # 10. Qualitätsziele
 Szenarien konkretisierte Qualitätsanforderungen. 
 # 11. Risiken und technische Schulden
