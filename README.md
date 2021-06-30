@@ -1,4 +1,4 @@
-# Titel
+# Android App zur Verwaltung von Aufgaben (ToDos)
 <sub>Maintainer: [Konrad Eichstädt](mailto:konrad.eichstaedt@gmx.de)</sub>  
 <br/>
 <br/>
