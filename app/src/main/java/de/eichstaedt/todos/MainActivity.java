@@ -175,9 +175,11 @@ public class MainActivity extends AppCompatActivity implements ToDoRepositoryCal
         sortByErledigtAndWichtigDatum(result);
         adapter = new ToDoRecyclerViewAdapter(result, dataService);
         adapter.setSortDecision(Sorting.WICHTIG_DATUM);
-        sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
-        todoList.setAdapter(adapter);
+        if(sortByDatumAndWichtig != null) {
+            sortByWichtigAndDatum.setIcon(R.drawable.outline_done_black_18);
+        }
 
+        todoList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
