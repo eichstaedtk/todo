@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import de.eichstaedt.todos.domain.ToDo;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,11 +32,21 @@ public class ToDoRepositoryTest {
   }
 
   @Test
-  public void testSaveToDo() {
+  public void testinsertToDo() {
     ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
 
     toDoDAO.insertToDo(neueAufgabe);
 
     Assert.assertEquals(1,toDoDAO.getAll().size());
+  }
+
+  @Test
+  public void testinsertToDos() {
+    ToDo alteAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+    ToDo neueAufgabe = new ToDo("Test Aufgabe","Aufgabe für einen Test", LocalDateTime.now(),true);
+
+    toDoDAO.insertTodos(Arrays.asList(alteAufgabe,neueAufgabe));
+
+    Assert.assertEquals(2,toDoDAO.getAll().size());
   }
 }
