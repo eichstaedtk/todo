@@ -1,5 +1,5 @@
 # Titel
-<sub>Maintainer: [Name](mailto:example@sbb.spk-berlin.de)</sub>  
+<sub>Maintainer: [Konrad Eichstädt](mailto:konrad.eichstaedt@gmx.de)</sub>  
 <br/>
 <br/>
 **Inhalt:**  
@@ -25,11 +25,13 @@
 # 1. Einführung und Ziele #
 Entwicklung einer nativen Android Anwendung zur Verwaltung von Aufgaben mit Hilfe der Programmiersprache Java oder Kotlin. 
 ## 1.1 Aufgabenstellung ##
-Eine kompakte Zusammenfassung des fachlichen Umfelds. Erklärt den Grund für das System. 
+Zielstellung ist die Umsetzung einer Anforderungsliste einer Aufgabenverwaltung mit Hilfe des Android Frameworks. Hierbei soll der Umgang und die Umsetzung einer
+Smartphone Anwendung auf Basis von Android erlernt werden. 
 ## 1.2 Qualitätsziele ##
 Usability und Datensicherheit. 
 ## 1.3 Projektbeteiligte (Stakeholder) ##
 Konrad Eichstädt
+<br/>
 Jörn Kreutel
 # 2. Randbedingungen
 Berücksichtigen Sie für die Erfüllung der unten genannten Anforderungen die folgenden Rahmenbedingungen:
