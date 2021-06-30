@@ -27,11 +27,10 @@ Entwicklung einer nativen Android Anwendung zur Verwaltung von Aufgaben mit Hilf
 ## 1.1 Aufgabenstellung ##
 Eine kompakte Zusammenfassung des fachlichen Umfelds. Erklärt den Grund für das System. 
 ## 1.2 Qualitätsziele ##
-Beschreibung der Qualitätsanforderungen der maßgeblichen Stakeholder. Themen wie Performance, Sicherheit, Änderbarkeit, Bedienbarkeit, 
-und Ähnliches. 
+Usability und Datensicherheit. 
 ## 1.3 Projektbeteiligte (Stakeholder) ##
-Master Student Konrad Eichstädt
-Professor Jörn Kreutel
+Konrad Eichstädt
+Jörn Kreutel
 # 2. Randbedingungen
 Berücksichtigen Sie für die Erfüllung der unten genannten Anforderungen die folgenden Rahmenbedingungen:
 - Die Anforderungen sind durch Implementierung einer nativen Android-Anwendung in Java oder Kotlin umzusetzen.
@@ -77,4 +76,4 @@ Fachliches Glossar.
 # 13. Release Notes
 | Komponente        | letzte Änderung           | Version  |
 | ------------- |:-------------:| -----:|
-| <Name>      | <Datum> | <Version> |
+| ToDoApp      | 30.06.2021 | 1.0.0 |
