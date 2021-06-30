@@ -1,10 +1,11 @@
 package de.eichstaedt.todos;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.registerIdlingResources;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static de.eichstaedt.todos.TestUtils.withRecyclerView;
+
 import android.content.Context;
 import androidx.room.Room;
 import androidx.test.espresso.IdlingRegistry;
@@ -33,11 +34,12 @@ public class MainActivityTest {
         = new ActivityScenarioRule<>(MainActivity.class);
 
     DataService dataService;
+    ToDoDatabase db;
 
     @Before
     public void setup() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        ToDoDatabase db = Room.inMemoryDatabaseBuilder(appContext, ToDoDatabase.class).build();
+        db = Room.inMemoryDatabaseBuilder(appContext, ToDoDatabase.class).build();
         dataService = DataService.instance(appContext);
         dataService.setLocalDatabase(db);
         dataService.getLocalDatabase().toDoDAO().deleteAll();
@@ -46,6 +48,7 @@ public class MainActivityTest {
     @After
     public void cleanup() {
         dataService.getLocalDatabase().toDoDAO().deleteAll();
+        db.close();
     }
 
     @Test
@@ -75,7 +78,6 @@ public class MainActivityTest {
     @Test
     public void testHeadLineOffline(){
         dataService.setOffline(true);
-
         onView(withId(R.id.headline))
             .check(matches(withText("Offline: Daten lokal geladen")));
     }
@@ -87,5 +89,4 @@ public class MainActivityTest {
         onView(withId(R.id.headline))
             .check(matches(withText("Online: Daten erfolgreich geladen")));
     }
-
 }
