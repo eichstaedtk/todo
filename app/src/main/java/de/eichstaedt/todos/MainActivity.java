@@ -208,7 +208,11 @@ public class MainActivity extends AppCompatActivity implements ToDoRepositoryCal
 
     }
 
-    public void setDataService(DataService dataService) {
-        this.dataService = dataService;
+    public ToDoRecyclerViewAdapter getAdapter() {
+        return adapter;
+    }
+
+    public RecyclerView getTodoList() {
+        return todoList;
     }
 }
