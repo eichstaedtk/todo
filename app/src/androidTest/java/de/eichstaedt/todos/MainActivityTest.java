@@ -1,11 +1,13 @@
 package de.eichstaedt.todos;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.registerIdlingResources;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import android.content.Context;
 import androidx.room.Room;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -76,6 +78,14 @@ public class MainActivityTest {
 
         onView(withId(R.id.headline))
             .check(matches(withText("Offline: Daten lokal geladen")));
+    }
+
+    @Test
+    public void testHeadLineOnline(){
+        dataService.setOffline(false);
+        IdlingRegistry.getInstance().register(dataService.getCountingResource());
+        onView(withId(R.id.headline))
+            .check(matches(withText("Online: Daten erfolgreich geladen")));
     }
 
 }
