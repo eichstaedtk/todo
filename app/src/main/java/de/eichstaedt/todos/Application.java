@@ -1,7 +1,6 @@
 package de.eichstaedt.todos;
 
 import android.util.Log;
-import android.widget.Toast;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 
 public class Application extends android.app.Application {

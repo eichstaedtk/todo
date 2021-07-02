@@ -1,6 +1,7 @@
 package de.eichstaedt.todos.domain;
 
 import androidx.annotation.NonNull;
+import java.util.Objects;
 import java.util.UUID;
 import org.parceler.Parcel;
 
@@ -75,6 +76,23 @@ public class User {
 
   public void setMobilnummer(String mobilnummer) {
     this.mobilnummer = mobilnummer;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return id.equals(user.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   @Override

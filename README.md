@@ -59,11 +59,11 @@ Die Anwendung läuft auf einem Android Smartphone. Die Daten werden zum einen au
 Dokumentendatenbank gespeichert. Die Persistierung in Firestore geschieht lediglich bei bestehender Internetverbindung.  
 # 4. Lösungsstrategie
 Als Programmiersprache wurde Java wegen der vorhandenen Kenntnisse ausgewählt. 
-Als Server Techologie wurde Firebase ausgewählt.
-Für die Umsetzung der nebenläufigen Hintergrundaufgaben wurde der Android Empfehlung durch Einsatz von RxJava gefolgt. 
-Für die Implementierung der Integrationstests wurde des Framework Espresso ausgewählt. 
-Als Dokumentationstandard wurde ARC42 auf Basis von Markdown ausgewählt. 
-Als Build Werkzeug wurde Gradle ausgewählt.  
+Als Server Techologie wurde [Google Cloud Firebase](https://console.firebase.google.com/) ausgewählt.
+Für die Umsetzung der nebenläufigen Hintergrundaufgaben wurde der Android Empfehlung durch Einsatz von [RxJava](https://github.com/ReactiveX/RxJava) gefolgt. 
+Für die Implementierung der Integrationstests wurde des [Framework Espresso](https://developer.android.com/training/testing/espresso) ausgewählt. 
+Als Dokumentationstandard wurde [ARC42](https://arc42.de/) auf Basis von Markdown ausgewählt. 
+Als Build Werkzeug wurde [Gradle](https://gradle.org/) ausgewählt.  
 # 5. Bausteinsicht
 Statische Zerlegung des Systems in Bausteine.  
 # 6. Laufzeitsicht
