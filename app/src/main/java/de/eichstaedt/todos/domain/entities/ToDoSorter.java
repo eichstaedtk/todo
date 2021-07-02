@@ -1,4 +1,4 @@
-package de.eichstaedt.todos.domain;
+package de.eichstaedt.todos.domain.entities;
 
 import java.util.Collections;
 import java.util.List;

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import de.eichstaedt.todos.domain.entities.ToDo;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import org.junit.Test;

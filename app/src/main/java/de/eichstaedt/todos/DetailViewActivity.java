@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.view.ContactModel;
 import de.eichstaedt.todos.infrastructure.view.ToDoDetailView;

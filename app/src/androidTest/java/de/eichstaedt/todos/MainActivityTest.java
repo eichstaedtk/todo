@@ -13,7 +13,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ToDoDatabase;
 import java.time.LocalDateTime;

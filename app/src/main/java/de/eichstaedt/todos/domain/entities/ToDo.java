@@ -1,4 +1,4 @@
-package de.eichstaedt.todos.domain;
+package de.eichstaedt.todos.domain.entities;
 
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
 

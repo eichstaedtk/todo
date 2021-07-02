@@ -1,6 +1,6 @@
 package de.eichstaedt.todos.infrastructure.view;
 
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import java.util.Objects;
 
 public class ContactModel {

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;

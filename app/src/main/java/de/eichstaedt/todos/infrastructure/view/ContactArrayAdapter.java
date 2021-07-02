@@ -14,7 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import de.eichstaedt.todos.Application;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.ContactElementBinding;
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import java.util.List;
 

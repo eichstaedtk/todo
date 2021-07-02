@@ -2,10 +2,11 @@ package de.eichstaedt.todos.domain;
 
 import static org.junit.Assert.assertEquals;
 
+import de.eichstaedt.todos.domain.entities.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDoSorter;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class ToDoSorterTest {

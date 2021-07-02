@@ -6,7 +6,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import de.eichstaedt.todos.domain.ToDo;
+import de.eichstaedt.todos.domain.entities.ToDo;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 import org.junit.After;

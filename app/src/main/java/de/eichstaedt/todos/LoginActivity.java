@@ -16,7 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import de.eichstaedt.todos.databinding.ActivityLoginBinding;
-import de.eichstaedt.todos.domain.User;
+import de.eichstaedt.todos.domain.entities.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.UserRepositoryCallback;
 import java.util.Optional;

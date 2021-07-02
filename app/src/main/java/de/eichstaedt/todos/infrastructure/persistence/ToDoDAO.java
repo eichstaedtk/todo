@@ -5,15 +5,10 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-import de.eichstaedt.todos.domain.User;
-import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 import java.util.List;
 
-import de.eichstaedt.todos.domain.ToDo;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import de.eichstaedt.todos.domain.entities.ToDo;
 
 @Dao
 public interface ToDoDAO {
