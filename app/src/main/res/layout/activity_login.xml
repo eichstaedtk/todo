@@ -4,7 +4,7 @@
   <data>
     <variable
       name="controller"
-      type="de.eichstaedt.todos.LoginActivity"></variable>
+      type="de.eichstaedt.todos.domain.usecases.LoginActivity"></variable>
   </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

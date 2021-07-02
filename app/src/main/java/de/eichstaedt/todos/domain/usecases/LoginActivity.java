@@ -1,4 +1,4 @@
-package de.eichstaedt.todos;
+package de.eichstaedt.todos.domain.usecases;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+import de.eichstaedt.todos.Application;
+import de.eichstaedt.todos.MainActivity;
+import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.ActivityLoginBinding;
 import de.eichstaedt.todos.domain.entities.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
