@@ -1,7 +1,7 @@
-package de.eichstaedt.todos;
+package de.eichstaedt.todos.domain.usecases;
 
-import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
-import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+import static de.eichstaedt.todos.domain.usecases.DetailViewActivity.TODO_BUNDLE;
+import static de.eichstaedt.todos.domain.usecases.DetailViewActivity.TODO_PARCEL;
 import static de.eichstaedt.todos.R.id.*;
 import static de.eichstaedt.todos.domain.entities.ToDoSorter.sortByErledigtAndDatumWichtig;
 import static de.eichstaedt.todos.domain.entities.ToDoSorter.sortByErledigtAndWichtigDatum;
@@ -20,6 +20,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import de.eichstaedt.todos.Application;
+import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.entities.User;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;
 import de.eichstaedt.todos.infrastructure.persistence.ReloadViewCallback;

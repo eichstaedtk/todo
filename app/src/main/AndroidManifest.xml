@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Todos">
-        <activity android:name=".MainActivity">
+        <activity android:name=".domain.usecases.MainActivity">
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
               android:value=".domain.usecases.LoginActivity" />
@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailViewActivity">
+        <activity android:name=".domain.usecases.DetailViewActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.SEND" />

@@ -1,4 +1,4 @@
-package de.eichstaedt.todos;
+package de.eichstaedt.todos.domain.usecases;
 
 import static de.eichstaedt.todos.infrastructure.persistence.FirebaseDocumentMapper.DATE_FORMAT;
 
@@ -21,6 +21,8 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import de.eichstaedt.todos.Application;
+import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.databinding.ActivityDetailviewBinding;
 import de.eichstaedt.todos.domain.entities.ToDo;
 import de.eichstaedt.todos.infrastructure.persistence.DataService;

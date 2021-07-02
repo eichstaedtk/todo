@@ -5,7 +5,7 @@
   <data>
     <variable
       name="controller"
-      type="de.eichstaedt.todos.DetailViewActivity"></variable>
+      type="de.eichstaedt.todos.domain.usecases.DetailViewActivity"></variable>
   </data>
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

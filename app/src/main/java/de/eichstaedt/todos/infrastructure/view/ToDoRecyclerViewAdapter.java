@@ -1,7 +1,7 @@
 package de.eichstaedt.todos.infrastructure.view;
 
-import static de.eichstaedt.todos.DetailViewActivity.TODO_BUNDLE;
-import static de.eichstaedt.todos.DetailViewActivity.TODO_PARCEL;
+import static de.eichstaedt.todos.domain.usecases.DetailViewActivity.TODO_BUNDLE;
+import static de.eichstaedt.todos.domain.usecases.DetailViewActivity.TODO_PARCEL;
 import static de.eichstaedt.todos.domain.entities.ToDoSorter.sortByErledigt;
 
 import android.content.Intent;
@@ -15,8 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import de.eichstaedt.todos.DetailViewActivity;
-import de.eichstaedt.todos.MainActivity;
+import de.eichstaedt.todos.domain.usecases.DetailViewActivity;
+import de.eichstaedt.todos.domain.usecases.MainActivity;
 import de.eichstaedt.todos.R;
 import de.eichstaedt.todos.domain.entities.ToDo;
 import de.eichstaedt.todos.domain.entities.ToDoSorter;
