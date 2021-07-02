@@ -69,7 +69,8 @@ Das grundlegende Design der Anwendung folgt dem Clean Architecture Pattern. Alle
 und die Klassen zur Umsetzung der UI und Persistierungsaufgaben im äußeren Bereich. 
 ![](CleanArchitecture.jpg)  
 # 5. Bausteinsicht
-Nachfolgende Abbildung zeigt die Struktur der Anwendung. 
+Nachfolgende Abbildung zeigt die Struktur der Anwendung.
+<br/> 
 ![](baustein-diagramm.png)
 
 Im domain Bereich befinden sich alle Klassen zur Umsetzung der fachlichen Anforderung. 
