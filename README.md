@@ -13,14 +13,11 @@
 [5. Baustein](#5-bausteinsicht)<br/>
 [6. Laufzeitsicht](#6-laufzeitsicht)<br/>
 [7. Verteilungssicht](#7-verteilungssicht)<br/>
-[8. Betrieb und Wiederherstellung](#8-betrieb-und-wiederherstellung)<br/>
-[8.1 Ansprechpartner , Service Level](#81-ansprechpartner-service-level)<br/>
-[8.2 Installation / Konfiguration](#82-installation-konfiguration)<br/>
-[9. Entwurfsentscheidungen](#9-entwurfsentscheidungen)<br/>
-[10. Qualitätsziele](#10-qualit%C3%A4tsziele)<br/>
-[11. Risiken und technische Schulden](#11-risiken-und-technische-schulden)<br/>
-[12. Glossar](#12-glossar)<br/>
-[13. Release Notes](#13-release-notes)<br/>
+[8. Entwurfsentscheidungen](#8-entwurfsentscheidungen)<br/>
+[9. Qualitätsziele](#9-qualit%C3%A4tsziele)<br/>
+[10. Risiken und technische Schulden](#10-risiken-und-technische-schulden)<br/>
+[11. Glossar](#11-glossar)<br/>
+[12. Release Notes](#12-release-notes)<br/>
 
 # 1. Einführung und Ziele #
 Entwicklung einer nativen Android Anwendung zur Verwaltung von Aufgaben mit Hilfe der Programmiersprache Java oder Kotlin. 
