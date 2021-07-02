@@ -17,7 +17,7 @@ public class Application extends android.app.Application {
 
       dataService.checkOfflineState().get();
 
-      Log.i(logger,"Application strated with network "+dataService.isOffline());
+      Log.i(logger,"Application started with network "+dataService.isOffline());
 
     } catch (Exception e) {
       Log.e(logger,"Error during check the offline state",e);
