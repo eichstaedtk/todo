@@ -52,7 +52,11 @@ Anforderungen gewertet.
 Beachten Sie für Gruppenprojekte außerdem, dass Gruppen von 2 Personen zusätzlich zu den Anforderungen für eine Person die am
 Ende des Dokuments beschriebenen Erweiterungen umsetzen müssen. 
 # 3. Kontextabgrenzung
-Sicht aus der Vogelperspektive. Zeigt das System als Blackbox und den Zusammenhang zu Nachbarsystemen. 
+Nachfolgende Abbildung zeigt die Kontextsicht dieser Anwendung. 
+![](kontext-diagramm.png)
+
+Die Anwendung läuft auf einem Android Smartphone. Die Daten werden zum einen auf der lokalen SQLite Datenbank und zum anderen auf der Google Firebase 
+Dokumentendatenbank gespeichert. Die Persistierung in Firestore geschieht lediglich bei bestehender Internetverbindung.  
 # 4. Lösungsstrategie
 Als Programmiersprache wurde Java wegen der vorhandenen Kenntnisse ausgewählt. 
 Als Server Techologie wurde Firebase ausgewählt.
@@ -71,7 +75,6 @@ Auf welchen Systemen laufen die Systemkomponenten.
 Konrad Eichstädt
 ## 8.2 Installation / Konfiguration ##
 ## 8.3 Wiederherstellung ##
-Wie kann das defekte System wiederhergestellt werden. 
 # 9. Entwurfsentscheidungen
 Java als Programmiersprache
 RxJava für die Nebenläufigkeit
@@ -79,7 +82,9 @@ RxJava für die Nebenläufigkeit
 Szenarien konkretisierte Qualitätsanforderungen. 
 # 11. Risiken und technische Schulden
 # 12. Glossar
-Fachliches Glossar. 
+ToDo: Zu erledigende Aufgabe
+User: Authentifizierung des Systems
+Kontakt: Kontakt eines Anwenders
 # 13. Release Notes
 | Komponente        | letzte Änderung           | Version  |
 | ------------- |:-------------:| -----:|
