@@ -63,7 +63,11 @@ Als Server Techologie wurde [Google Cloud Firebase](https://console.firebase.goo
 Für die Umsetzung der nebenläufigen Hintergrundaufgaben wurde der Android Empfehlung durch Einsatz von [RxJava](https://github.com/ReactiveX/RxJava) gefolgt. 
 Für die Implementierung der Integrationstests wurde des [Framework Espresso](https://developer.android.com/training/testing/espresso) ausgewählt. 
 Als Dokumentationstandard wurde [ARC42](https://arc42.de/) auf Basis von Markdown ausgewählt. 
-Als Build Werkzeug wurde [Gradle](https://gradle.org/) ausgewählt.  
+Als Build Werkzeug wurde [Gradle](https://gradle.org/) ausgewählt.
+
+Das grundlegende Design der Anwendung folgt dem Clean Architecture Pattern. Alle Klassen zur Umsetzung der fachlichen Aufgaben befinden sich im inneren der Awnedungsstruktur 
+und die Klassen zur Umsetzung der UI und Persistierungsaufgaben im äußeren Bereich. 
+![](CleanArchitecture.jpg)  
 # 5. Bausteinsicht
 Statische Zerlegung des Systems in Bausteine.  
 # 6. Laufzeitsicht
