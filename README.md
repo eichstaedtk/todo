@@ -79,22 +79,18 @@ im infrastructure Bereich befinden sich alle Klassen zur Umsetzung der Aufgaben 
 Zeigt das Zusammenspiel der Architekturbausteine zur Laufzeit. 
 # 7. Verteilungssicht
 Auf welchen Systemen laufen die Systemkomponenten. 
-# 8. Betrieb und Wiederherstellung #
-## 8.1 Ansprechpartner , Service Level
-Konrad Eichstädt
-## 8.2 Installation / Konfiguration ##
-## 8.3 Wiederherstellung ##
-# 9. Entwurfsentscheidungen
+# 8. Entwurfsentscheidungen
 Java als Programmiersprache
 RxJava für die Nebenläufigkeit
-# 10. Qualitätsziele
+# 9. Qualitätsziele
 Szenarien konkretisierte Qualitätsanforderungen. 
-# 11. Risiken und technische Schulden
-# 12. Glossar
+# 10. Risiken und technische Schulden
+Die derzeit geringen Kenntnisse im Team sind ein Projektrisiko. 
+# 11. Glossar
 ToDo: Zu erledigende Aufgabe
 User: Authentifizierung des Systems
 Kontakt: Kontakt eines Anwenders
-# 13. Release Notes
+# 12. Release Notes
 | Komponente        | letzte Änderung           | Version  |
 | ------------- |:-------------:| -----:|
 | ToDoApp      | 30.06.2021 | 1.0.0 |
